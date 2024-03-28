@@ -20,7 +20,7 @@ export default function SiteHeader({ user }: SiteHeaderProps) {
         <MainNav items={siteConfig.MainNav} />
         <div>
           <nav className='flex flex-1 items-center space-x-1'>
-            <UserProfileDropdown user={user} />
+            {user?.name && user?.email && <UserProfileDropdown user={user} />}
             <GoogleLoginButton />
             <ThemeToggle />
           </nav>
