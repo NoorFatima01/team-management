@@ -19,7 +19,7 @@ export default function LoginButton(props: { nextUrl?: string }) {
   };
 
   return (
-    <Button variant='destructive' size='sm' onClick={handleLogin}>
+    <Button size='sm' onClick={handleLogin}>
       Login
     </Button>
   );
