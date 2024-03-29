@@ -21,7 +21,6 @@ export default function SiteHeader({ user }: SiteHeaderProps) {
         <div>
           <nav className='flex flex-1 items-center space-x-1'>
             <UserProfileDropdown user={user} />
-            {/* @ts-except-error Async Server Component */}
             <GoogleLoginButton />
             <ThemeToggle />
           </nav>
