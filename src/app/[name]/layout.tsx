@@ -2,25 +2,25 @@ import React from 'react';
 
 import { getUser } from '@/lib/server-user';
 
-import SiteHeader from '@/components/layout/site-header';
+import AccountNav from '@/components/layout/account-nav';
 
-interface LobbyLayoutProps {
+interface AccountLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function LobbyLayout({ children }: LobbyLayoutProps) {
+export default async function AccountLayout({ children }: AccountLayoutProps) {
   const user = await getUser();
 
-  const siteHeaderUser = {
+  const accountNavUser = {
     name: user?.user_metadata.full_name,
     email: user?.email,
     image: user?.user_metadata.avatar_url,
+    id: user?.id as string,
   };
+
   return (
     <div>
-      <SiteHeader user={siteHeaderUser} />
-
-      <main>{children}</main>
+      <AccountNav user={accountNavUser}>{children}</AccountNav>
     </div>
   );
 }

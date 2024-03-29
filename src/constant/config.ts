@@ -10,15 +10,15 @@ export const siteConfig = {
     },
     {
       title: 'Events',
-      href: '/events',
+      href: '/all-events',
     },
     {
       title: 'Projects',
       href: '/projects',
     },
     {
-      title: 'Departments',
-      href: '/my-departments',
+      title: 'Teams',
+      href: '/all-teams',
     },
   ],
 };

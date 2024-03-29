@@ -52,12 +52,12 @@ const UserProfileDropdown = ({ user }: UserProfileDropdownProps) => {
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href='/'>
+              <Link href='/' className='cursor-pointer'>
                 <Icons.settings className='mr-2 size-4' /> Settings
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/${user.name}`}>
+              <Link href={`/${user.name}`} className='cursor-pointer'>
                 <Icons.user className='mr-2 size-4' /> My Account
               </Link>
             </DropdownMenuItem>
