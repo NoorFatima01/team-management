@@ -22,4 +22,5 @@ export const memberSchema = z.object({
 });
 
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
+export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
