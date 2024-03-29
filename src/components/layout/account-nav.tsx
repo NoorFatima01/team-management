@@ -33,7 +33,7 @@ const accountNavRoutes = [
   },
   {
     title: 'Create a New Team',
-    href: '/create team',
+    href: '/create-team',
     icon: <Icons.add className='size-4' />,
   },
   {

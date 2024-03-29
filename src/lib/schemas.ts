@@ -21,6 +21,24 @@ export const memberSchema = z.object({
   open_to_work: z.boolean().default(true),
 });
 
+export const teamFormSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  team_head: z.string(),
+});
+
+export const teamSchema = z.object({
+  team_id: z.string().uuid(),
+  created_at: z.string().default(new Date().toISOString()),
+  name: z.string(),
+  description: z.string(),
+  projects_done: z.number().default(0),
+  projects_in_progress: z.number().default(0),
+  team_head: z.string().uuid(),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
+export type teamFormSchemaType = z.infer<typeof teamFormSchema>;
+export type teamSchemaType = z.infer<typeof teamSchema>;

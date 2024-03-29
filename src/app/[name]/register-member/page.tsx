@@ -5,7 +5,7 @@ import { getUser } from '@/lib/server-user';
 import RegisterMemberForm from '@/components/forms/register-member-form';
 import PageDescriptionHeader from '@/components/layout/page-description-header';
 
-export default async function RegisterUserPage() {
+export default async function RegisterMemberPage() {
   const user = await getUser();
   const EmployeeFormUser = {
     name: user?.user_metadata.full_name,
