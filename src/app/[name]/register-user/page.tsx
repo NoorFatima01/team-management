@@ -2,7 +2,7 @@ import React from 'react';
 
 import { getUser } from '@/lib/server-user';
 
-import RegisterUserForm from '@/components/forms/register-user-form';
+import RegisterMemberForm from '@/components/forms/register-member-form';
 import PageDescriptionHeader from '@/components/layout/page-description-header';
 
 export default async function RegisterUserPage() {
@@ -14,10 +14,10 @@ export default async function RegisterUserPage() {
   return (
     <div className='flex flex-col gap-6 mt-8'>
       <PageDescriptionHeader
-        title='Register User'
-        description='Form for employee registration'
+        title='Register Member'
+        description='Form for member registration'
       />
-      <RegisterUserForm user={EmployeeFormUser} />
+      <RegisterMemberForm user={EmployeeFormUser} />
     </div>
   );
 }

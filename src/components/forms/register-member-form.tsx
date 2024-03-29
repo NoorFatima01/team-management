@@ -1,8 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { memberFormSchema, memberFormSchemaType } from '@/lib/schemas';
 
@@ -25,8 +27,10 @@ interface RegisterEmployeeFormProps {
   user: Pick<SessionUser, 'name' | 'image' | 'email'>;
 }
 
-export default function RegisterUserForm({ user }: RegisterEmployeeFormProps) {
-  const [isLoading] = useState(false);
+export default function RegisterMemberForm({
+  user,
+}: RegisterEmployeeFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<memberFormSchemaType>({
     resolver: zodResolver(memberFormSchema),
@@ -35,9 +39,40 @@ export default function RegisterUserForm({ user }: RegisterEmployeeFormProps) {
       email: user.email as string,
     },
   });
+
+  async function registerMember(formData: memberFormSchemaType) {
+    await fetch('/api/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+  }
+
+  const { mutate } = useMutation({
+    mutationFn: registerMember,
+    onSuccess: () => {
+      toast.success('Registeration Successful');
+      setIsLoading(false);
+    },
+    onError: () => {
+      setIsLoading(false);
+      toast.error('Failed to register');
+    },
+  });
+
+  async function onSubmit(formData: memberFormSchemaType) {
+    setIsLoading(true);
+    mutate(formData);
+  }
+
   return (
     <Form {...form}>
-      <form className='mx-auto grid w-full max-w-md gap-6'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='mx-auto grid w-full max-w-md gap-6'
+      >
         <div className='flex justify-between gap-1'>
           <div className='flex-1'>
             <FormField

@@ -33,6 +33,8 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.40.0",
+    "@tanstack/react-query": "^5.28.9",
+    "@tanstack/react-query-devtools": "^5.28.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^1.0.0",
