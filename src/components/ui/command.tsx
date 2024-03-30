@@ -1,7 +1,7 @@
 'use client';
 
 import { type DialogProps } from '@radix-ui/react-dialog';
-import { Command as CommandPrimitive } from 'cmdk';
+import { Command as CommandPrimitive } from 'cmdk'; //the cmdk version should not be ^1.0.0. It is an active github issue. Updating the version makes it impossible to select the command items. Link: https://github.com/shadcn-ui/ui/issues/2944
 import { Search } from 'lucide-react';
 import * as React from 'react';
 

@@ -1,13 +1,7 @@
 import React from 'react';
 
-import UserProfile from '@/components/user-profile';
-
 const AccountPage = () => {
-  return (
-    <div>
-      <UserProfile />
-    </div>
-  );
+  return <div>hello</div>;
 };
 
 export default AccountPage;

@@ -29,3 +29,25 @@ export async function POST(req: Request) {
     }
   }
 }
+
+//get only those members who are open to work
+export async function GET() {
+  try {
+    const serverSupabase = createSupabaseServerClient();
+    const { data: membersWithProfiles, error } = await serverSupabase
+      .from('profiles')
+      .select('email, username, id, members(open_to_work)')
+      .eq('members.open_to_work', true);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return new Response(JSON.stringify(membersWithProfiles), { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return new Response(error.message, { status: 500 });
+    } else {
+      return new Response(null, { status: 500 });
+    }
+  }
+}

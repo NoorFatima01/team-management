@@ -22,7 +22,7 @@ interface AccountNavProps {
 const accountNavRoutes = [
   {
     title: 'User Registration',
-    href: '/register-user',
+    href: '/register-member',
     icon: <Icons.employee className='size-4' />,
   },
   {

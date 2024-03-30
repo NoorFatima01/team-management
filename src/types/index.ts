@@ -5,3 +5,10 @@ export type SessionUser = {
   image?: string | undefined;
   role?: string | null;
 };
+
+export type membersAvailibilityCheckType = {
+  id: string;
+  username: string;
+  email: string;
+  members: { open_to_work: boolean } | null;
+};

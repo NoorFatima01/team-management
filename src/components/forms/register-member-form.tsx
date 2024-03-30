@@ -41,13 +41,18 @@ export default function RegisterMemberForm({
   });
 
   async function registerMember(formData: memberFormSchemaType) {
-    await fetch('/api/user', {
+    const response = await fetch('/api/member', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
     });
+    if (!response.ok) {
+      throw new Error('Failed to add department');
+    }
+
+    return response.json();
   }
 
   const { mutate } = useMutation({
