@@ -1,9 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { teamFormSchema, teamFormSchemaType } from '@/lib/schemas';
 import { getAllAvailableMembers } from '@/lib/utils';
@@ -29,7 +30,7 @@ interface CreateTeamFormProps {
 
 export default function CreateTeamForm({ user }: CreateTeamFormProps) {
   const { name } = user;
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [membersList, setMembersList] = useState<
     { label: string; email: string; value: string }[]
   >([]);
@@ -86,9 +87,47 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
     setSelectedMembers(newSelectedEmployees);
   };
 
+  async function createTeam(teamData: teamFormSchemaType) {
+    const response = await fetch('/api/team', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(teamData),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create team');
+    }
+
+    return response.json();
+  }
+
+  const { mutate } = useMutation({
+    mutationFn: createTeam,
+    onSuccess: () => {
+      toast.success('Team Created Successfully');
+      setIsLoading(false);
+      form.reset();
+      updateSelectedMembers();
+    },
+    onError: () => {
+      setIsLoading(false);
+      toast.error('Failed to create team');
+    },
+  });
+
+  const onSubmit: SubmitHandler<teamFormSchemaType> = async (formData) => {
+    formData.members = Array.from(selectedMembers);
+    setIsLoading(true);
+    mutate(formData);
+  };
+
   return (
     <Form {...form}>
-      <form className='mx-auto grid w-full max-w-md gap-6 '>
+      <form
+        className='mx-auto grid w-full max-w-md gap-6 '
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name='name'

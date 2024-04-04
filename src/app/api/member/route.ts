@@ -30,10 +30,14 @@ export async function POST(req: Request) {
   }
 }
 
-//get only those members who are open to work
+//get only those members who are open to work except current user if he is in members table
 export async function GET() {
   try {
     const serverSupabase = createSupabaseServerClient();
+    const {
+      data: { user: serverUser },
+    } = await serverSupabase.auth.getUser();
+    const user_id = serverUser?.id;
     const { data: membersWithProfiles, error } = await serverSupabase
       .from('profiles')
       .select('email, username, id, members(open_to_work)')
@@ -42,7 +46,10 @@ export async function GET() {
     if (error) {
       throw new Error(error.message);
     }
-    return new Response(JSON.stringify(membersWithProfiles), { status: 200 });
+    const availableMembers = membersWithProfiles.filter(
+      (member) => member.id !== user_id
+    );
+    return new Response(JSON.stringify(availableMembers), { status: 200 });
   } catch (error: unknown) {
     if (error instanceof Error) {
       return new Response(error.message, { status: 500 });
