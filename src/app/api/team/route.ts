@@ -17,6 +17,27 @@ export async function POST(req: Request) {
     } = await serverSupabase.auth.getUser();
     const user_id = serverUser?.id;
     const role = await getRole(user_id as string);
+
+    if (role === 'TEAM_MEMBER') {
+      //delete team head from members
+      const { error: membersError } = await serverSupabase
+        .from('members')
+        .delete()
+        .eq('member_id', user_id);
+      if (membersError) {
+        throw new Error(membersError.message);
+      }
+
+      //update role to TEAM_HEAD
+      const { error: roleError } = await serverSupabase
+        .from('profiles')
+        .update({ role: 'TEAM_HEAD' })
+        .eq('id', user_id);
+      if (roleError) {
+        throw new Error(roleError.message);
+      }
+    }
+
     // eslint-disable-next-line unused-imports/no-unused-vars
     const { team_head, members, ...team } = teamData;
     if (user_id) {
@@ -28,16 +49,6 @@ export async function POST(req: Request) {
         projects_done: 0,
         projects_in_progress: 0,
       };
-      if (role === 'TEAM_MEMBER') {
-        //first delete team head from members
-        const { error: membersError } = await serverSupabase
-          .from('members')
-          .delete()
-          .eq('member_id', user_id);
-        if (membersError) {
-          throw new Error(membersError.message);
-        }
-      }
 
       members.push(user_id);
 
@@ -62,15 +73,6 @@ export async function POST(req: Request) {
         .insert([{ ...teamData }]);
       if (teamError) {
         throw new Error('Failed to create team');
-      }
-
-      //update role to TEAM_HEAD
-      const { error: roleError } = await serverSupabase
-        .from('profiles')
-        .update({ role: 'TEAM_HEAD' })
-        .eq('id', user_id);
-      if (roleError) {
-        throw new Error(roleError.message);
       }
 
       return new Response(JSON.stringify(teamData), { status: 200 });
