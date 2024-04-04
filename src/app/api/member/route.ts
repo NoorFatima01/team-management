@@ -20,6 +20,15 @@ export async function POST(req: Request) {
     if (error) {
       throw new Error(error.message);
     }
+
+    //upgrade role to member in profiles table
+    const { error: roleError } = await serverSupabase
+      .from('profiles')
+      .update({ role: 'TEAM_MEMBER' })
+      .eq('id', user_id);
+    if (roleError) {
+      throw new Error(roleError.message);
+    }
     return new Response(JSON.stringify({ success: true }), { status: 201 });
   } catch (error: unknown) {
     if (error instanceof Error) {

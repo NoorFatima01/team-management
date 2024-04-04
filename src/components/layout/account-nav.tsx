@@ -21,7 +21,7 @@ interface AccountNavProps {
 //TODO: add role based display of these routes using shouldRender boolean
 const accountNavRoutes = [
   {
-    shouldRender: (user: SessionUser) => user.role === 'user',
+    shouldRender: (user: SessionUser) => user.role === 'USER',
     title: 'User Registration',
     href: '/register-member',
     icon: <Icons.employee className='size-4' />,
@@ -33,7 +33,7 @@ const accountNavRoutes = [
     icon: <Icons.dashboard className='size-4' />,
   },
   {
-    shouldRender: (user: SessionUser) => user.role !== 'user',
+    shouldRender: (user: SessionUser) => user.role !== 'USER',
     title: 'Create a New Team',
     href: '/create-team',
     icon: <Icons.add className='size-4' />,
