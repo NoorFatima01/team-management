@@ -21,6 +21,7 @@ interface AccountNavProps {
 //TODO: add role based display of these routes using shouldRender boolean
 const accountNavRoutes = [
   {
+    shouldRender: (user: SessionUser) => user.role === 'user',
     title: 'User Registration',
     href: '/register-member',
     icon: <Icons.employee className='size-4' />,
@@ -32,6 +33,7 @@ const accountNavRoutes = [
     icon: <Icons.dashboard className='size-4' />,
   },
   {
+    shouldRender: (user: SessionUser) => user.role !== 'user',
     title: 'Create a New Team',
     href: '/create-team',
     icon: <Icons.add className='size-4' />,
@@ -66,19 +68,39 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
           <Box className='h-full flex flex-col items-center gap-y-4 px-5 py-4 mt-2'>
             <nav className='flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'>
               {accountNavRoutes.map((route, index) => {
-                return (
-                  <Link
-                    key={index}
-                    href={`/${params.name}/${route.href}`}
-                    className={cn(
-                      buttonVariants({ variant: 'ghost' }),
-                      'flex gap-4'
-                    )}
-                  >
-                    {route.icon && route.icon}
-                    {route.title}
-                  </Link>
-                );
+                if (route.shouldRender === true) {
+                  return (
+                    <Link
+                      key={index}
+                      href={`/${params.name}/${route.href}`}
+                      className={cn(
+                        buttonVariants({ variant: 'ghost' }),
+                        'flex gap-4'
+                      )}
+                    >
+                      {route.icon && route.icon}
+                      {route.title}
+                    </Link>
+                  );
+                } else if (typeof route.shouldRender === 'function') {
+                  if (route.shouldRender(user)) {
+                    return (
+                      <Link
+                        key={index}
+                        href={`/${params.name}/${route.href}`}
+                        className={cn(
+                          buttonVariants({ variant: 'ghost' }),
+                          'flex gap-4'
+                        )}
+                      >
+                        {route.icon && route.icon}
+                        {route.title}
+                      </Link>
+                    );
+                  }
+                } else {
+                  return null;
+                }
               })}
             </nav>
           </Box>
