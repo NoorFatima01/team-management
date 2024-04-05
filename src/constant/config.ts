@@ -18,7 +18,7 @@ export const siteConfig = {
     },
     {
       title: 'Teams',
-      href: '/all-teams',
+      href: '/teams',
     },
   ],
 };

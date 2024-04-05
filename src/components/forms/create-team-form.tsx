@@ -136,9 +136,9 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
-                  id='add-dept-name'
+                  id='add-team-name'
                   type='text'
-                  placeholder='Enter Department Name'
+                  placeholder='Enter Team Name'
                   {...field}
                 />
               </FormControl>
@@ -153,9 +153,9 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Input
-                  id='add-dept-description'
+                  id='add-team-description'
                   type='text'
-                  placeholder='Enter Department Description'
+                  placeholder='Enter Team Description'
                   {...field}
                 />
               </FormControl>
@@ -170,9 +170,9 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
               <FormLabel>Dept Head</FormLabel>
               <FormControl>
                 <Input
-                  id='add-dept-head'
+                  id='add-team-head'
                   type='text'
-                  placeholder='Enter Department Head'
+                  placeholder='Enter Team Head'
                   disabled
                   {...field}
                 />

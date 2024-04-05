@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -31,6 +32,9 @@ export default function RegisterMemberForm({
   user,
 }: RegisterEmployeeFormProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const currentPath = usePathname();
+  const splitPath = currentPath.split('/');
 
   const form = useForm<memberFormSchemaType>({
     resolver: zodResolver(memberFormSchema),
@@ -70,6 +74,7 @@ export default function RegisterMemberForm({
   async function onSubmit(formData: memberFormSchemaType) {
     setIsLoading(true);
     mutate(formData);
+    router.push(`/${splitPath[1]}`);
   }
 
   return (
