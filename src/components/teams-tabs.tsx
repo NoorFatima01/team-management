@@ -4,7 +4,9 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 import { memberTableSchemaType, teamSchemaType } from '@/lib/schemas';
+import useSession from '@/lib/supabase/use-session';
 
+import InviteMembers from '@/components/invite-members';
 import MembersTable from '@/components/table/members-table';
 import TeamDetails from '@/components/team-details';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -21,6 +23,9 @@ export default function TeamsTabs({
   teams,
   membersWithTeamIds,
 }: TeamsTabsProps) {
+  const session = useSession();
+  const userId = session?.user?.id;
+  const isHead = (team: teamSchemaType) => team.team_head === userId;
   const router = useRouter();
   useEffect(() => {
     if (teams.length > 0) {
@@ -62,8 +67,15 @@ export default function TeamsTabs({
                     )?.members ?? [];
                 }
                 return (
-                  <TeamDetails key={teamToShow.team_id} team={teamToShow}>
-                    <MembersTable members={tableMembers} />
+                  <TeamDetails
+                    key={teamToShow.team_id}
+                    team={teamToShow}
+                    isUserHead={isHead(teamToShow)}
+                  >
+                    <div className='flex flex-col'>
+                      {isHead(teamToShow) && <InviteMembers />}
+                      <MembersTable members={tableMembers} />
+                    </div>
                   </TeamDetails>
                 );
               }
