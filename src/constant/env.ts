@@ -9,3 +9,9 @@ export const showLogger = isLocal
 export const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'sth';
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'sth';
+
+//Pusher
+export const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY ?? 'sth';
+export const PUSHER_CLUSTER = process.env.NEXT_PUBLIC_PUSHER_CLUSTER ?? 'sth';
+export const PUSHER_APP_ID = process.env.PUSHER_APP_ID ?? 'sth';
+export const PUSHER_SECRET = process.env.PUSHER_SECRET ?? 'sth';
