@@ -23,13 +23,11 @@ import { Input } from '@/components/ui/input';
 
 import { SessionUser } from '@/types';
 
-interface RegisterEmployeeFormProps {
+interface RegisterMemberFormProps {
   user: Pick<SessionUser, 'name' | 'image' | 'email'>;
 }
 
-export default function RegisterMemberForm({
-  user,
-}: RegisterEmployeeFormProps) {
+export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<memberFormSchemaType>({

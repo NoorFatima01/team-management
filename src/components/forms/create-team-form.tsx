@@ -77,14 +77,14 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
       setSelectedMembers(memberIdOrSet);
       return;
     }
-    const newSelectedEmployees = new Set(selectedMembers);
+    const newSelectedMembers = new Set(selectedMembers);
     const memberId = memberIdOrSet;
     if (selectedMembers.has(memberId)) {
-      newSelectedEmployees.delete(memberId);
+      newSelectedMembers.delete(memberId);
     } else {
-      newSelectedEmployees.add(memberId);
+      newSelectedMembers.add(memberId);
     }
-    setSelectedMembers(newSelectedEmployees);
+    setSelectedMembers(newSelectedMembers);
   };
 
   async function createTeam(teamData: teamFormSchemaType) {

@@ -3,15 +3,24 @@
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
-import { teamSchemaType } from '@/lib/schemas';
+import { memberTableSchemaType, teamSchemaType } from '@/lib/schemas';
 
+import MembersTable from '@/components/table/members-table';
+import TeamDetails from '@/components/team-details';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface TeamsTabsProps {
   teams: teamSchemaType[];
+  membersWithTeamIds: {
+    team_id: string;
+    members: memberTableSchemaType[];
+  }[];
 }
 
-export default function TeamsTabs({ teams }: TeamsTabsProps) {
+export default function TeamsTabs({
+  teams,
+  membersWithTeamIds,
+}: TeamsTabsProps) {
   const router = useRouter();
   useEffect(() => {
     if (teams.length > 0) {
@@ -43,11 +52,19 @@ export default function TeamsTabs({ teams }: TeamsTabsProps) {
           <TabsContent key={team.team_id} value={team.team_id}>
             {teams.map((teamToShow) => {
               if (teamToShow.team_id === team.team_id) {
+                // Find the members of the team
+                let tableMembers: memberTableSchemaType[] = [];
+                if (membersWithTeamIds) {
+                  tableMembers =
+                    membersWithTeamIds.find(
+                      (membersWithTeamId) =>
+                        membersWithTeamId.team_id === teamToShow.team_id
+                    )?.members ?? [];
+                }
                 return (
-                  <div key={teamToShow.team_id}>
-                    <h1>{teamToShow.name}</h1>
-                    <p>{teamToShow.description}</p>
-                  </div>
+                  <TeamDetails key={teamToShow.team_id} team={teamToShow}>
+                    <MembersTable members={tableMembers} />
+                  </TeamDetails>
                 );
               }
             })}

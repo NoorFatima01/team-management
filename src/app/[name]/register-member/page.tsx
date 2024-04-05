@@ -7,7 +7,7 @@ import PageDescriptionHeader from '@/components/layout/page-description-header';
 
 export default async function RegisterMemberPage() {
   const user = await getUser();
-  const EmployeeFormUser = {
+  const memberFormUser = {
     name: user?.user_metadata.full_name,
     email: user?.email,
   };
@@ -17,7 +17,7 @@ export default async function RegisterMemberPage() {
         title='Register Member'
         description='Form for member registration'
       />
-      <RegisterMemberForm user={EmployeeFormUser} />
+      <RegisterMemberForm user={memberFormUser} />
     </div>
   );
 }

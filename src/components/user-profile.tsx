@@ -11,7 +11,7 @@ const UserProfile = () => {
 
   //TODO: get user data from the database using useQuery
 
-  if (!memberData) return <h1>Not Registered as an employee</h1>;
+  if (!memberData) return <h1>Not Registered as a member</h1>;
   return (
     <>
       <div className='flex flex-col gap-4 '>
