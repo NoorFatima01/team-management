@@ -44,9 +44,17 @@ export const memberTableSchema = z.object({
   email: z.string().email(),
 });
 
+export const notificationSchema = z.object({
+  notf_id: z.string().uuid(),
+  text: z.string(),
+  created_at: z.string().default(new Date().toISOString()),
+  read: z.boolean().default(false),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
 export type teamFormSchemaType = z.infer<typeof teamFormSchema>;
 export type teamSchemaType = z.infer<typeof teamSchema>;
 export type memberTableSchemaType = z.infer<typeof memberTableSchema>;
+export type notificationSchemaType = z.infer<typeof notificationSchema>;
