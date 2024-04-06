@@ -57,28 +57,9 @@ export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
     return response.json();
   }
 
-  async function addNotification(notificationText: string) {
-    const response = await fetch('api/notifications/teamHeadNotifications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: notificationText }),
-    });
-    if (response.status !== 201) {
-      throw new Error('Failed to add notification');
-    }
-  }
-
-  const { mutate: notificationMutate } = useMutation({
-    mutationFn: addNotification,
-    //even if the notification is not successful, we don't want the registeration to fail
-  });
-
   const { mutate } = useMutation({
     mutationFn: registerMember,
     onSuccess: () => {
-      notificationMutate('A new employee was just registered!');
       toast.success('Registeration Successful');
       setIsLoading(false);
     },
@@ -91,6 +72,14 @@ export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
   async function onSubmit(formData: memberFormSchemaType) {
     setIsLoading(true);
     mutate(formData);
+    //TODO: execute this only if the mutation is successful, try to use react query
+    await fetch('/api/notifications/teamHeadNotifications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: 'A new employee was just registered!' }),
+    });
     // router.push(`/${splitPath[1]}`);
   }
 
