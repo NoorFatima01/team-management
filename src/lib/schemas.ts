@@ -44,6 +44,12 @@ export const memberTableSchema = z.object({
   email: z.string().email(),
 });
 
+export const messageSchema = z.object({
+  msg_id: z.string().uuid(),
+  text: z.string(),
+  created_at: z.string().default(new Date().toISOString()),
+});
+
 export const notificationSchema = z.object({
   notf_id: z.string().uuid(),
   text: z.string(),

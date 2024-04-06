@@ -12,3 +12,9 @@ export type membersAvailibilityCheckType = {
   email: string;
   members: { open_to_work: boolean } | null;
 };
+
+export type newMessageType = {
+  message: string;
+  sender_name: string;
+  sender_id: string;
+};
