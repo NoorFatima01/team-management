@@ -1,7 +1,7 @@
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { membersAvailibilityCheckType } from '@/types';
+import { availableMember } from '@/types';
 
 /** Merge classes with tailwind-merge with clsx full feature */
 export function cn(...inputs: ClassValue[]) {
@@ -13,9 +13,9 @@ export async function getAllAvailableMembers() {
   const members = await res.json();
   //filter out those whose members is null
   const availableMembers = members.filter(
-    (member: membersAvailibilityCheckType) => member.members !== null
+    (member: availableMember) => member.members !== null
   );
-  return availableMembers as membersAvailibilityCheckType[];
+  return availableMembers as availableMember[];
 }
 
 export function formatNotificationDateTime(created_at: string) {
