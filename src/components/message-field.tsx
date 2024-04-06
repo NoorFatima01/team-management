@@ -7,7 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-export default function MessageField() {
+interface MessageFieldProps {
+  teamId: string;
+}
+
+export default function MessageField({ teamId }: MessageFieldProps) {
   const [message, setMessage] = useState('');
   const [placeholder, setPlaceholder] = useState('Type your message here...');
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +19,7 @@ export default function MessageField() {
   const sendMessage = async (text: string) => {
     const response = await fetch('/api/message', {
       method: 'POST',
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text, teamId }),
       headers: {
         'Content-Type': 'application/json',
       },
