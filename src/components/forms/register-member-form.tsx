@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { usePathname, useRouter } from 'next/navigation';
+// import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -30,9 +30,9 @@ interface RegisterMemberFormProps {
 
 export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const currentPath = usePathname();
-  const splitPath = currentPath.split('/');
+  // const router = useRouter();
+  // const currentPath = usePathname();
+  // const splitPath = currentPath.split('/');
 
   const form = useForm<memberFormSchemaType>({
     resolver: zodResolver(memberFormSchema),
@@ -72,7 +72,15 @@ export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
   async function onSubmit(formData: memberFormSchemaType) {
     setIsLoading(true);
     mutate(formData);
-    router.push(`/${splitPath[1]}`);
+    //TODO: execute this only if the mutation is successful, try to use react query
+    await fetch('/api/notifications/teamHeadNotifications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: 'A new employee was just registered!' }),
+    });
+    // router.push(`/${splitPath[1]}`);
   }
 
   return (
