@@ -44,6 +44,12 @@ export const memberTableSchema = z.object({
   email: z.string().email(),
 });
 
+export const messageSchema = z.object({
+  msg_id: z.string().uuid(),
+  text: z.string(),
+  created_at: z.string().default(new Date().toISOString()),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;

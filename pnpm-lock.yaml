@@ -71,9 +71,6 @@ dependencies:
   cookies-next:
     specifier: ^4.1.1
     version: 4.1.1
-  js:
-    specifier: ^0.1.0
-    version: 0.1.0
   lucide-react:
     specifier: ^0.321.0
     version: 0.321.0(react@18.2.0)
@@ -4510,13 +4507,6 @@ packages:
     dependencies:
       delayed-stream: 1.0.0
 
-  /commander@1.1.1:
-    resolution: {integrity: sha512-71Rod2AhcH3JhkBikVpNd0pA+fWsmAaVoti6OR38T76chA7vE3pSerS0Jor4wDw+tOueD2zLVvFOw5H0Rcj7rA==}
-    engines: {node: '>= 0.6.x'}
-    dependencies:
-      keypress: 0.1.0
-    dev: false
-
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
@@ -6855,13 +6845,6 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /js@0.1.0:
-    resolution: {integrity: sha512-ZBbGYOpact8QAH9RprFWL4RAESYwbDodxiuDjOnzwzzk9pBzKycoifGuUrHHcDixE/eLMKPHRaXenTgu1qXBqA==}
-    hasBin: true
-    dependencies:
-      commander: 1.1.1
-    dev: false
-
   /jsdom@16.7.0:
     resolution: {integrity: sha512-u9Smc2G1USStM+s/x1ru5Sxrl6mPYCbByG1U/hUmqaVsm4tbNyS7CicOSRyuGQYZhTu0h84qkZZQ/I+dzizSVw==}
     engines: {node: '>=10'}
@@ -6964,10 +6947,6 @@ packages:
       object.assign: 4.1.5
       object.values: 1.1.7
     dev: true
-
-  /keypress@0.1.0:
-    resolution: {integrity: sha512-x0yf9PL/nx9Nw9oLL8ZVErFAk85/lslwEP7Vz7s5SI1ODXZIgit3C5qyWjw4DxOuO/3Hb4866SQh28a1V1d+WA==}
-    dev: false
 
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
