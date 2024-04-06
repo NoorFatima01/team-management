@@ -11,13 +11,12 @@ for insert
 to public
 with check (true);
 
-
-create policy "Enable read for authenticated"
+create policy "Enable read access for authenticated users"
 on "public"."members-notifications"
 as permissive
 for select
-to authenticated;
-
+to authenticated
+using (true);
 
 create policy "Enable insert for everyone"
 on "public"."notifications"
@@ -26,12 +25,16 @@ for insert
 to public
 with check (true);
 
+create policy "Enable update access for authenticated users" 
+on "public"."notifications" 
+as permissive 
+for update 
+to authenticated 
+using (true);
 
-create policy "Enable read for authenticated users"
+create policy "Enable read access for authenticated users"
 on "public"."notifications"
 as permissive
 for select
-to public;
-
-
-
+to authenticated
+using (true);

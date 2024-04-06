@@ -17,3 +17,31 @@ export async function getAllAvailableMembers() {
   );
   return availableMembers as membersAvailibilityCheckType[];
 }
+
+export function formatNotificationDateTime(created_at: string) {
+  const date = new Date(created_at);
+  const now = new Date().getTime();
+
+  // Convert date to number
+  const dateNumber = date.getTime();
+
+  // Calculate the difference in milliseconds
+  const timeDifference: number = now - dateNumber;
+
+  // Calculate the difference in days
+  const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+  if (daysDifference >= 1) {
+    // If it has been more than a day, return the date part
+    const formattedDate = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+    return formattedDate;
+  } else {
+    // If it has been less than a day, return the time part
+    const formattedTime = `${date.getHours()}:${
+      (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
+    }`;
+    return formattedTime;
+  }
+}

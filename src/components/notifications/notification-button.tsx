@@ -3,6 +3,7 @@ import React from 'react';
 
 import { pusherClient } from '@/lib/pusher';
 import { notificationSchemaType } from '@/lib/schemas';
+import { useDotVisibilityStore } from '@/lib/store';
 import useSession from '@/lib/supabase/use-session';
 
 import NotificationBell from '@/components/notifications/notification-bell';
@@ -20,6 +21,7 @@ const NotificationButton = () => {
   const [oldNotifications, setOldNotifications] = React.useState<
     notificationSchemaType[]
   >([]);
+  const { setDotVisibility } = useDotVisibilityStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const session = useSession();
   const user = session?.user;
@@ -60,6 +62,31 @@ const NotificationButton = () => {
 
     fetchOldNotifications();
   }, [userId]);
+
+  React.useEffect(() => {
+    if (!oldNotifications || !newNotifications) {
+      // Check if either oldNotifications or newNotifications is undefined
+      return;
+    }
+
+    if (oldNotifications.length === 0 && newNotifications.length === 0) {
+      return;
+    }
+    let allNotifications;
+    if (oldNotifications.length === 0) {
+      allNotifications = newNotifications;
+    }
+    if (newNotifications.length === 0) {
+      allNotifications = oldNotifications;
+    } else {
+      allNotifications = [...oldNotifications, ...newNotifications];
+    }
+    const hasUnread = allNotifications.some(
+      (notification) => !notification.read
+    );
+    setDotVisibility(hasUnread);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oldNotifications, newNotifications]);
 
   return (
     <div>
