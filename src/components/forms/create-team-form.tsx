@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { membersAvailibilityCheckType, SessionUser } from '@/types';
+import { availableMember, SessionUser } from '@/types';
 
 interface CreateTeamFormProps {
   user: Pick<SessionUser, 'name' | 'id'>;
@@ -55,15 +55,13 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
 
   useEffect(() => {
     if (membersOpenToWork === undefined) return;
-    const members = membersOpenToWork?.map(
-      (member: membersAvailibilityCheckType) => {
-        return {
-          label: member.username,
-          email: member.email,
-          value: member.id,
-        };
-      }
-    );
+    const members = membersOpenToWork?.map((member: availableMember) => {
+      return {
+        label: member.username,
+        email: member.email,
+        value: member.id,
+      };
+    });
     setMembersList(members);
   }, [membersOpenToWork]);
 
