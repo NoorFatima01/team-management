@@ -1,15 +1,19 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 import { memberTableSchemaType, teamSchemaType } from '@/lib/schemas';
 import useSession from '@/lib/supabase/use-session';
+import { getAllAvailableMembers } from '@/lib/utils';
 
 import InviteMembers from '@/components/invite-members';
 import MembersTable from '@/components/table/members-table';
 import TeamDetails from '@/components/team-details';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { availableMember } from '@/types';
 
 interface TeamsTabsProps {
   teams: teamSchemaType[];
@@ -34,9 +38,17 @@ export default function TeamsTabs({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const handleClick = (team_id: string) => {
     router.replace(`/teams?${team_id}`);
   };
+
+  const { data: membersOpenToWork } = useQuery({
+    queryKey: ['availableMembers'],
+    queryFn: getAllAvailableMembers,
+    retry: 10,
+  });
+
   return (
     <div>
       <Tabs className='w-full flex flex-col' defaultValue={teams[0].team_id}>
@@ -73,7 +85,11 @@ export default function TeamsTabs({
                     isUserHead={isHead(teamToShow)}
                   >
                     <div className='flex flex-col'>
-                      {isHead(teamToShow) && <InviteMembers />}
+                      {isHead(teamToShow) && (
+                        <InviteMembers
+                          members={membersOpenToWork as availableMember[]}
+                        />
+                      )}
                       <MembersTable members={tableMembers} />
                     </div>
                   </TeamDetails>

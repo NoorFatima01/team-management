@@ -6,7 +6,7 @@ export type SessionUser = {
   role?: string | null;
 };
 
-export type membersAvailibilityCheckType = {
+export type availableMember = {
   id: string;
   username: string;
   email: string;
