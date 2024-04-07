@@ -21,7 +21,10 @@ export async function GET(
 
   //fetch from members-notifications table all the notf_id where the member_id is userId
   const { data: memberNotifications, error: memberNotificationError } =
-    await supabase.from('members-notifications').select('notf_id');
+    await supabase
+      .from('members-notifications')
+      .select('notf_id')
+      .eq('member_id', userId);
   if (memberNotificationError) {
     return NextResponse.json(
       { success: false, error: memberNotificationError.message },
