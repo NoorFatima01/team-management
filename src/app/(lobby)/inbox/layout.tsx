@@ -16,7 +16,7 @@ export default function InboxLayout({ children }: InboxLayoutProps) {
         description='Connect through Messages'
       />
 
-      <div className='w-full h-full flex flex-col lg:flex-row'>
+      <div className='w-full h-full flex flex-col lg:flex-row space-y-2'>
         <div className='p-4'>
           <InboxSideBar />
         </div>

@@ -20,5 +20,9 @@ export const siteConfig = {
       title: 'Teams',
       href: '/teams',
     },
+    {
+      title: 'Inbox',
+      href: '/inbox',
+    },
   ],
 };
