@@ -86,7 +86,7 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
   };
 
   async function createTeam(teamData: teamFormSchemaType) {
-    const response = await fetch('/api/team', {
+    const response = await fetch('/api/teams', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

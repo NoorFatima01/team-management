@@ -19,7 +19,7 @@ export default function InboxSideBar() {
   useEffect(() => {
     if (!userId) return;
     const fetchTeams = async () => {
-      const response = await fetch(`/api/team/${userId}`);
+      const response = await fetch(`/api/teams/${userId}`);
       const data = await response.json();
       setTeams(data);
     };

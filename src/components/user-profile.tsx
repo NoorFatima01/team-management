@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import useSession from '@/lib/supabase/use-session';
 
+import Invitations from '@/components/pending-invitations';
+
 import { memberProfile } from '@/types';
 
 const UserProfile = () => {
@@ -69,6 +71,7 @@ const UserProfile = () => {
         </div>
 
         {/* Pending Invitations */}
+        <Invitations />
       </div>
     </>
   );

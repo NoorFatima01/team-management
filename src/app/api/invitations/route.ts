@@ -62,26 +62,3 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ success: true }, { status: 201 });
 }
-
-export async function PUT(req: Request) {
-  const body = await req.json(); //body will contain status and inv_id
-
-  const serverSupabase = createSupabaseServerClient();
-
-  const { data: invitationData, error } = await serverSupabase
-    .from('invitations')
-    .update({ status: body.status })
-    .eq('inv_id', body.inv_id);
-
-  if (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json(
-    { success: true, data: invitationData },
-    { status: 200 }
-  );
-}
