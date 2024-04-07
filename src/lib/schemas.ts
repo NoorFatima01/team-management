@@ -57,6 +57,15 @@ export const notificationSchema = z.object({
   read: z.boolean().default(false),
 });
 
+export const invitationSchema = z.object({
+  inv_id: z.string().uuid(),
+  teamHead_id: z.string().uuid(),
+  member_id: z.string().uuid(),
+  text: z.string(),
+  inv_status: z.enum(['ACCEPTED', 'REJECTED', 'PENDING']).default('PENDING'),
+  team_id: z.string().uuid(),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
@@ -64,3 +73,4 @@ export type teamFormSchemaType = z.infer<typeof teamFormSchema>;
 export type teamSchemaType = z.infer<typeof teamSchema>;
 export type memberTableSchemaType = z.infer<typeof memberTableSchema>;
 export type notificationSchemaType = z.infer<typeof notificationSchema>;
+export type invitationSchemaType = z.infer<typeof invitationSchema>;

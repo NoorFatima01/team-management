@@ -1,39 +1,72 @@
 'use client';
-import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 
-import { memberSchemaType } from '@/lib/schemas';
-import { cn } from '@/lib/utils';
+import useSession from '@/lib/supabase/use-session';
 
-import { buttonVariants } from '@/components/ui/button';
+import { memberProfile } from '@/types';
 
 const UserProfile = () => {
-  const memberData: memberSchemaType | null = null;
+  const session = useSession();
+  const user = session?.user;
+  const userId = user?.id;
 
-  //TODO: get user data from the database using useQuery
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['memberProfile', userId],
+    queryFn: async () => {
+      if (!userId) {
+        return <h1>Not Logged in</h1>;
+      }
+      const response = await fetch(`/api/member/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return await response.json();
+    },
+    retry: 10,
+  });
+  //TODO: improve this logic to not show the glitch
+  if (isLoading) return <h1>Loading...</h1>;
+  if (isError) return <h1>Failed to fetch user profile</h1>;
+  const memberData: memberProfile = data?.memberData;
+  if (data && !memberData) return <h1>Not Registered as a Member</h1>;
 
-  if (!memberData) return <h1>Not Registered as a member</h1>;
   return (
     <>
-      <div className='flex flex-col gap-4 '>
-        <div className='flex items-center gap-x-2'>
+      <div className='space-y-2'>
+        <div className='flex flex-col'>
           {/* Name */}
-          <div></div>
+          <div className='text-2xl font-bold'>{memberData?.username}</div>
+          <div className='text-sm font-light'>{memberData?.email}</div>
         </div>
 
         {/* Open to work or not */}
-        <span className='bg-green-800 border-2 border-white rounded-lg py-1 px-2 font-bold w-[8rem]'></span>
+        <div>
+          <span className='font-semibold'>Availability: </span>
+          {memberData?.open_to_work ? (
+            <span className='text-green-800 py-1 px-2'>Open to work</span>
+          ) : (
+            <span className='text-red-500 rounded-lg py-1 px-2'>
+              Not open to work
+            </span>
+          )}
+        </div>
 
         {/* Team */}
-
+        <div>
+          <span className='font-semibold'>Team: </span>
+          {memberData?.team ? (
+            <span>{memberData?.team}</span>
+          ) : (
+            <span>No team joined yet</span>
+          )}
+        </div>
         {/* Role */}
-
-        {/* Chat */}
-        <Link
-          href='/inbox/' //TODO: add /team name in here later on
-          className={cn(buttonVariants({ variant: 'ghost' }), 'justify-center')}
-        >
-          Chat
-        </Link>
+        <div>
+          <span className='font-semibold'>Role: </span>
+          <span>{memberData?.role}</span>
+        </div>
 
         {/* Pending Invitations */}
       </div>

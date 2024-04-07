@@ -88,6 +88,8 @@ export default function TeamsTabs({
                       {isHead(teamToShow) && (
                         <InviteMembers
                           members={membersOpenToWork as availableMember[]}
+                          teamName={teamToShow.name}
+                          team_id={teamToShow.team_id}
                         />
                       )}
                       <MembersTable members={tableMembers} />
