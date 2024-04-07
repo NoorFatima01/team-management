@@ -137,39 +137,36 @@ const Invitations = () => {
                     className='flex items-center justify-between p-3'
                   >
                     <h3>{invitation.text}</h3>
-                    <div className='flex gap-3'>
-                      <Button
-                        onClick={() => {
-                          handleAcceptance(
-                            invitation.inv_id,
-                            invitation.team_id,
-                            invitation.member_id
-                          );
-                        }}
-                        disabled={isLoading}
-                      >
-                        {isLoading && (
-                          <Icons.spinner
-                            className='mr-2 size-4 animate-spin'
-                            aria-hidden='true'
-                          />
-                        )}
-                        Accept
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          handleRejection(invitation.inv_id);
-                        }}
-                        disabled={isLoading}
-                      >
-                        {isLoading && (
-                          <Icons.spinner
-                            className='mr-2 size-4 animate-spin'
-                            aria-hidden='true'
-                          />
-                        )}
-                        Reject
-                      </Button>
+                    <div>
+                      {isLoading ? (
+                        <Icons.spinner
+                          className='mr-2 size-8 animate-spin text-primary-foreground rounded-md p-1'
+                          aria-hidden='true'
+                        />
+                      ) : (
+                        <div className='flex gap-3'>
+                          <Button
+                            onClick={() => {
+                              handleAcceptance(
+                                invitation.inv_id,
+                                invitation.team_id,
+                                invitation.member_id
+                              );
+                            }}
+                            disabled={isLoading}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              handleRejection(invitation.inv_id);
+                            }}
+                            disabled={isLoading}
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )
