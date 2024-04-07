@@ -18,3 +18,12 @@ export type messageUIType = {
   sender_name: string;
   sender_id: string;
 };
+
+export type memberProfile = {
+  id: string;
+  username: string;
+  email: string;
+  open_to_work: boolean;
+  team?: string;
+  role: string;
+};
