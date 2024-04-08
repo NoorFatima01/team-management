@@ -1,20 +1,21 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-import { EmailTemplate } from '@/components/email-template';
+import EmailTemplate from '@/components/welcome-email-template';
 
 import { RESEND_KEY } from '@/constant/env';
 
 const resend = new Resend(RESEND_KEY);
 
-export async function POST() {
+export async function POST(req: Request) {
   try {
+    const body = await req.json(); //body will contain name and email
+
     const data = await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
-      to: ['nfatima101204@gmail.com'],
-      subject: 'Testing Resend',
-      react: EmailTemplate({ firstName: 'John' }),
-      text: 'Hello world', // Add the missing 'text' property
+      from: process.env.RESEND_EMAIL as string,
+      to: [body.email],
+      subject: 'Welcome to TeamManager!',
+      react: EmailTemplate({ userName: body.name }),
     });
 
     return NextResponse.json({ data, success: true }, { status: 200 });
