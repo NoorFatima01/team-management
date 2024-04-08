@@ -57,10 +57,21 @@ export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
     return response.json();
   }
 
+  // async function sendWelcomeEmail (formData: memberFormSchemaType) {
+  //   await fetch('/api/send', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ email: formData.email, name: formData.name }),
+  //   });
+  // }
+
   const { mutate } = useMutation({
     mutationFn: registerMember,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Registeration Successful');
+      // sendWelcomeEmail(form.getValues());
       setIsLoading(false);
     },
     onError: () => {
