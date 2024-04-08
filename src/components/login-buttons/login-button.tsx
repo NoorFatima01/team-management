@@ -14,6 +14,10 @@ export default function LoginButton(props: { nextUrl?: string }) {
         redirectTo: `${location.origin}/api/auth/callback?next=${
           props.nextUrl || ''
         }`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
       },
     });
   };
