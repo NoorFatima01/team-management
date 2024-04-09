@@ -28,10 +28,10 @@ const UserProfile = () => {
     },
     retry: 10,
   });
-  //TODO: improve this logic to not show the glitch
+  //TODO: improve this logic to not show the glitch on the page
   if (isLoading) return <h1>Loading...</h1>;
   if (isError) return <h1>Failed to fetch user profile</h1>;
-  const memberData: memberProfile = data?.memberData;
+  const memberData: memberProfile | null = data?.memberData;
   if (data && !memberData) return <h1>Not Registered as a Member</h1>;
 
   return (
