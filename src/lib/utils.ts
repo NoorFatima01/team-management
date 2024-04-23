@@ -18,6 +18,13 @@ export async function getAllAvailableMembers() {
   return availableMembers as availableMember[];
 }
 
+export async function getTeamsUserIsIn(user_id: string | undefined) {
+  if (!user_id) return [];
+  const res = await fetch(`/api/teams/${user_id}`);
+  const teams = await res.json();
+  return teams;
+}
+
 export function formatNotificationDateTime(created_at: string) {
   const date = new Date(created_at);
   const now = new Date().getTime();

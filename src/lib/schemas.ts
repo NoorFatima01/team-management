@@ -69,8 +69,8 @@ export const invitationSchema = z.object({
 export const projectFormSchema = z.object({
   name: z.string(),
   description: z.string(),
-  start_date: z.string(),
-  end_date: z.string(),
+  start_date: z.date(),
+  end_date: z.date(),
   team: z.string(),
 });
 
