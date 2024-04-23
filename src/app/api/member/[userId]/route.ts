@@ -19,6 +19,26 @@ export async function GET(
 
   const supabase = createSupabaseServerClient();
 
+  //first check if the userId exists in the members table or not
+  const { data: memberExists, error: memberExistsError } = await supabase
+    .from('members')
+    .select('member_id')
+    .eq('member_id', userId);
+
+  if (memberExistsError) {
+    return NextResponse.json(
+      { success: false, error: memberExistsError.message },
+      { status: 500 }
+    );
+  }
+
+  if (memberExists.length === 0) {
+    return NextResponse.json(
+      { success: true, data: {} }, //returning empty data as user is not a member
+      { status: 200 }
+    );
+  }
+
   const { data: memberInfo, error: memberInfoError } = await supabase
     .from('profiles')
     .select('email, username, members(open_to_work),role')
@@ -78,5 +98,8 @@ export async function GET(
     team: teamInfo[0].name,
   };
 
-  return NextResponse.json({ success: true, memberData: entireProfile });
+  return NextResponse.json(
+    { success: true, memberData: entireProfile },
+    { status: 200 }
+  );
 }
