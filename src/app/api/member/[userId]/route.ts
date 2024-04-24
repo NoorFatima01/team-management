@@ -10,31 +10,24 @@ export async function GET(
 ) {
   const userId = params.userId;
 
-  if (!userId) {
-    return NextResponse.json(
-      { success: false, error: 'User Id not found' },
-      { status: 400 }
-    );
-  }
-
   const supabase = createSupabaseServerClient();
 
-  //first check if the userId exists in the members table or not
-  const { data: memberExists, error: memberExistsError } = await supabase
-    .from('members')
-    .select('member_id')
-    .eq('member_id', userId);
+  //first check role of user
+  const { data: roleData, error: roleError } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', userId);
 
-  if (memberExistsError) {
+  if (roleError) {
     return NextResponse.json(
-      { success: false, error: memberExistsError.message },
+      { success: false, error: roleError.message },
       { status: 500 }
     );
   }
 
-  if (memberExists.length === 0) {
+  if (roleData[0].role === 'USER') {
     return NextResponse.json(
-      { success: true, data: {} }, //returning empty data as user is not a member
+      { success: true, memberData: null },
       { status: 200 }
     );
   }

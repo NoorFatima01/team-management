@@ -7,6 +7,8 @@ import Invitations from '@/components/pending-invitations';
 
 import { memberProfile } from '@/types';
 
+//no need to check if userId exists or not since this component will be accessed only if logged in
+
 const UserProfile = () => {
   const session = useSession();
   const user = session?.user;
@@ -16,14 +18,9 @@ const UserProfile = () => {
     queryKey: ['memberProfile', userId],
     queryFn: async () => {
       if (!userId) {
-        return <h1>Not Logged in</h1>;
+        return null;
       }
-      const response = await fetch(`/api/member/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(`/api/member/${userId}`);
       return await response.json();
     },
     retry: 10,
