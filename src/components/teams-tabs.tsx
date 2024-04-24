@@ -34,13 +34,13 @@ export default function TeamsTabs({
   useEffect(() => {
     if (teams.length > 0) {
       // If there's no team ID in the URL and we have teams, set the first team ID as default
-      router.replace(`/teams?team_id=${teams[0].team_id}`);
+      router.replace(`/dashboard/teams?team_id=${teams[0].team_id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClick = (team_id: string) => {
-    router.replace(`/teams?${team_id}`);
+    router.replace(`/dashboard/teams?${team_id}`);
   };
 
   const { data: membersOpenToWork } = useQuery({

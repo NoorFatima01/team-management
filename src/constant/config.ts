@@ -18,7 +18,7 @@ export const siteConfig = {
     },
     {
       title: 'Teams',
-      href: '/teams',
+      href: '/dashboard/teams',
     },
     {
       title: 'Inbox',

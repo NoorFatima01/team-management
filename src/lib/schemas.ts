@@ -66,6 +66,14 @@ export const invitationSchema = z.object({
   team_id: z.string().uuid(),
 });
 
+export const projectFormSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  start_date: z.date(),
+  end_date: z.date(),
+  team: z.string(),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
@@ -74,3 +82,4 @@ export type teamSchemaType = z.infer<typeof teamSchema>;
 export type memberTableSchemaType = z.infer<typeof memberTableSchema>;
 export type notificationSchemaType = z.infer<typeof notificationSchema>;
 export type invitationSchemaType = z.infer<typeof invitationSchema>;
+export type projectFormSchemaType = z.infer<typeof projectFormSchema>;
