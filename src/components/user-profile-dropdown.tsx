@@ -57,7 +57,10 @@ const UserProfileDropdown = ({ user }: UserProfileDropdownProps) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/${user.name}`} className='cursor-pointer'>
+              <Link
+                href={`/my-profile/${user.name}`}
+                className='cursor-pointer'
+              >
                 <Icons.user className='mr-2 size-4' /> My Account
               </Link>
             </DropdownMenuItem>
