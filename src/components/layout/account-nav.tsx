@@ -11,7 +11,7 @@ import NextImage from '@/components/NextImage';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
-import ProfileNotFound from '@/app/[name]/not-found';
+import ProfileNotFound from '@/app/my-profile/[name]/not-found';
 
 import { SessionUser } from '@/types/index';
 
@@ -83,7 +83,7 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
                   return (
                     <Link
                       key={index}
-                      href={`/${params.name}/${route.href}`}
+                      href={`/my-profile/${params.name}/${route.href}`}
                       className={cn(
                         buttonVariants({ variant: 'ghost' }),
                         'flex gap-4'
@@ -98,7 +98,7 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
                     return (
                       <Link
                         key={index}
-                        href={`/${params.name}/${route.href}`}
+                        href={`/my-profile/${params.name}/${route.href}`}
                         className={cn(
                           buttonVariants({ variant: 'ghost' }),
                           'flex gap-4'
