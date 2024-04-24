@@ -71,7 +71,16 @@ export const projectFormSchema = z.object({
   description: z.string(),
   start_date: z.date(),
   end_date: z.date(),
-  team: z.string(),
+  team_id: z.string(),
+});
+
+export const projectSchema = z.object({
+  project_id: z.string().uuid(),
+  name: z.string(),
+  description: z.string(),
+  start_date: z.string(),
+  end_date: z.string(),
+  team_id: z.string().uuid(),
 });
 
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
