@@ -12,6 +12,10 @@ export default async function AccountLayout({ children }: AccountLayoutProps) {
   const user = await getUser();
   const role = await getRole(user?.id as string);
 
+  if (!user) {
+    return <div>Not Logged In</div>;
+  }
+
   const accountNavUser = {
     name: user?.user_metadata.full_name,
     email: user?.email,

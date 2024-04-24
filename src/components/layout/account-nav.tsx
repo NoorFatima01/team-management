@@ -11,6 +11,8 @@ import NextImage from '@/components/NextImage';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
+import ProfileNotFound from '@/app/[name]/not-found';
+
 import { SessionUser } from '@/types/index';
 
 interface AccountNavProps {
@@ -48,6 +50,15 @@ const accountNavRoutes = [
 
 const AccountNav = ({ user, children }: AccountNavProps) => {
   const params = useParams();
+  const paramName = decodeURIComponent(params.name as string);
+
+  //code for when the url is /any-random-word, show 404 page
+  if (paramName !== user.name)
+    return (
+      <div>
+        <ProfileNotFound />
+      </div>
+    );
 
   return (
     <div className='h-screen p-2'>
