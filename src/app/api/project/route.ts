@@ -10,6 +10,7 @@ export async function POST(req: Request) {
     const reqData = await req.json();
     const projectData = {
       project_id: v4(),
+      project_status: 'IN_PROGRESS',
       ...reqData,
     };
 

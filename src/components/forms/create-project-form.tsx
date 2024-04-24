@@ -113,7 +113,9 @@ export default function CreateProjectForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size='sm'>Create Project</Button>
+        <Button size='sm' className='self-end'>
+          Create Project
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className='mb-4'>
