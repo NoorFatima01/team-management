@@ -7,7 +7,7 @@ export const userProfileSchema = z.object({
   full_name: z.string(),
   avatar_url: z.string(),
   email: z.string().email(),
-  role: z.enum(['USER', 'TEAM_MEMBER', 'TEAM_HEAD']),
+  role: z.enum(['USER', 'TEAM_MEMBER', 'TEAM_HEAD']).default('USER'),
 });
 
 export const memberFormSchema = z.object({
@@ -71,7 +71,19 @@ export const projectFormSchema = z.object({
   description: z.string(),
   start_date: z.date(),
   end_date: z.date(),
-  team: z.string(),
+  team_id: z.string(),
+});
+
+export const projectSchema = z.object({
+  project_id: z.string().uuid(),
+  name: z.string(),
+  description: z.string(),
+  start_date: z.string(),
+  end_date: z.string(),
+  team_id: z.string().uuid(),
+  project_status: z
+    .enum(['IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
+    .default('IN_PROGRESS'),
 });
 
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
@@ -83,3 +95,4 @@ export type memberTableSchemaType = z.infer<typeof memberTableSchema>;
 export type notificationSchemaType = z.infer<typeof notificationSchema>;
 export type invitationSchemaType = z.infer<typeof invitationSchema>;
 export type projectFormSchemaType = z.infer<typeof projectFormSchema>;
+export type projectSchemaType = z.infer<typeof projectSchema>;

@@ -1,10 +1,11 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { CalendarIcon } from 'lucide-react';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import {
   projectFormSchema,
@@ -48,7 +49,7 @@ export default function CreateProjectForm() {
   const session = useSession();
   const user_id = session?.user.id;
 
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedteam, setSelectedTeam] = useState<string>('');
 
   const form = useForm<projectFormSchemaType>({
@@ -58,7 +59,7 @@ export default function CreateProjectForm() {
       description: '',
       start_date: new Date(),
       end_date: new Date(),
-      team: '',
+      team_id: '',
     },
   });
 
@@ -74,10 +75,47 @@ export default function CreateProjectForm() {
       value: team.team_id,
     })) || [];
 
+  const createProject = async (data: projectFormSchemaType) => {
+    const response = await fetch('/api/project', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create team');
+    }
+    return response.json();
+  };
+
+  const mutate = useMutation({
+    mutationFn: createProject,
+    onSuccess: () => {
+      toast.success('Team Created Successfully');
+      setIsLoading(false);
+      form.reset();
+      setSelectedTeam('');
+    },
+    onError: () => {
+      toast.error('Failed to create team');
+      setIsLoading(false);
+    },
+  });
+
+  const onSubmit: SubmitHandler<projectFormSchemaType> = async (formData) => {
+    formData.team_id = selectedteam;
+
+    setIsLoading(true);
+    mutate.mutate(formData);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size='sm'>Create Project</Button>
+        <Button size='sm' className='self-end'>
+          Create Project
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className='mb-4'>
@@ -87,7 +125,10 @@ export default function CreateProjectForm() {
         </DialogHeader>
         <div>
           <Form {...form}>
-            <form className='mx-auto grid w-full max-w-lg gap-6'>
+            <form
+              className='mx-auto grid w-full max-w-lg gap-6'
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <div className='flex gap-2'>
                 <FormField
                   control={form.control}
@@ -106,7 +147,7 @@ export default function CreateProjectForm() {
                 />
                 <FormField
                   control={form.control}
-                  name='team'
+                  name='team_id'
                   render={() => (
                     <FormItem className='flex flex-1 flex-col gap-2'>
                       <FormLabel>Team</FormLabel>
