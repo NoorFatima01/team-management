@@ -80,3 +80,5 @@ export default function ProjectsTableShell({
   );
   return <DataTable columns={columns} data={data} />;
 }
+
+// /dashboard/projects/${ (row.original as { name: string }).name

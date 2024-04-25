@@ -91,6 +91,7 @@ export default function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className='hover:cursor-pointer'
                   onClick={() =>
                     router.push(
                       `/dashboard/projects/${
