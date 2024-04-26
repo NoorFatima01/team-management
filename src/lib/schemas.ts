@@ -86,6 +86,31 @@ export const projectSchema = z.object({
     .default('IN_PROGRESS'),
 });
 
+const MAX_FILE_SIZE = 700000;
+function checkFileType(file: File) {
+  if (file?.name) {
+    const fileType = file.name.split('.').pop();
+    if (fileType === 'docx' || fileType === 'pdf') return true;
+    return false;
+  }
+}
+
+export const fileSchema = z.object({
+  file: z
+    .any()
+    .refine((file: File) => file?.size !== 0, 'File is required')
+    .refine((file: File) => {
+      if (file?.size) {
+        return file.size <= MAX_FILE_SIZE;
+      }
+      return false;
+    }, `File size should be less than ${MAX_FILE_SIZE / 1000}KB`)
+    .refine(
+      (file: File) => checkFileType(file),
+      'File should be of type docx or pdf'
+    ),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
@@ -96,3 +121,4 @@ export type notificationSchemaType = z.infer<typeof notificationSchema>;
 export type invitationSchemaType = z.infer<typeof invitationSchema>;
 export type projectFormSchemaType = z.infer<typeof projectFormSchema>;
 export type projectSchemaType = z.infer<typeof projectSchema>;
+export type fileSchemaType = z.infer<typeof fileSchema>;

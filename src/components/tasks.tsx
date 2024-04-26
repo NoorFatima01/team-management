@@ -4,8 +4,17 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
+import AddTaskForm from '@/components/forms/create-task-form';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,6 +22,7 @@ import {
 } from '@/components/ui/resizable';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import UploadFile from '@/components/upload-file';
 
 const tasks = [
   {
@@ -152,9 +162,12 @@ export default function Tasks({ projectName }: TasksProps) {
       >
         <ResizablePanel defaultSize={20}>
           <ScrollArea className='p-6'>
-            <h2 className='text-2xl font-extrabold tracking-tighter mb-4'>
-              {projectName}
-            </h2>
+            <div className='flex justify-between items-center'>
+              <h2 className='text-2xl font-extrabold tracking-tighter mb-4'>
+                {projectName}
+              </h2>
+              <AddTaskForm />
+            </div>
             <Separator orientation='horizontal' className='mb-4' />
             {tasks.map((task) => (
               <div key={task.id}>
@@ -197,10 +210,26 @@ export default function Tasks({ projectName }: TasksProps) {
             <ResizablePanel defaultSize={75}>
               <div className='flex h-full p-6 justify-between '>
                 <h3 className='text-xl font-extrabold'>Recent Activity</h3>
-                <Button size='sm'>
-                  <Icons.attach className='mr-2 size-4' />
-                  Upload File
-                </Button>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size='sm'>
+                      <Icons.attach className='mr-2 size-4' />
+                      Attach File
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader className='mb-4'>
+                      <DialogTitle className='text-xl font-bold'>
+                        Attach File
+                      </DialogTitle>
+                    </DialogHeader>
+                    <UploadFile />
+                    <DialogFooter>
+                      <Button size='sm'>Upload</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
