@@ -1,5 +1,19 @@
 import React from 'react';
 
-export default function ProjectDetailsPage() {
-  return <div>ProjectDetailsPage</div>;
+import Tasks from '@/components/tasks';
+
+interface ProjectDetailsPageProps {
+  params: { project: string };
+}
+
+export default function ProjectDetailsPage({
+  params,
+}: ProjectDetailsPageProps) {
+  const { project } = params;
+
+  return (
+    <div>
+      <Tasks projectName={project} />
+    </div>
+  );
 }

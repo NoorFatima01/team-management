@@ -260,8 +260,8 @@ export default function CreateProjectForm() {
                     aria-hidden='true'
                   />
                 )}
-                Create Team
-                <span className='sr-only'>Create Team</span>
+                Create Project
+                <span className='sr-only'>Create Project</span>
               </Button>
             </form>
           </Form>
