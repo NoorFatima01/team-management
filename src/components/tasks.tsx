@@ -4,7 +4,7 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
-import AddTaskForm from '@/components/forms/create-task-form';
+import AddTaskForm from '@/components/forms/add-task-form';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
