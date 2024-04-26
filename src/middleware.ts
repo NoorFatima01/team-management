@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
 
   const user = session?.user;
 
-  if (!user && request.nextUrl.pathname.startsWith('/my-profile')) {
+  if (!user) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
@@ -34,5 +34,6 @@ export const config = {
      * Feel free to modify this pattern to include more paths.
      */
     '/((?!_next/static|_next/image|favicon.ico|.\\.(?:svg|png|jpg|jpeg|gif|webp)$).)',
+    '/my-profile/:name*',
   ],
 };
