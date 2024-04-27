@@ -123,6 +123,7 @@ export const taskSchema = z.object({
     .enum(['IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
     .default('IN_PROGRESS'),
   filePath: z.string(),
+  project_id: z.string().uuid(),
 });
 
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;

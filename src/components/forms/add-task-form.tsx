@@ -73,10 +73,22 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
   const onSubmit = async (data: taskFormSchemaType) => {
     setIsLoading(true);
     const clientSupabase = createSupabaseBrowserClient();
-    const filePath: string = '/' + projectName + '/' + data.file.name;
+    const filePath: string =
+      '/' + projectName + '/' + data.title + '/' + data.file.name;
     const { error } = await clientSupabase.storage
       .from('taskFiles')
       .upload(filePath, data.file as File);
+    //get project id
+    const { data: projectData, error: projectError } = await clientSupabase
+      .from('projects')
+      .select('project_id')
+      .eq('name', projectName);
+    if (projectError) {
+      toast.error('Error uploading file');
+      setIsLoading(false);
+      return;
+    }
+    const projectId = projectData[0].project_id;
     if (error) {
       toast.error('Error uploading file');
       setIsLoading(false);
@@ -87,6 +99,7 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
       details: data.details as string,
       filePath: filePath as string,
       status: 'IN_PROGRESS',
+      project_id: projectId as string,
     });
   };
 

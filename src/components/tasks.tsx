@@ -95,66 +95,6 @@ const tasks = [
     description: 'Description 10',
     status: 'In Progress',
   },
-  {
-    id: 11,
-    title: 'Task 11',
-    description: 'Description 11',
-    status: 'In Progress',
-  },
-  {
-    id: 12,
-    title: 'Task 12',
-    description: 'Description 12',
-    status: 'In Progress',
-  },
-  {
-    id: 13,
-    title: 'Task 13',
-    description: 'Description 13',
-    status: 'In Progress',
-  },
-  {
-    id: 14,
-    title: 'Task 14',
-    description: 'Description 14',
-    status: 'In Progress',
-  },
-  {
-    id: 15,
-    title: 'Task 15',
-    description: 'Description 15',
-    status: 'In Progress',
-  },
-  {
-    id: 16,
-    title: 'Task 16',
-    description: 'Description 16',
-    status: 'In Progress',
-  },
-  {
-    id: 17,
-    title: 'Task 17',
-    description: 'Description 17',
-    status: 'In Progress',
-  },
-  {
-    id: 18,
-    title: 'Task 18',
-    description: 'Description 18',
-    status: 'In Progress',
-  },
-  {
-    id: 19,
-    title: 'Task 19',
-    description: 'Description 19',
-    status: 'In Progress',
-  },
-  {
-    id: 20,
-    title: 'Task 20',
-    description: 'Description 20',
-    status: 'In Progress',
-  },
 ];
 
 interface TasksProps {
@@ -165,6 +105,17 @@ export default function Tasks({ projectName }: TasksProps) {
   const [taskSelected, setTaskSelected] = React.useState<number | null>(1);
   const [isLoading] = React.useState(false);
   //there wont be that many tasks so tasks ids will be incremented starting from 1
+
+  // const getProjectTasks = async () => {
+  //   //fetch tasks from db
+  //   const clientSupabase = createSupabaseBrowserClient();
+  //   const { data, error } = await clientSupabase.from('tasks').select('*');
+  //   if (error) {
+  //     console.error('Error fetching tasks', error);
+  //     return;
+  //   }
+  //   console.log('tasks', data);
+  // };
 
   const form = useForm<fileSchemaType>({
     resolver: zodResolver(fileSchema),
