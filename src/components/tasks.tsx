@@ -189,7 +189,7 @@ export default function Tasks({ projectName }: TasksProps) {
               <h2 className='text-2xl font-extrabold tracking-tighter mb-4'>
                 {projectName}
               </h2>
-              <AddTaskForm />
+              <AddTaskForm projectName={projectName} />
             </div>
             <Separator orientation='horizontal' className='mb-4' />
             {tasks.map((task) => (

@@ -111,12 +111,18 @@ export const fileSchema = z.object({
     ),
 });
 //task schema extends file schema
-export const taskSchema = fileSchema.extend({
+export const taskFormSchema = fileSchema.extend({
+  title: z.string(),
+  details: z.string(),
+});
+
+export const taskSchema = z.object({
   title: z.string(),
   details: z.string(),
   status: z
     .enum(['IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
     .default('IN_PROGRESS'),
+  filePath: z.string(),
 });
 
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
@@ -130,4 +136,5 @@ export type invitationSchemaType = z.infer<typeof invitationSchema>;
 export type projectFormSchemaType = z.infer<typeof projectFormSchema>;
 export type projectSchemaType = z.infer<typeof projectSchema>;
 export type fileSchemaType = z.infer<typeof fileSchema>;
+export type taskFormSchemaType = z.infer<typeof taskFormSchema>;
 export type taskSchemaType = z.infer<typeof taskSchema>;
