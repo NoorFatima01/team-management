@@ -1,20 +1,30 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
+import { useForm } from 'react-hook-form';
 
+import { fileSchema, fileSchemaType } from '@/lib/schemas';
 import { cn } from '@/lib/utils';
 
-import AddTaskForm from '@/components/forms/create-task-form';
+import AddTaskForm from '@/components/forms/add-task-form';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -153,7 +163,20 @@ interface TasksProps {
 
 export default function Tasks({ projectName }: TasksProps) {
   const [taskSelected, setTaskSelected] = React.useState<number | null>(1);
+  const [isLoading] = React.useState(false);
   //there wont be that many tasks so tasks ids will be incremented starting from 1
+
+  const form = useForm<fileSchemaType>({
+    resolver: zodResolver(fileSchema),
+
+    defaultValues: {
+      file: '',
+    },
+  });
+
+  // const onSubmit = (data: fileSchemaType) => {
+  //   console.log('form data is', data);
+  // };
   return (
     <div className='h-full'>
       <ResizablePanelGroup
@@ -224,10 +247,39 @@ export default function Tasks({ projectName }: TasksProps) {
                         Attach File
                       </DialogTitle>
                     </DialogHeader>
-                    <UploadFile />
-                    <DialogFooter>
-                      <Button size='sm'>Upload</Button>
-                    </DialogFooter>
+                    <Form {...form}>
+                      <form
+                        // onSubmit={form.handleSubmit(onSubmit)}
+                        className='space-y-4'
+                      >
+                        <FormField
+                          control={form.control}
+                          name='file'
+                          render={() => (
+                            <FormItem className='flex flex-col gap-2'>
+                              <FormLabel>File</FormLabel>
+                              <FormControl>
+                                <UploadFile
+                                  setValue={form.setValue}
+                                  name='file'
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button type='submit' disabled={isLoading}>
+                          {isLoading && (
+                            <Icons.spinner
+                              className='mr-2 size-4 animate-spin'
+                              aria-hidden='true'
+                            />
+                          )}
+                          Upload File
+                          <span className='sr-only'>Upload File</span>
+                        </Button>
+                      </form>
+                    </Form>
                   </DialogContent>
                 </Dialog>
               </div>
