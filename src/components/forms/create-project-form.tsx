@@ -84,7 +84,7 @@ export default function CreateProjectForm() {
       body: JSON.stringify(data),
     });
     if (!response.ok) {
-      throw new Error('Failed to create team');
+      throw new Error('Failed to create project');
     }
     return response.json();
   };
@@ -92,7 +92,7 @@ export default function CreateProjectForm() {
   const mutate = useMutation({
     mutationFn: createProject,
     onSuccess: () => {
-      toast.success('Team Created Successfully');
+      toast.success('Project Created Successfully');
       setIsLoading(false);
       form.reset();
       setSelectedTeam('');
@@ -136,12 +136,14 @@ export default function CreateProjectForm() {
                   render={({ field }) => (
                     <FormItem className='flex flex-1 flex-col gap-2'>
                       <FormLabel>Name</FormLabel>
-                      <Input
-                        id='add-project-name'
-                        type='text'
-                        placeholder='Enter Project Name'
-                        {...field}
-                      />
+                      <FormControl>
+                        <Input
+                          id='add-project-name'
+                          type='text'
+                          placeholder='Enter Project Name'
+                          {...field}
+                        />
+                      </FormControl>
                     </FormItem>
                   )}
                 />
@@ -166,12 +168,14 @@ export default function CreateProjectForm() {
                 render={({ field }) => (
                   <FormItem className='flex flex-col gap-2'>
                     <FormLabel>Description</FormLabel>
-                    <Input
-                      id='add-project-description'
-                      type='text'
-                      placeholder='Enter Project Description'
-                      {...field}
-                    />
+                    <FormControl>
+                      <Input
+                        id='add-project-description'
+                        type='text'
+                        placeholder='Enter Project Description'
+                        {...field}
+                      />
+                    </FormControl>
                   </FormItem>
                 )}
               />
