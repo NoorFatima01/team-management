@@ -22,6 +22,16 @@ export async function POST(req: Request) {
     if (projectError) {
       throw new Error(projectError.message);
     }
+
+    const { error: incrementError } = await serverSupabase.rpc(
+      'update_team_projects',
+      { x: 1, row_id: projectDataParsed.team_id }
+    );
+
+    if (incrementError) {
+      throw new Error(incrementError.message);
+    }
+
     return new Response(JSON.stringify(projectDataParsed), { status: 201 });
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
