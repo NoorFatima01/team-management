@@ -18,7 +18,7 @@ const Pagination = ({ page, pages, onPageChange }: PaginationProps) => {
           <li
             key={pageNumber}
             className={`w-10 h-10 flex justify-center items-center ${
-              pageNumber === page ? 'bg-blue-600 text-white' : 'text-blue-600'
+              pageNumber === page ? 'bg-green-600 text-white' : 'text-green-600'
             }`}
           >
             <button onClick={() => onPageChange(pageNumber)}>

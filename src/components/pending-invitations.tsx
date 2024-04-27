@@ -109,7 +109,7 @@ const Invitations = () => {
     //change the status of the invitation to accepted
     invitationUpdate({ status: 'ACCEPTED', inv_id: inv_id });
 
-    //also update the department to include this member
+    //also update the team to include this member
     teamUpdate({ team_id: team_id, member_id: member_id });
   }
 

@@ -87,7 +87,7 @@ export default function InviteMembers({
   });
 
   async function handleClick(id: string) {
-    const text = `You have been invited to join the ${teamName} department`;
+    const text = `You have been invited to join the ${teamName} team`;
     const invitationData: invitationProps = {
       member_id: id,
       text,

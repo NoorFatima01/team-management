@@ -51,7 +51,7 @@ export default function RegisterMemberForm({ user }: RegisterMemberFormProps) {
       body: JSON.stringify(formData),
     });
     if (!response.ok) {
-      throw new Error('Failed to add department');
+      throw new Error('Failed to add team member');
     }
 
     return response.json();
