@@ -1,4 +1,3 @@
-alter table "_realtime"."tenants" drop column "enable_authorization";
 
 
 set check_function_bodies = off;
