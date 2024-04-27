@@ -10,10 +10,6 @@ const HeroSection = () => {
         <h1 className='text-5xl leading-tight tracking-tighter font-bold'>
           A Team Management Platform
         </h1>
-        <p className='px-2 text-lg font-normal text-muted-foreground'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
-          distinctio in beatae nam amet neque ad maxime sit even
-        </p>
       </div>
     </div>
   );
