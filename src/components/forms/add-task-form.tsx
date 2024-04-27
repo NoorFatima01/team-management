@@ -1,10 +1,17 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
-import { taskSchema, taskSchemaType } from '@/lib/schemas';
+import {
+  taskFormSchema,
+  taskFormSchemaType,
+  taskSchemaType,
+} from '@/lib/schemas';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
 
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
@@ -28,19 +35,60 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import UploadFile from '@/components/upload-file';
 
-export default function AddTaskForm() {
-  const [isLoading] = useState(false);
-  const form = useForm<taskSchemaType>({
-    resolver: zodResolver(taskSchema),
+interface AddTaskFormProps {
+  projectName: string;
+}
+
+export default function AddTaskForm({ projectName }: AddTaskFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm<taskFormSchemaType>({
+    resolver: zodResolver(taskFormSchema),
     defaultValues: {
       title: '',
       details: '',
       file: '',
     },
   });
-  // const onSubmit = (data: taskSchemaType) => {
-  //   console.log('form data is', data);
-  // };
+  const addTask = async (data: taskSchemaType) => {
+    const respone = await fetch('/api/task', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    if (!respone.ok) {
+      throw new Error('Error adding task');
+    }
+  };
+  const mutate = useMutation({
+    mutationFn: addTask,
+    onSuccess: () => {
+      toast.success('Task added Successfully');
+      setIsLoading(false);
+      form.reset();
+    },
+    onError: () => {
+      toast.error('Failed to add task');
+      setIsLoading(false);
+    },
+  });
+  const onSubmit = async (data: taskFormSchemaType) => {
+    setIsLoading(true);
+    const clientSupabase = createSupabaseBrowserClient();
+    const filePath: string = '/' + projectName + '/' + data.file.name;
+    const { error } = await clientSupabase.storage
+      .from('taskFiles')
+      .upload(filePath, data.file as File);
+    if (error) {
+      toast.error('Error uploading file');
+      setIsLoading(false);
+      return;
+    }
+    mutate.mutate({
+      title: data.title as string,
+      details: data.details as string,
+      filePath: filePath as string,
+      status: 'IN_PROGRESS',
+    });
+  };
 
   return (
     <Dialog>
@@ -56,7 +104,7 @@ export default function AddTaskForm() {
             <Form {...form}>
               <form
                 className='mx-auto grid w-full max-w-lg gap-6'
-                // onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmit)}
               >
                 <FormField
                   control={form.control}
