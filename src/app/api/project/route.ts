@@ -33,3 +33,55 @@ export async function POST(req: Request) {
     }
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const pageSize = 3;
+    const pageNumber = parseInt(req.url.split('?')[1].split('page=')[1] || '1');
+
+    const serverSupabase = createSupabaseServerClient();
+
+    //first get total number of projects
+    const { data: projectsCount, error: countError } = await serverSupabase
+      .from('projects')
+      .select('project_id');
+    const totalProjects = projectsCount?.length || 0;
+
+    if (totalProjects === 0) {
+      return new Response(null, { status: 200 });
+    }
+
+    if (countError) {
+      throw new Error(countError.message);
+    }
+
+    const skip = (pageNumber - 1) * pageSize;
+
+    //get only those projects that are in the current page
+    const { data: projects, error } = await serverSupabase
+      .from('projects')
+      .select(
+        'project_id, name, description, project_status,start_date, end_date, teams (name) '
+      )
+      .range(skip, skip + pageSize - 1);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const projectResponse = {
+      projects,
+      totalProjects,
+      totalPages: Math.ceil(totalProjects / pageSize),
+      currentPage: pageNumber,
+    };
+
+    return new Response(JSON.stringify(projectResponse), { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return new Response(error.message, { status: 500 });
+    } else {
+      return new Response(null, { status: 500 });
+    }
+  }
+}
