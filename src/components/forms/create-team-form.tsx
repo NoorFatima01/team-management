@@ -165,7 +165,7 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
           name='team_head'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Dept Head</FormLabel>
+              <FormLabel>Team Head</FormLabel>
               <FormControl>
                 <Input
                   id='add-team-head'

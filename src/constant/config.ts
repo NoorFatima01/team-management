@@ -9,16 +9,12 @@ export const siteConfig = {
       href: '/dashboard',
     },
     {
-      title: 'Events',
-      href: '/all-events',
-    },
-    {
       title: 'Projects',
       href: '/projects',
     },
     {
       title: 'Teams',
-      href: '/dashboard/teams',
+      href: '/teams',
     },
     {
       title: 'Inbox',

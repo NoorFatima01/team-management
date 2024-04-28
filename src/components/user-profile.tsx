@@ -33,7 +33,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className='space-y-2'>
+      <div className='space-y-2 mt-2'>
         <div className='flex flex-col'>
           {/* Name */}
           <div className='text-2xl font-bold'>{memberData?.username}</div>
