@@ -126,6 +126,13 @@ export const taskSchema = z.object({
   project_id: z.string().uuid(),
 });
 
+const fileRecordSchema = z.object({
+  file_id: z.string().uuid(),
+  created_at: z.string().default(new Date().toISOString()),
+  path: z.string(),
+  uploader_id: z.string().uuid(),
+});
+
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;
@@ -139,3 +146,4 @@ export type projectSchemaType = z.infer<typeof projectSchema>;
 export type fileSchemaType = z.infer<typeof fileSchema>;
 export type taskFormSchemaType = z.infer<typeof taskFormSchema>;
 export type taskSchemaType = z.infer<typeof taskSchema>;
+export type fileRecordSchemaType = z.infer<typeof fileRecordSchema>;

@@ -1,9 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { useDownload } from '@/lib/hooks';
@@ -12,6 +12,7 @@ import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
 
 import AddTaskForm from '@/components/forms/add-task-form';
 import { Icons } from '@/components/icons';
+import RecentActivity from '@/components/recent-activity';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -41,10 +42,16 @@ interface TasksProps {
   projectName: string;
 }
 
+type FileData = {
+  id: string;
+  path: string;
+  fullPath: string;
+};
+
 export default function Tasks({ projectName }: TasksProps) {
   const [taskSelected, setTaskSelected] =
     React.useState<taskSchemaType | null>();
-  const [isLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const { handleZip } = useDownload(taskSelected?.filePath || '');
 
   const getProjectTasks = async () => {
@@ -77,9 +84,55 @@ export default function Tasks({ projectName }: TasksProps) {
     },
   });
 
-  const onSubmit = (data: fileSchemaType) => {
-    // eslint-disable-next-line no-console
-    console.log('form data is', data);
+  const recordFile = async (file: {
+    id: string;
+    path: string;
+    fullPath: string;
+  }) => {
+    const response = await fetch('/api/file', {
+      method: 'POST',
+      body: JSON.stringify({ file_id: file.id, path: file.path }),
+    });
+    if (!response.ok) {
+      throw new Error('Error recording file');
+    }
+  };
+
+  const mutate = useMutation({
+    mutationFn: recordFile,
+    onSuccess: () => {
+      toast.success('File recorded Successfully');
+      setIsLoading(false);
+      form.reset();
+    },
+    onError: () => {
+      toast.error('Failed to record file');
+      setIsLoading(false);
+    },
+  });
+
+  const onSubmit: SubmitHandler<fileSchemaType> = async (
+    data: fileSchemaType
+  ) => {
+    setIsLoading(true);
+    const clientSupabase = createSupabaseBrowserClient();
+    const filePath: string =
+      '/' + projectName + '/' + taskSelected?.title + '/' + data.file.name;
+    const { data: fileData, error } = await clientSupabase.storage
+      .from('taskFiles')
+      .upload(filePath, data.file as File);
+
+    if (error) {
+      toast.error('Error uploading file');
+      setIsLoading(false);
+      return;
+    }
+    mutate.mutate({
+      id: (fileData as FileData).id,
+      path: (fileData as FileData).path,
+      fullPath: (fileData as FileData).fullPath,
+    });
+    setIsLoading(false);
   };
   return (
     <div className='h-96 flex flex-col gap-3'>
@@ -148,64 +201,70 @@ export default function Tasks({ projectName }: TasksProps) {
                     </div>
                   </div>
                 ) : (
-                  <span className='font-semibold'>Select a task</span>
+                  <span className='text-center font-semibold'>
+                    Select a task
+                  </span>
                 )}
               </div>
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
-              <div className='flex h-full p-6 justify-between '>
-                <h3 className='text-xl font-extrabold'>Recent Activity</h3>
+              {taskSelected ? (
+                <div className='flex h-full p-6 justify-between '>
+                  <RecentActivity project={projectName} task={taskSelected} />
 
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size='sm'>
-                      <Icons.attach className='mr-2 size-4' />
-                      Attach File
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader className='mb-4'>
-                      <DialogTitle className='text-xl font-bold'>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button size='sm'>
+                        <Icons.attach className='mr-2 size-4' />
                         Attach File
-                      </DialogTitle>
-                    </DialogHeader>
-                    <Form {...form}>
-                      <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className='space-y-4'
-                      >
-                        <FormField
-                          control={form.control}
-                          name='file'
-                          render={() => (
-                            <FormItem className='flex flex-col gap-2'>
-                              <FormLabel>File</FormLabel>
-                              <FormControl>
-                                <UploadFile
-                                  setValue={form.setValue}
-                                  name='file'
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button type='submit' disabled={isLoading}>
-                          {isLoading && (
-                            <Icons.spinner
-                              className='mr-2 size-4 animate-spin'
-                              aria-hidden='true'
-                            />
-                          )}
-                          Upload File
-                          <span className='sr-only'>Upload File</span>
-                        </Button>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
-              </div>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader className='mb-4'>
+                        <DialogTitle className='text-xl font-bold'>
+                          Attach File
+                        </DialogTitle>
+                      </DialogHeader>
+                      <Form {...form}>
+                        <form
+                          onSubmit={form.handleSubmit(onSubmit)}
+                          className='space-y-4'
+                        >
+                          <FormField
+                            control={form.control}
+                            name='file'
+                            render={() => (
+                              <FormItem className='flex flex-col gap-2'>
+                                <FormLabel>File</FormLabel>
+                                <FormControl>
+                                  <UploadFile
+                                    setValue={form.setValue}
+                                    name='file'
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <Button type='submit' disabled={isLoading}>
+                            {isLoading && (
+                              <Icons.spinner
+                                className='mr-2 size-4 animate-spin'
+                                aria-hidden='true'
+                              />
+                            )}
+                            Upload File
+                            <span className='sr-only'>Upload File</span>
+                          </Button>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              ) : (
+                <p className='text-center font-semibold mt-8'>Select a Task</p>
+              )}
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>

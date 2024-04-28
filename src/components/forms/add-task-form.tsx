@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import {
@@ -70,7 +70,9 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
       setIsLoading(false);
     },
   });
-  const onSubmit = async (data: taskFormSchemaType) => {
+  const onSubmit: SubmitHandler<taskFormSchemaType> = async (
+    data: taskFormSchemaType
+  ) => {
     setIsLoading(true);
     const clientSupabase = createSupabaseBrowserClient();
     const filePath: string =

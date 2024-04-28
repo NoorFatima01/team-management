@@ -8,13 +8,11 @@ export async function POST(req: Request) {
     const body = await req.json();
     const taskData = taskSchema.parse(body);
     const clientSupabase = createSupabaseServerClient();
-    const { data: task, error } = await clientSupabase
-      .from('tasks')
-      .insert(taskData);
+    const { error } = await clientSupabase.from('tasks').insert(taskData);
     if (error) {
       throw new Error(error.message);
     }
-    return new Response(JSON.stringify(task), { status: 201 });
+    return new Response(JSON.stringify({ success: true }), { status: 201 });
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 });
