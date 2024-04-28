@@ -53,7 +53,9 @@ export default function Tasks({ projectName }: TasksProps) {
     const { data, error } = await clientSupabase
       .from('tasks')
       .select('title, details, status, filePath, projects(project_id)')
-      .eq('projects.name', projectName);
+      .eq('projects.name', projectName)
+      .not('projects', 'is', null);
+
     if (error) {
       toast.error('Error fetching tasks');
       return;
