@@ -6,6 +6,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { useDownload } from '@/lib/hooks';
 import { fileSchema, fileSchemaType, taskSchemaType } from '@/lib/schemas';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
 
@@ -44,14 +45,14 @@ export default function Tasks({ projectName }: TasksProps) {
   const [taskSelected, setTaskSelected] =
     React.useState<taskSchemaType | null>();
   const [isLoading] = React.useState(false);
-  //there wont be that many tasks so tasks ids will be incremented starting from 1
+  const { handleZip } = useDownload(taskSelected?.filePath || '');
 
   const getProjectTasks = async () => {
     //fetch tasks from db
     const clientSupabase = createSupabaseBrowserClient();
     const { data, error } = await clientSupabase
       .from('tasks')
-      .select('title, details, status, projects(project_id)')
+      .select('title, details, status, filePath, projects(project_id)')
       .eq('projects.name', projectName);
     if (error) {
       toast.error('Error fetching tasks');
@@ -129,9 +130,20 @@ export default function Tasks({ projectName }: TasksProps) {
                       </span>
                       <span className='text-lg'>{taskSelected.details}</span>
                     </div>
-                    <Button size='sm' variant='secondary'>
-                      Mark as Done
-                    </Button>
+                    <div className='flex gap-3'>
+                      <Button
+                        size='sm'
+                        variant='secondary'
+                        onClick={async () => {
+                          await handleZip();
+                        }}
+                      >
+                        Download Reference Material
+                      </Button>
+                      <Button size='sm' variant='secondary'>
+                        Mark as Done
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <span className='font-semibold'>Select a task</span>
