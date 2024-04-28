@@ -70,3 +70,18 @@ using ((EXISTS ( SELECT 1
 
 
 
+
+
+insert into storage.buckets
+  (id, name, public)
+values
+  ('taskFiles', 'taskFiles', false);
+
+
+CREATE POLICY "Enable all operations to authenticated users 2lrraq_0" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'taskFiles');
+CREATE POLICY "Enable all operations to authenticated users 2lrraq_1" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'taskFiles');
+CREATE POLICY "Enable all operations to authenticated users 2lrraq_2" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'taskFiles');
+CREATE POLICY "Enable all operations to authenticated users 2lrraq_3" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'taskFiles');
+
+
+
