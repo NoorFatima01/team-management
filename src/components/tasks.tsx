@@ -1,11 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
-import { fileSchema, fileSchemaType } from '@/lib/schemas';
-import { cn } from '@/lib/utils';
+import { fileSchema, fileSchemaType, taskSchemaType } from '@/lib/schemas';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
 
 import AddTaskForm from '@/components/forms/add-task-form';
 import { Icons } from '@/components/icons';
@@ -34,88 +36,35 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import UploadFile from '@/components/upload-file';
 
-const tasks = [
-  {
-    id: 1,
-    title: 'Task 1',
-    description: 'Description 1',
-    status: 'In Progress',
-  },
-  {
-    id: 2,
-    title: 'Task 2',
-    description: 'Description 2',
-    status: 'In Progress',
-  },
-  {
-    id: 3,
-    title: 'Task 3',
-    description: 'Description 3',
-    status: 'In Progress',
-  },
-  {
-    id: 4,
-    title: 'Task 4',
-    description: 'Description 4',
-    status: 'In Progress',
-  },
-  {
-    id: 5,
-    title: 'Task 5',
-    description: 'Description 5',
-    status: 'In Progress',
-  },
-  {
-    id: 6,
-    title: 'Task 6',
-    description: 'Description 6',
-    status: 'In Progress',
-  },
-  {
-    id: 7,
-    title: 'Task 7',
-    description: 'Description 7',
-    status: 'In Progress',
-  },
-  {
-    id: 8,
-    title: 'Task 8',
-    description: 'Description 8',
-    status: 'In Progress',
-  },
-  {
-    id: 9,
-    title: 'Task 9',
-    description: 'Description 9',
-    status: 'In Progress',
-  },
-  {
-    id: 10,
-    title: 'Task 10',
-    description: 'Description 10',
-    status: 'In Progress',
-  },
-];
-
 interface TasksProps {
   projectName: string;
 }
 
 export default function Tasks({ projectName }: TasksProps) {
-  const [taskSelected, setTaskSelected] = React.useState<number | null>(1);
+  const [taskSelected, setTaskSelected] =
+    React.useState<taskSchemaType | null>();
   const [isLoading] = React.useState(false);
   //there wont be that many tasks so tasks ids will be incremented starting from 1
 
-  // const getProjectTasks = async () => {
-  //   //fetch tasks from db
-  //   const clientSupabase = createSupabaseBrowserClient();
-  //   const { data, error } = await clientSupabase.from('tasks').select('*');
-  //   if (error) {
-  //     console.error('Error fetching tasks', error);
-  //     return;
-  //   }
-  //   console.log('tasks', data);
-  // };
+  const getProjectTasks = async () => {
+    //fetch tasks from db
+    const clientSupabase = createSupabaseBrowserClient();
+    const { data, error } = await clientSupabase
+      .from('tasks')
+      .select('title, details, status, projects(project_id)')
+      .eq('projects.name', projectName);
+    if (error) {
+      toast.error('Error fetching tasks');
+      return;
+    }
+    return data as unknown as taskSchemaType[];
+  };
+
+  const { data: tasksData, isLoading: tasksLoading } = useQuery({
+    queryKey: ['tasks', projectName],
+    queryFn: getProjectTasks,
+    retry: 10,
+  });
 
   const form = useForm<fileSchemaType>({
     resolver: zodResolver(fileSchema),
@@ -125,37 +74,46 @@ export default function Tasks({ projectName }: TasksProps) {
     },
   });
 
-  // const onSubmit = (data: fileSchemaType) => {
-  //   console.log('form data is', data);
-  // };
+  const onSubmit = (data: fileSchemaType) => {
+    // eslint-disable-next-line no-console
+    console.log('form data is', data);
+  };
   return (
-    <div className='h-full'>
+    <div className='h-96 flex flex-col gap-3'>
+      <AddTaskForm projectName={projectName} />
+
       <ResizablePanelGroup
         direction='horizontal'
         className='w-full h-full rounded-lg border'
       >
         <ResizablePanel defaultSize={20}>
           <ScrollArea className='p-6'>
-            <div className='flex justify-between items-center'>
-              <h2 className='text-2xl font-extrabold tracking-tighter mb-4'>
-                {projectName}
-              </h2>
-              <AddTaskForm projectName={projectName} />
-            </div>
+            <h2 className='text-2xl font-extrabold tracking-tighter mb-4'>
+              {projectName}
+            </h2>
+
             <Separator orientation='horizontal' className='mb-4' />
-            {tasks.map((task) => (
-              <div key={task.id}>
-                <span
-                  className={cn(
-                    'font-semibold hover:cursor-pointer hover:text-primary-foreground transition-all duration-400',
-                    taskSelected === task.id && 'text-xl font-bold'
-                  )}
-                  onClick={() => setTaskSelected(task.id)}
-                >
-                  {task.title}
-                </span>
-              </div>
-            ))}
+            <div className='flex flex-col items-center justify-center gap-3'>
+              {tasksLoading ? (
+                <Icons.spinner
+                  className='size-7 animate-spin'
+                  aria-hidden='true'
+                />
+              ) : tasksData ? (
+                tasksData?.map((task, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => setTaskSelected(task)}
+                    variant='ghost'
+                    className='w-full'
+                  >
+                    {task.title}
+                  </Button>
+                ))
+              ) : (
+                <div>no tasks. Add</div>
+              )}
+            </div>
           </ScrollArea>
         </ResizablePanel>
         <ResizableHandle />
@@ -165,11 +123,11 @@ export default function Tasks({ projectName }: TasksProps) {
               <div className='flex flex-col h-full p-6'>
                 {taskSelected ? (
                   <div className='flex justify-between'>
-                    <div className='flex flex-col'>
-                      <span className='font-semibold text-xl'>
-                        {tasks[taskSelected - 1].title}
+                    <div className='flex flex-col gap-3'>
+                      <span className='font-extrabold text-xl'>
+                        {taskSelected.title}
                       </span>
-                      <span>{tasks[taskSelected - 1].description}</span>
+                      <span className='text-lg'>{taskSelected.details}</span>
                     </div>
                     <Button size='sm' variant='secondary'>
                       Mark as Done
@@ -200,7 +158,7 @@ export default function Tasks({ projectName }: TasksProps) {
                     </DialogHeader>
                     <Form {...form}>
                       <form
-                        // onSubmit={form.handleSubmit(onSubmit)}
+                        onSubmit={form.handleSubmit(onSubmit)}
                         className='space-y-4'
                       >
                         <FormField

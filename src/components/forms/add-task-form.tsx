@@ -106,7 +106,9 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size='sm'>Add Task</Button>
+        <Button size='sm' className='self-end'>
+          Add Task
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className='mb-4'>
