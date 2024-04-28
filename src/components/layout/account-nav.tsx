@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 
 import Box from '@/components/Box';
 import { Icons } from '@/components/icons';
+import ProfilePageBreadcrumb from '@/components/layout/profile-page-breadcrumb';
 import NextImage from '@/components/NextImage';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -20,7 +21,6 @@ interface AccountNavProps {
   user: SessionUser;
 }
 
-//TODO: add role based display of these routes using shouldRender boolean
 const accountNavRoutes = [
   {
     shouldRender: (user: SessionUser) => user.role === 'USER',
@@ -29,22 +29,10 @@ const accountNavRoutes = [
     icon: <Icons.employee className='size-4' />,
   },
   {
-    shouldRender: true,
-    title: 'Dashboard',
-    href: '/dashboard',
-    icon: <Icons.dashboard className='size-4' />,
-  },
-  {
     shouldRender: (user: SessionUser) => user.role !== 'USER',
     title: 'Create a New Team',
     href: '/create-team',
     icon: <Icons.add className='size-4' />,
-  },
-  {
-    shouldRender: true,
-    title: 'Settings',
-    href: '/settings',
-    icon: <Icons.settings className='size-4' />,
   },
 ];
 
@@ -79,21 +67,7 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
           <Box className='h-full flex flex-col items-center gap-y-4 px-5 py-4 mt-2'>
             <nav className='flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'>
               {accountNavRoutes.map((route, index) => {
-                if (route.shouldRender === true) {
-                  return (
-                    <Link
-                      key={index}
-                      href={`/my-profile/${params.name}/${route.href}`}
-                      className={cn(
-                        buttonVariants({ variant: 'ghost' }),
-                        'flex gap-4'
-                      )}
-                    >
-                      {route.icon && route.icon}
-                      {route.title}
-                    </Link>
-                  );
-                } else if (typeof route.shouldRender === 'function') {
+                if (typeof route.shouldRender === 'function') {
                   if (route.shouldRender(user)) {
                     return (
                       <Link
@@ -121,6 +95,7 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
 
         {/*div for the main elements of the page*/}
         <main className='h-full flex-1 overflow-y-auto p-2 rounded-lg ml-4'>
+          <ProfilePageBreadcrumb />
           {children}
         </main>
       </div>

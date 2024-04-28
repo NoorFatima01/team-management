@@ -26,9 +26,10 @@ interface NavItem {
 
 interface MainNavProps {
   items: NavItem[];
+  username: string | undefined | null;
 }
 
-export default function MainNav({ items }: MainNavProps) {
+export default function MainNav({ items, username }: MainNavProps) {
   return (
     <div className='flex gap-6 lg:gap-10'>
       <Link href='/' className='hidden items-center space-x-2 lg:flex'>
@@ -45,7 +46,10 @@ export default function MainNav({ items }: MainNavProps) {
               key={index}
               className={cn(
                 'flex items-center text-lg font-semibold text-muted-foreground hover:text-foreground/80 sm:text-sm',
-                item.disabled && 'cursor-not-allowed opacity-80'
+                item.disabled && 'cursor-not-allowed opacity-80',
+                (item.title === 'Dashboard' || item.title === 'Inbox') &&
+                  !username &&
+                  'hidden'
               )}
             >
               {item.icon ? <item.icon className='size-6' /> : null}
