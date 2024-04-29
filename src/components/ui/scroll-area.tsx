@@ -5,22 +5,35 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+type ExtendedProps = React.ComponentPropsWithoutRef<
+  typeof ScrollAreaPrimitive.Root
+> & {
+  viewPortClassName?: string;
+};
+
 const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
->(({ className, children, ...props }, ref) => (
-  <ScrollAreaPrimitive.Root
-    ref={ref}
-    className={cn('relative overflow-hidden', className)}
-    {...props}
-  >
-    <ScrollAreaPrimitive.Viewport className='max-h-[25rem] w-full rounded-[inherit]'>
-      {children}
-    </ScrollAreaPrimitive.Viewport>
-    <ScrollBar />
-    <ScrollAreaPrimitive.Corner />
-  </ScrollAreaPrimitive.Root>
-));
+  ExtendedProps
+>(
+  (
+    { className, children, viewPortClassName = 'max-h-[25rem]', ...props },
+    ref
+  ) => (
+    <ScrollAreaPrimitive.Root
+      ref={ref}
+      className={cn('relative overflow-hidden', className)}
+      {...props}
+    >
+      <ScrollAreaPrimitive.Viewport
+        className={cn('w-full rounded-[inherit]', viewPortClassName)}
+      >
+        {children}
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  )
+);
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 
 const ScrollBar = React.forwardRef<

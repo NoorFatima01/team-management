@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useDownload } from '@/lib/hooks';
 import { fileSchema, fileSchemaType, taskSchemaType } from '@/lib/schemas';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
+import { cn } from '@/lib/utils';
 
 import AddTaskForm from '@/components/forms/add-task-form';
 import { Icons } from '@/components/icons';
@@ -40,41 +41,22 @@ import UploadFile from '@/components/upload-file';
 
 interface TasksProps {
   projectName: string;
+  tasks: taskSchemaType[];
 }
-
 type FileData = {
   id: string;
   path: string;
   fullPath: string;
 };
 
-export default function Tasks({ projectName }: TasksProps) {
-  const [taskSelected, setTaskSelected] =
-    React.useState<taskSchemaType | null>();
+export default function Tasks({ projectName, tasks }: TasksProps) {
+  const [taskSelected, setTaskSelected] = React.useState<taskSchemaType | null>(
+    tasks ? tasks[0] : null
+  );
   const [isLoading, setIsLoading] = React.useState(false);
-  const { handleZip } = useDownload(taskSelected?.filePath || '');
-
-  const getProjectTasks = async () => {
-    //fetch tasks from db
-    const clientSupabase = createSupabaseBrowserClient();
-    const { data, error } = await clientSupabase
-      .from('tasks')
-      .select('title, details, status, filePath, projects(project_id)')
-      .eq('projects.name', projectName)
-      .not('projects', 'is', null);
-
-    if (error) {
-      toast.error('Error fetching tasks');
-      return;
-    }
-    return data as unknown as taskSchemaType[];
-  };
-
-  const { data: tasksData, isLoading: tasksLoading } = useQuery({
-    queryKey: ['tasks', projectName],
-    queryFn: getProjectTasks,
-    retry: 10,
-  });
+  const { handleZip } = useDownload(
+    taskSelected ? ([taskSelected?.filePath] as string[]) : ['']
+  );
 
   const form = useForm<fileSchemaType>({
     resolver: zodResolver(fileSchema),
@@ -150,24 +132,26 @@ export default function Tasks({ projectName }: TasksProps) {
 
             <Separator orientation='horizontal' className='mb-4' />
             <div className='flex flex-col items-center justify-center gap-3'>
-              {tasksLoading ? (
-                <Icons.spinner
-                  className='size-7 animate-spin'
-                  aria-hidden='true'
-                />
-              ) : tasksData ? (
-                tasksData?.map((task, index) => (
+              {tasks && tasks.length > 0 ? (
+                tasks?.map((task, index) => (
                   <Button
                     key={index}
                     onClick={() => setTaskSelected(task)}
                     variant='ghost'
-                    className='w-full'
+                    className={cn(
+                      ' w-full font-semibold hover:cursor-pointer hover:text-primary-foreground transition-all duration-400',
+                      taskSelected === task && 'text-xl font-bold'
+                    )}
                   >
                     {task.title}
                   </Button>
                 ))
               ) : (
-                <div>no tasks. Add</div>
+                <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2'>
+                  <p className='text-muted-foreground text-sm'>
+                    Add a task to get started
+                  </p>
+                </div>
               )}
             </div>
           </ScrollArea>
@@ -201,74 +185,82 @@ export default function Tasks({ projectName }: TasksProps) {
                     </div>
                   </div>
                 ) : (
-                  <span className='text-center font-semibold'>
-                    Select a task
-                  </span>
+                  <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2'>
+                    <p className='text-muted-foreground text-sm'>
+                      Add a task to get started
+                    </p>
+                  </div>
                 )}
               </div>
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
-              {taskSelected ? (
-                <div className='flex h-full p-6 justify-between'>
-                  <RecentActivity
-                    project={projectName}
-                    task={taskSelected}
-                    className='flex-1'
-                  />
+              <div className='flex h-full p-6 justify-between'>
+                {taskSelected ? (
+                  <>
+                    <RecentActivity
+                      project={projectName}
+                      task={taskSelected}
+                      className='flex-1'
+                    />
 
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button size='sm'>
-                        <Icons.attach className='mr-2 size-4' />
-                        Attach File
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader className='mb-4'>
-                        <DialogTitle className='text-xl font-bold'>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button size='sm'>
+                          <Icons.attach className='mr-2 size-4' />
                           Attach File
-                        </DialogTitle>
-                      </DialogHeader>
-                      <Form {...form}>
-                        <form
-                          onSubmit={form.handleSubmit(onSubmit)}
-                          className='space-y-4'
-                        >
-                          <FormField
-                            control={form.control}
-                            name='file'
-                            render={() => (
-                              <FormItem className='flex flex-col gap-2'>
-                                <FormLabel>File</FormLabel>
-                                <FormControl>
-                                  <UploadFile
-                                    setValue={form.setValue}
-                                    name='file'
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <Button type='submit' disabled={isLoading}>
-                            {isLoading && (
-                              <Icons.spinner
-                                className='mr-2 size-4 animate-spin'
-                                aria-hidden='true'
-                              />
-                            )}
-                            Upload File
-                            <span className='sr-only'>Upload File</span>
-                          </Button>
-                        </form>
-                      </Form>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              ) : (
-                <p className='text-center font-semibold mt-8'>Select a Task</p>
-              )}
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader className='mb-4'>
+                          <DialogTitle className='text-xl font-bold'>
+                            Attach File
+                          </DialogTitle>
+                        </DialogHeader>
+                        <Form {...form}>
+                          <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className='space-y-4'
+                          >
+                            <FormField
+                              control={form.control}
+                              name='file'
+                              render={() => (
+                                <FormItem className='flex flex-col gap-2'>
+                                  <FormLabel>File</FormLabel>
+                                  <FormControl>
+                                    <UploadFile
+                                      setValue={form.setValue}
+                                      name='file'
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <Button type='submit' disabled={isLoading}>
+                              {isLoading && (
+                                <Icons.spinner
+                                  className='mr-2 size-4 animate-spin'
+                                  aria-hidden='true'
+                                />
+                              )}
+                              Upload File
+                              <span className='sr-only'>Upload File</span>
+                            </Button>
+                          </form>
+                        </Form>
+                      </DialogContent>
+                    </Dialog>
+                  </>
+                ) : (
+                  <div className=' place-self-start ml-[16rem]  lg:ml-[26rem] rounded-md border border-muted-foreground p-2'>
+                    <p className='text-muted-foreground text-sm '>
+                      Add a task to get started
+                    </p>
+                  </div>
+                )}
+              </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>

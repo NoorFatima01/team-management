@@ -4,6 +4,7 @@ import { FileObject } from '@supabase/storage-js';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
+import { useDownload } from '@/lib/hooks';
 import { taskSchemaType } from '@/lib/schemas';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
 import useSession from '@/lib/supabase/use-session';
@@ -36,6 +37,11 @@ export default function RecentActivity({
   >(new Set());
   const session = useSession();
   const userId = session?.user?.id;
+  const { handleZip } = useDownload(
+    selectedFiles.size > 0
+      ? Array.from(selectedFiles).map((file) => file.path)
+      : ['']
+  );
   const clientSupabase = createSupabaseBrowserClient();
   const listAllFiles = async () => {
     const folderName1 = task.filePath.split('/')[1];
@@ -51,30 +57,28 @@ export default function RecentActivity({
       );
       const files: FileDataAndUploader[] | null = (
         await Promise.all(
-          fileDataWithoutReferenceMaterial
-            // .filter((file) => !task.filePath.includes(file.name))
-            .map(async (file: FileObject) => {
-              const { data: fileUploaderId } = await clientSupabase
-                .from('files-uploaders')
-                .select('uploader_id')
-                .eq('file_id', file.id)
-                .single();
-              //get name from profiles table
-              const { data: fileUploader } = await clientSupabase
-                .from('profiles')
-                .select('username')
-                .eq('id', fileUploaderId?.uploader_id)
-                .single();
-              if (fileUploader) {
-                return {
-                  file_id: file.id,
-                  name: file.name as string,
-                  path: folderName + '/' + file.name,
-                  uploader_id: fileUploaderId?.uploader_id as string,
-                  uploader_name: fileUploader.username as string,
-                };
-              }
-            })
+          fileDataWithoutReferenceMaterial.map(async (file: FileObject) => {
+            const { data: fileUploaderId } = await clientSupabase
+              .from('files-uploaders')
+              .select('uploader_id')
+              .eq('file_id', file.id)
+              .single();
+            //get name from profiles table
+            const { data: fileUploader } = await clientSupabase
+              .from('profiles')
+              .select('username')
+              .eq('id', fileUploaderId?.uploader_id)
+              .single();
+            if (fileUploader) {
+              return {
+                file_id: file.id,
+                name: file.name as string,
+                path: folderName + '/' + file.name,
+                uploader_id: fileUploaderId?.uploader_id as string,
+                uploader_name: fileUploader.username as string,
+              };
+            }
+          })
         )
       ).filter(Boolean) as FileDataAndUploader[];
       return files;
@@ -91,13 +95,22 @@ export default function RecentActivity({
     <div className={cn('flex flex-col gap-4', className)}>
       <div className='flex justify-between'>
         <h3 className='text-xl font-extrabold'>Recent Activity</h3>
-        <Button size='sm' variant='outline' className='mr-4'>
-          Download Selected
-        </Button>
+        {selectedFiles.size > 0 && (
+          <Button
+            size='sm'
+            variant='outline'
+            className='mr-4'
+            onClick={async () => {
+              await handleZip();
+            }}
+          >
+            Download Selected Files
+          </Button>
+        )}
       </div>
       {isLoading && <div>Loading...</div>}
       {data && data.length > 0 ? (
-        <ScrollArea>
+        <ScrollArea viewPortClassName='h-full'>
           <div className='flex flex-col'>
             {data.map((file, index) => {
               const isSelected = selectedFiles.has(file);
@@ -145,7 +158,9 @@ export default function RecentActivity({
           </div>
         </ScrollArea>
       ) : (
-        <div>No files uploaded yet</div>
+        <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2'>
+          <p className='text-muted-foreground text-sm'>No files uploaded yet</p>
+        </div>
       )}
     </div>
   );
