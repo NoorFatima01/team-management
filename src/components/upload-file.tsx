@@ -118,7 +118,7 @@ export default function UploadFile<TFieldValues extends FieldValues>({
               <div className='flex justify-between gap-2 rounded-lg overflow-hidden border border-slate-100 group'>
                 <div className='flex items-center flex-1 p-2'>
                   <div className='w-full ml-2 space-y-1'>
-                    <Icons.File className='w-6 h-6 text-gray-400 dark:text-gray-300' />
+                    <Icons.fileText className='w-6 h-6 text-gray-400 dark:text-gray-300' />
 
                     <p className='text-muted-foreground '>{file.name}</p>
                   </div>

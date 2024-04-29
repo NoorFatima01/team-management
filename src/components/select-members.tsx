@@ -1,10 +1,10 @@
 'use client';
 
-import { CheckIcon } from 'lucide-react';
 import React from 'react';
 
 import { cn } from '@/lib/utils';
 
+import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -80,7 +80,7 @@ const SelectMembers = ({
                           : 'opacity-50 [&_svg]:invisible'
                       )}
                     >
-                      <CheckIcon className={cn('h-4 w-4')} />
+                      <Icons.check className={cn('h-4 w-4')} />
                     </div>
                     <span>{option.label}</span>
                     <span className='ml-20 flex h-4 w-4 items-center justify-center font-mono text-xs'>

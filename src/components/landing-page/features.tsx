@@ -22,7 +22,7 @@ const features = [
   {
     heading: 'View Reports',
     description: 'View reports of your projects and tasks.',
-    icon: <Icons.File />,
+    icon: <Icons.file />,
   },
   {
     heading: 'Real time Chat',

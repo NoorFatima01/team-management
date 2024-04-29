@@ -210,8 +210,12 @@ export default function Tasks({ projectName }: TasksProps) {
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
               {taskSelected ? (
-                <div className='flex h-full p-6 justify-between '>
-                  <RecentActivity project={projectName} task={taskSelected} />
+                <div className='flex h-full p-6 justify-between'>
+                  <RecentActivity
+                    project={projectName}
+                    task={taskSelected}
+                    className='flex-1'
+                  />
 
                   <Dialog>
                     <DialogTrigger asChild>

@@ -1,8 +1,10 @@
 import {
   type LucideProps,
   Bell,
+  CheckIcon,
   File,
   FileImage,
+  FileText,
   Folder,
   Gauge,
   Loader2,
@@ -26,6 +28,7 @@ export type Icon = typeof LucideIcon;
 
 export const Icons = {
   bell: Bell,
+  check: CheckIcon,
   sun: SunMedium,
   moon: Moon,
   close: X,
@@ -33,8 +36,9 @@ export const Icons = {
   spinner: Loader2,
   add: Plus,
   folder: Folder,
-  File: File,
-  FileImage: FileImage,
+  file: File,
+  fileImage: FileImage,
+  fileText: FileText,
   attach: Paperclip,
   user: User,
   dashboard: Gauge,
