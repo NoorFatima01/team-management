@@ -27,3 +27,11 @@ export type memberProfile = {
   team?: string;
   role: string;
 };
+
+export type TaskDataWithProjectName = {
+  title: string;
+  details: string;
+  projects: {
+    name: string;
+  };
+};
