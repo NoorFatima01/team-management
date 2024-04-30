@@ -3,6 +3,7 @@ import React from 'react';
 import { getUser } from '@/lib/server-user';
 import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
+import { DashboardGraph } from '@/components/dashboard-graph';
 import DashboardTaskCard from '@/components/dashboard-task-card';
 import {
   Card,
@@ -12,7 +13,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { TaskDataWithProjectName } from '@/types';
+import {
+  ProjectDataWithTeamName,
+  ProjectsByTeam,
+  TaskDataWithProjectName,
+} from '@/types';
 
 export default async function DashboardPage() {
   const user = await getUser();
@@ -28,8 +33,9 @@ export default async function DashboardPage() {
 
   const { data: projectData } = await serverSupabase
     .from('projects')
-    .select('project_id')
-    .in('team_id', teamData?.map((team) => team.team_id) || []);
+    .select('project_id, name, project_status, teams(name)')
+    .in('team_id', teamData?.map((team) => team.team_id) || [])
+    .not('teams', 'is', null);
   const { data: tasksData } = await serverSupabase
     .from('tasks')
     .select('title, details, projects(name)')
@@ -38,13 +44,34 @@ export default async function DashboardPage() {
     .not('projects', 'is', null);
   const tasksDataWithProjectName =
     tasksData as unknown as TaskDataWithProjectName[];
+  const projectDataWithTeamName =
+    projectData as unknown as ProjectDataWithTeamName[];
+
+  const projectsByTeam: ProjectsByTeam = {};
+
+  projectDataWithTeamName.forEach((project) => {
+    const teamName = project.teams.name;
+    if (!projectsByTeam[teamName]) {
+      projectsByTeam[teamName] = [];
+    }
+    projectsByTeam[teamName].push(project);
+  });
 
   return (
-    <div>
+    <div className='grid grid-flow-col gap-2'>
+      <Card className='col-span-4'>
+        <CardHeader>
+          <CardTitle>Project Statuses Per Team</CardTitle>
+        </CardHeader>
+        <CardContent className='flex'>
+          <DashboardGraph projectsByTeam={projectsByTeam} />
+        </CardContent>
+      </Card>
+
       <Card className='w-[350px]'>
         <CardHeader className='flex flex-col gap-3'>
           <CardTitle>Tasks</CardTitle>
-          <CardDescription>Following are you ongoing tasks.</CardDescription>
+          <CardDescription>Following are your ongoing tasks.</CardDescription>
           <CardContent className='flex flex-col gap-4'>
             {tasksDataWithProjectName?.map((taskWithProjectName, index) => (
               <DashboardTaskCard

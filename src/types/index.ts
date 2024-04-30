@@ -35,3 +35,20 @@ export type TaskDataWithProjectName = {
     name: string;
   };
 };
+
+export type Project = {
+  project_id: string;
+  name: string;
+  project_status: string;
+  teams: { name: string };
+};
+
+export type ProjectDataWithTeamName = {
+  project_id: string;
+  name: string;
+  project_status: string;
+  teams: { name: string };
+};
+export type ProjectsByTeam = {
+  [teamName: string]: ProjectDataWithTeamName[];
+};
