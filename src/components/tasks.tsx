@@ -39,9 +39,16 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import UploadFile from '@/components/upload-file';
 
+type TaskWithProjects = taskSchemaType & {
+  projects: {
+    name: string;
+    project_status: string;
+  };
+};
+
 interface TasksProps {
+  tasks: TaskWithProjects[];
   projectName: string;
-  tasks: taskSchemaType[];
 }
 type FileData = {
   id: string;
@@ -50,9 +57,13 @@ type FileData = {
 };
 
 export default function Tasks({ projectName, tasks }: TasksProps) {
-  const [taskSelected, setTaskSelected] = React.useState<taskSchemaType | null>(
-    tasks ? tasks[0] : null
-  );
+  const status =
+    tasks && tasks.length > 0
+      ? tasks[0].projects.project_status
+      : 'IN_PROGRESS';
+  const [isProjectInProgress] = React.useState(status === 'IN_PROGRESS');
+  const [taskSelected, setTaskSelected] =
+    React.useState<TaskWithProjects | null>(tasks ? tasks[0] : null);
   const [isLoading, setIsLoading] = React.useState(false);
   const { handleZip } = useDownload(
     taskSelected ? ([taskSelected?.filePath] as string[]) : ['']
@@ -93,6 +104,18 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
     },
   });
 
+  const updateProjectStatus = async (status: string) => {
+    const response = await fetch('/api/project', {
+      method: 'PUT',
+      body: JSON.stringify({ projectName, status }),
+    });
+    if (response.ok) {
+      toast.success('Project status updated');
+    } else {
+      toast.error('Failed to update project status');
+    }
+  };
+
   const onSubmit: SubmitHandler<fileSchemaType> = async (
     data: fileSchemaType
   ) => {
@@ -118,7 +141,66 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
   };
   return (
     <div className='h-96 flex flex-col gap-3'>
-      <AddTaskForm projectName={projectName} />
+      {tasks && tasks.length > 0 ? (
+        <div className='flex justify-between'>
+          <h2 className='text-sm text-muted-foreground'>
+            Project Status:{' '}
+            <span
+              className={cn(
+                status === 'COMPLETED'
+                  ? 'text-primary'
+                  : status === 'CANCELLED'
+                  ? 'text-destructive'
+                  : ''
+              )}
+            >
+              {status}
+            </span>
+          </h2>
+
+          <div className='flex gap-2'>
+            <Button
+              size='sm'
+              disabled={!isProjectInProgress}
+              onClick={() => {
+                updateProjectStatus('COMPLETED');
+              }}
+            >
+              Mark Project as Done
+            </Button>
+            <Button
+              size='sm'
+              variant='destructive'
+              disabled={!isProjectInProgress}
+              onClick={() => {
+                updateProjectStatus('CANCELLED');
+              }}
+            >
+              Mark Project as Cancelled
+            </Button>
+            <AddTaskForm projectName={projectName} />
+          </div>
+        </div>
+      ) : (
+        <div className='flex justify-between'>
+          <h2 className='text-sm text-muted-foreground'>
+            Project Status:{' '}
+            <span
+              className={cn(
+                status === 'COMPLETED'
+                  ? 'text-primary'
+                  : status === 'CANCELLED'
+                  ? 'text-destructive'
+                  : ''
+              )}
+            >
+              {status}
+            </span>
+          </h2>
+
+          <AddTaskForm projectName={projectName} />
+        </div>
+      )}
 
       <ResizablePanelGroup
         direction='horizontal'
@@ -179,9 +261,6 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                       >
                         Download Reference Material
                       </Button>
-                      <Button size='sm' variant='secondary'>
-                        Mark as Done
-                      </Button>
                     </div>
                   </div>
                 ) : (
@@ -206,7 +285,7 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
 
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button size='sm'>
+                        <Button size='sm' disabled={!isProjectInProgress}>
                           <Icons.attach className='mr-2 size-4' />
                           Attach File
                         </Button>

@@ -119,9 +119,6 @@ export const taskFormSchema = fileSchema.extend({
 export const taskSchema = z.object({
   title: z.string(),
   details: z.string(),
-  status: z
-    .enum(['IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
-    .default('IN_PROGRESS'),
   filePath: z.string(),
   project_id: z.string().uuid(),
 });

@@ -100,7 +100,7 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
       title: data.title as string,
       details: data.details as string,
       filePath: filePath as string,
-      status: 'IN_PROGRESS',
+
       project_id: projectId as string,
     });
   };
@@ -108,9 +108,7 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size='sm' className='self-end'>
-          Add Task
-        </Button>
+        <Button size='sm'>Add Task</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className='mb-4'>
