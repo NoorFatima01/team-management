@@ -71,13 +71,13 @@ export function DashboardGraph({ projectsByTeam }: DashboardGraphProps) {
               <XAxis
                 dataKey='status'
                 stroke='#888888'
-                fontSize={12}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
                 stroke='#888888'
-                fontSize={12}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `${value}`}
