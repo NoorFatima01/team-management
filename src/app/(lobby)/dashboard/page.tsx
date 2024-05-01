@@ -63,7 +63,7 @@ export default async function DashboardPage() {
         <CardHeader>
           <CardTitle>Project Statuses Per Team</CardTitle>
         </CardHeader>
-        <CardContent className='flex'>
+        <CardContent className='grid grid-flow-col'>
           <DashboardGraph projectsByTeam={projectsByTeam} />
         </CardContent>
       </Card>
