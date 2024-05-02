@@ -1,6 +1,12 @@
 import React from 'react';
 
 import { Icons } from '@/components/icons';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -70,12 +76,16 @@ const ProjectCard = ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className='text-muted-foreground text-lg'>
-            Details: <span className='text-neutral-50'>{description}</span>
-          </p>
-          <p className='text-muted-foreground text-lg'>
-            Team: <span className='text-neutral-50'>{team}</span>
-          </p>
+          <Accordion type='single' collapsible className='w-full'>
+            <AccordionItem value='description'>
+              <AccordionTrigger>Details</AccordionTrigger>
+              <AccordionContent>{description}</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value='team'>
+              <AccordionTrigger>Team</AccordionTrigger>
+              <AccordionContent>{team}</AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </CardContent>
         <CardFooter className='flex-row-reverse'>
           <Badge variant='outline' className='flex gap-2 border-4'>
