@@ -37,3 +37,30 @@ export async function POST(
 
   return new Response(JSON.stringify({ success: true }), { status: 200 });
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { team_id: string } }
+) {
+  try {
+    const { team_id } = params;
+
+    const serverSupabase = createSupabaseServerClient();
+    //delete team
+    const { error } = await serverSupabase
+      .from('teams')
+      .delete()
+      .eq('team_id', team_id);
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return new Response(error.message, { status: 500 });
+    } else {
+      return new Response(null, { status: 500 });
+    }
+  }
+}

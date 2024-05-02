@@ -33,7 +33,6 @@ export const teamSchema = z.object({
   created_at: z.string().default(new Date().toISOString()),
   name: z.string(),
   description: z.string(),
-  projects_done: z.number().default(0),
   projects_in_progress: z.number().default(0),
   team_head: z.string().uuid(),
 });
