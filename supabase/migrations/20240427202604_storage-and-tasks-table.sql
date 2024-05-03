@@ -84,4 +84,9 @@ CREATE POLICY "Enable all operations to authenticated users 2lrraq_2" ON storage
 CREATE POLICY "Enable all operations to authenticated users 2lrraq_3" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'taskFiles');
 
 
+insert into storage.buckets
+  (id, name, public)
+values
+  ('userImages', 'userImages', false);
 
+CREATE POLICY "Enable insert for all lhb5lv_0" ON storage.objects FOR INSERT TO public WITH CHECK (bucket_id = 'userImages');

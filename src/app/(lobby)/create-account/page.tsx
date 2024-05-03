@@ -5,7 +5,7 @@ import PageDescriptionHeader from '@/components/layout/page-description-header';
 
 const CreateAccountPage = () => {
   return (
-    <div className='flex flex-col gap-6 mt-8'>
+    <div className='flex flex-col gap-6 mt-8 mb-6'>
       <div className='ml-6'>
         <PageDescriptionHeader
           title='Sign Up Form'

@@ -1,6 +1,37 @@
 import { z } from 'zod';
 
-export const userSignupFormSchema = z.object({
+const MAX_FILE_SIZE = 700000;
+function checkFileType(file: File) {
+  if (file?.name) {
+    const fileType = file.name.split('.').pop();
+    if (
+      fileType === 'docx' ||
+      fileType === 'pdf' ||
+      fileType === 'jpeg' ||
+      fileType === 'png'
+    )
+      return true;
+    return false;
+  }
+}
+
+export const fileSchema = z.object({
+  file: z
+    .any()
+    .refine((file: File) => file?.size !== 0, 'File is required')
+    .refine((file: File) => {
+      if (file?.size) {
+        return file.size <= MAX_FILE_SIZE;
+      }
+      return false;
+    }, `File size should be less than ${MAX_FILE_SIZE / 1000}KB`)
+    .refine(
+      (file: File) => checkFileType(file),
+      'File should be of type docx or pdf'
+    ),
+});
+
+export const userSignupFormSchema = fileSchema.extend({
   name: z.string(),
   // image: z.string(),
   email: z.string().email(),
@@ -92,30 +123,6 @@ export const projectSchema = z.object({
     .default('IN_PROGRESS'),
 });
 
-const MAX_FILE_SIZE = 700000;
-function checkFileType(file: File) {
-  if (file?.name) {
-    const fileType = file.name.split('.').pop();
-    if (fileType === 'docx' || fileType === 'pdf') return true;
-    return false;
-  }
-}
-
-export const fileSchema = z.object({
-  file: z
-    .any()
-    .refine((file: File) => file?.size !== 0, 'File is required')
-    .refine((file: File) => {
-      if (file?.size) {
-        return file.size <= MAX_FILE_SIZE;
-      }
-      return false;
-    }, `File size should be less than ${MAX_FILE_SIZE / 1000}KB`)
-    .refine(
-      (file: File) => checkFileType(file),
-      'File should be of type docx or pdf'
-    ),
-});
 //task schema extends file schema
 export const taskFormSchema = fileSchema.extend({
   title: z.string(),
@@ -136,6 +143,7 @@ const fileRecordSchema = z.object({
   uploader_id: z.string().uuid(),
 });
 
+export type fileSchemaType = z.infer<typeof fileSchema>;
 export type userSignupFormSchemaType = z.infer<typeof userSignupFormSchema>;
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
@@ -147,7 +155,6 @@ export type notificationSchemaType = z.infer<typeof notificationSchema>;
 export type invitationSchemaType = z.infer<typeof invitationSchema>;
 export type projectFormSchemaType = z.infer<typeof projectFormSchema>;
 export type projectSchemaType = z.infer<typeof projectSchema>;
-export type fileSchemaType = z.infer<typeof fileSchema>;
 export type taskFormSchemaType = z.infer<typeof taskFormSchema>;
 export type taskSchemaType = z.infer<typeof taskSchema>;
 export type fileRecordSchemaType = z.infer<typeof fileRecordSchema>;

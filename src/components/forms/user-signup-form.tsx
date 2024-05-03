@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import UploadFile from '@/components/upload-file';
 
 const UserSignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +34,7 @@ const UserSignupForm = () => {
       name: '',
       email: '',
       password: '',
+      file: '',
     },
   });
 
@@ -64,70 +66,77 @@ const UserSignupForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className='mx-auto grid w-full max-w-md gap-6'
       >
-        <div className='flex flex-col justify-between gap-1'>
-          <div className=''>
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      id='add-name'
-                      type='text'
-                      placeholder='Your Name'
-                      required
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+        <div className='flex flex-col justify-between gap-3'>
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input
+                    id='add-name'
+                    type='text'
+                    placeholder='Your Name'
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='file'
+            render={() => (
+              <FormItem className='flex flex-col gap-2'>
+                <FormLabel>Profile Picture</FormLabel>
+                <FormControl>
+                  <UploadFile setValue={form.setValue} name='file' />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className=''>
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      id='add-email'
-                      type='text'
-                      placeholder='Your Email'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    id='add-email'
+                    type='text'
+                    placeholder='Your Email'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className=''>
-            <FormField
-              control={form.control}
-              name='password'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      id='add-password'
-                      type='password'
-                      placeholder='Enter Password'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    id='add-password'
+                    type='password'
+                    placeholder='Enter Password'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <div className='flex justify-end'>
           <Button type='submit' disabled={isLoading} size='sm'>
