@@ -136,11 +136,35 @@ export const taskSchema = z.object({
   project_id: z.string().uuid(),
 });
 
-const fileRecordSchema = z.object({
+export const fileRecordSchema = z.object({
   file_id: z.string().uuid(),
   created_at: z.string().default(new Date().toISOString()),
   path: z.string(),
   uploader_id: z.string().uuid(),
+});
+
+export const profileFormSchema = z.object({
+  username: z
+    .string()
+    .min(2, {
+      message: 'Username must be at least 2 characters.',
+    })
+    .max(30, {
+      message: 'Username must not be longer than 30 characters.',
+    }),
+  email: z
+    .string({
+      required_error: 'Please select an email to display.',
+    })
+    .email(),
+  bio: z.string().max(160).min(4),
+  urls: z
+    .array(
+      z.object({
+        value: z.string().url({ message: 'Please enter a valid URL.' }),
+      })
+    )
+    .optional(),
 });
 
 export type fileSchemaType = z.infer<typeof fileSchema>;
@@ -158,3 +182,4 @@ export type projectSchemaType = z.infer<typeof projectSchema>;
 export type taskFormSchemaType = z.infer<typeof taskFormSchema>;
 export type taskSchemaType = z.infer<typeof taskSchema>;
 export type fileRecordSchemaType = z.infer<typeof fileRecordSchema>;
+export type profileFormSchemaType = z.infer<typeof profileFormSchema>;
