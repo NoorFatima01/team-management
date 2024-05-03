@@ -1,6 +1,6 @@
 import MainNav from '@/components/layout/main-nav';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
-import GoogleLoginButton from '@/components/login-buttons/login-with-google-button';
+import LoginButton from '@/components/login-buttons/login-button';
 import NotificationButton from '@/components/notifications/notification-button';
 import UserProfileDropdown from '@/components/user-profile-dropdown';
 
@@ -22,8 +22,8 @@ export default function SiteHeader({ user }: SiteHeaderProps) {
         <div>
           <nav className='flex flex-1 items-center space-x-1'>
             <UserProfileDropdown user={user} />
-            {user.name ? <NotificationButton /> : null}
-            <GoogleLoginButton />
+            {user ? <NotificationButton /> : null}
+            <LoginButton />
             <ThemeToggle />
           </nav>
         </div>

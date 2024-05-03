@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const userSignupFormSchema = z.object({
+  name: z.string(),
+  // image: z.string(),
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
 export const userProfileSchema = z.object({
   id: z.string().uuid(),
   updated_at: z.string().default(new Date().toISOString()),
@@ -133,6 +140,7 @@ const fileRecordSchema = z.object({
   uploader_id: z.string().uuid(),
 });
 
+export type userSignupFormSchemaType = z.infer<typeof userSignupFormSchema>;
 export type userProfileSchemaType = z.infer<typeof userProfileSchema>;
 export type memberFormSchemaType = z.infer<typeof memberFormSchema>;
 export type memberSchemaType = z.infer<typeof memberSchema>;

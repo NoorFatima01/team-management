@@ -1,30 +1,37 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+import { useLogInStatusStore } from '@/lib/store';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
+import useSession from '@/lib/supabase/use-session';
 
-import { Button } from '@/components/ui/button';
+import LoginDialog from '@/components/login-buttons/login-dialog';
 
-export default function LoginButton(props: { nextUrl?: string }) {
+import LogoutButton from './logout-button';
+
+export default function LoginButton() {
+  const user = useSession()?.user;
+  const { logInStatus, setLogInStatus } = useLogInStatusStore();
+
   const supabase = createSupabaseBrowserClient();
+  const router = useRouter();
 
-  const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${location.origin}/api/auth/callback?next=${
-          props.nextUrl || ''
-        }`,
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
-      },
-    });
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+    setLogInStatus(false);
   };
 
+  useEffect(() => {
+    setLogInStatus(!!user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
-    <Button size='sm' onClick={handleLogin}>
-      Login
-    </Button>
+    <>
+      {logInStatus ? <LogoutButton onLogout={handleLogout} /> : <LoginDialog />}
+    </>
   );
 }
