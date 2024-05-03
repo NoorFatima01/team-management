@@ -46,7 +46,6 @@ export async function POST(req: Request) {
         team_head: user_id,
         team_id: v4(),
         created_at: new Date().toISOString(),
-        projects_done: 0,
         projects_in_progress: 0,
       };
 

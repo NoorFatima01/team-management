@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 
 import Pagination from '@/components/pagination';
 import ProjectCard from '@/components/project-card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Project = {
   project_id: number;
@@ -18,6 +19,9 @@ type Project = {
   start_date: string;
   end_date: string;
 };
+
+//an array from 0 to 2
+const divs = Array.from({ length: 3 }, (_, i) => i);
 
 const PaginatedProjects = () => {
   const router = useRouter();
@@ -51,12 +55,20 @@ const PaginatedProjects = () => {
     },
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (isFetching) {
-    return <div>Fetching...</div>;
+  if (isFetching || isLoading) {
+    return (
+      <div className='container grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 my-4'>
+        {divs.map((div) => (
+          <div key={div}>
+            <Skeleton className=' h-64 w-[420px]  rounded-lg' />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (error) {

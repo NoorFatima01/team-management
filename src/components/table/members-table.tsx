@@ -12,6 +12,7 @@ interface MembersTableProps {
 export default function MembersTable({ members }: MembersTableProps) {
   return (
     <Shell>
+      <h1 className='text-xl font-semibold tracking-tighter'>Members</h1>
       <MembersTableShell data={members} />
     </Shell>
   );

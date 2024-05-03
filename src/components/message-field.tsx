@@ -42,6 +42,13 @@ export default function MessageField({ teamId }: MessageFieldProps) {
     sendMessage(message);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleClick(); // Call handleClick function when Enter key is pressed
+    }
+  };
+
   return (
     <div className='grid w-full items-center gap-4 p-6'>
       <Label>Message</Label>
@@ -51,6 +58,7 @@ export default function MessageField({ teamId }: MessageFieldProps) {
           placeholder={placeholder}
           value={message}
           onChange={handleChange}
+          onKeyPress={handleKeyPress} // Add event listener for key press
         />
         <Button size='sm' onClick={handleClick} disabled={isLoading}>
           {isLoading && (

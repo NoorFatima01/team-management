@@ -40,7 +40,6 @@ export default async function DashboardPage() {
     .from('tasks')
     .select('title, details, projects(name)')
     .in('project_id', projectData?.map((project) => project.project_id) || [])
-    .eq('status', 'IN_PROGRESS')
     .not('projects', 'is', null);
   const tasksDataWithProjectName =
     tasksData as unknown as TaskDataWithProjectName[];
@@ -58,17 +57,17 @@ export default async function DashboardPage() {
   });
 
   return (
-    <div className='grid grid-flow-col gap-2'>
+    <div className='grid lg:grid-flow-col gap-2'>
       <Card className='col-span-4'>
         <CardHeader>
           <CardTitle>Project Statuses Per Team</CardTitle>
         </CardHeader>
-        <CardContent className='flex'>
+        <CardContent className='grid grid-flow-col'>
           <DashboardGraph projectsByTeam={projectsByTeam} />
         </CardContent>
       </Card>
 
-      <Card className='w-[350px]'>
+      <Card className='lg:w-[350px] col-span-4'>
         <CardHeader className='flex flex-col gap-3'>
           <CardTitle>Tasks</CardTitle>
           <CardDescription>Following are your ongoing tasks.</CardDescription>

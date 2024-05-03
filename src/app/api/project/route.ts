@@ -95,3 +95,39 @@ export async function GET(req: Request) {
     }
   }
 }
+
+export async function PUT(req: Request) {
+  try {
+    const serverSupabase = createSupabaseServerClient();
+    const reqData = await req.json();
+
+    //find the project with name project name
+    const { data: project } = await serverSupabase
+      .from('projects')
+      .select('*')
+      .eq('name', reqData.projectName);
+    const oldProject = project && project[0] ? project[0] : null;
+    const updatedProject = {
+      ...oldProject,
+      project_status: reqData.status,
+    };
+
+    const { error } = await serverSupabase
+      .from('projects')
+      .update(updatedProject)
+      .eq('name', reqData.projectName);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return new Response(JSON.stringify('Updation success'), { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      return new Response(JSON.stringify(error.issues), { status: 422 });
+    } else if (error instanceof Error) {
+      return new Response(error.message, { status: 500 });
+    } else {
+      return new Response(null, { status: 500 });
+    }
+  }
+}

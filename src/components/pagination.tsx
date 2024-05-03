@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button';
+
 export type PaginationProps = {
   page: number;
   pages: number;
@@ -13,20 +15,18 @@ const Pagination = ({ page, pages, onPageChange }: PaginationProps) => {
 
   return (
     <div className='flex justify-center'>
-      <ul className='flex border border-slate-300'>
-        {pageNumbers.map((pageNumber) => (
-          <li
-            key={pageNumber}
-            className={`w-10 h-10 flex justify-center items-center ${
-              pageNumber === page ? 'bg-green-600 text-white' : 'text-green-600'
-            }`}
-          >
-            <button onClick={() => onPageChange(pageNumber)}>
-              {pageNumber}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {pageNumbers.map((pageNumber) => (
+        <Button
+          variant='ghost'
+          onClick={() => onPageChange(pageNumber)}
+          key={pageNumber}
+          className={` ${
+            pageNumber === page ? 'bg-green-600 text-white' : 'text-green-600'
+          }`}
+        >
+          {pageNumber}
+        </Button>
+      ))}
     </div>
   );
 };

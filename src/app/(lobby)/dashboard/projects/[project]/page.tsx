@@ -9,18 +9,26 @@ interface ProjectDetailsPageProps {
   params: { project: string };
 }
 
+type TaskWithProjects = taskSchemaType & {
+  projects: {
+    name: string;
+    project_status: string;
+  };
+};
+
 export default async function ProjectDetailsPage({
   params,
 }: ProjectDetailsPageProps) {
   const { project } = params;
   const serverSupabase = createSupabaseServerClient();
-  const { data } = await serverSupabase
+
+  const { data: data } = await serverSupabase
     .from('tasks')
-    .select('title, details, status, filePath, projects(project_id)')
+    .select('title, details, filePath, projects(name, project_status)')
     .eq('projects.name', project)
     .not('projects', 'is', null);
 
-  const tasks = data as unknown as taskSchemaType[];
+  const tasks = data as unknown as TaskWithProjects[];
 
   return (
     <div>
