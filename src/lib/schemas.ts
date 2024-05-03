@@ -7,7 +7,7 @@ function checkFileType(file: File) {
     if (
       fileType === 'docx' ||
       fileType === 'pdf' ||
-      fileType === 'jpeg' ||
+      fileType === 'jpg' ||
       fileType === 'png'
     )
       return true;
