@@ -8,7 +8,9 @@ export const showLogger = isLocal
 // Supabase
 export const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'sth';
-export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'sth';
+export const SUPABASE_URL = isProd
+  ? process.env.NEXT_PUBLIC_SUPABASE_PROD_URL
+  : process.env.NEXT_PUBLIC_SUPABASE_URL;
 
 //Pusher
 export const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY ?? 'sth';
