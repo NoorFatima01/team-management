@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import UploadFile from '@/components/upload-file';
 
 const UserSignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +33,6 @@ const UserSignupForm = () => {
       name: '',
       email: '',
       password: '',
-      file: '',
     },
   });
 
@@ -51,12 +49,13 @@ const UserSignupForm = () => {
     });
 
     if (error) {
-      toast.error('Failed to log in');
+      toast.error('Failed to create new account');
     } else if (data) {
-      toast.success('Logged in successfully');
+      toast.success('Account created successfully');
       setLogInStatus(true);
     }
 
+    router.refresh();
     router.push('/');
   }
 
@@ -86,20 +85,6 @@ const UserSignupForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='file'
-            render={() => (
-              <FormItem className='flex flex-col gap-2'>
-                <FormLabel>Profile Picture</FormLabel>
-                <FormControl>
-                  <UploadFile setValue={form.setValue} name='file' />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <FormField
             control={form.control}
             name='email'

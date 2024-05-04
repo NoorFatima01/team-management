@@ -1,6 +1,9 @@
 'use client';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+
+import { useLogInStatusStore } from '@/lib/store';
 
 import { Icons } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -20,6 +23,12 @@ interface UserProfileDropdownProps {
 }
 
 const UserProfileDropdown = ({ user }: UserProfileDropdownProps) => {
+  const { logInStatus } = useLogInStatusStore();
+  const router = useRouter();
+  useEffect(() => {
+    router.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logInStatus]);
   return (
     <div>
       {' '}
@@ -32,11 +41,14 @@ const UserProfileDropdown = ({ user }: UserProfileDropdownProps) => {
               size='sm'
               aria-label='Use menu trigger'
             >
-              <Avatar className='size-8'>
-                <AvatarImage src={user.image} />
-
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              {user.image ? (
+                <Avatar className='size-8'>
+                  <AvatarImage src={user.image} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              ) : (
+                !user.image && user.name && <Icons.user />
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>

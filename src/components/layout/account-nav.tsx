@@ -54,13 +54,17 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
         <div className='flex flex-col'>
           {/*div for sidebar boxes*/}
           <Box className='flex flex-col items-center gap-y-4 px-5 py-4'>
-            <NextImage
-              src={user?.image as string}
-              alt={user?.name as string}
-              width={100}
-              height={100}
-              classNames={{ image: 'rounded-full', blur: 'rounded-full' }}
-            />
+            {user?.image ? (
+              <NextImage
+                src={user?.image as string}
+                alt={user?.name as string}
+                width={100}
+                height={100}
+                classNames={{ image: 'rounded-full', blur: 'rounded-full' }}
+              />
+            ) : (
+              <Icons.user />
+            )}
             <h1 className='text-2xl font-bold'>{user?.name}</h1>
           </Box>
           <Separator />
