@@ -34,11 +34,10 @@ Team Manager defines three roles:
 - **File Sharing and Collaboration**: Members can share, upload and download files while working on a project
 - **Real-time Chat**: Members of a team can chat with each other in real time.
 - **Notifications**: Members receive real-time notifications about certain activities on the platform.
-  
+
 ## Upcoming Features
 
 - **Restriction on Number of Teams**: Implement a restriction on the number of teams a user can join or create.
-  
 - **Improvements on Task Management**: Enhance task management functionality with new features such as task prioritization, due dates, task assignments to specific team members, and task dependencies.
 
 - **Expanded Notifications**: Introduce more notification alerts for various activities, including chat messages, project updates, task assignments, and deadlines.

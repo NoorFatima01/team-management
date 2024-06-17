@@ -22,7 +22,7 @@ export default function SiteHeader({ user }: SiteHeaderProps) {
         <div>
           <nav className='flex flex-1 items-center space-x-1'>
             <UserProfileDropdown user={user} />
-            {user ? <NotificationButton /> : null}
+            {user.email ? <NotificationButton /> : null}
             <LoginButton />
             <ThemeToggle />
           </nav>

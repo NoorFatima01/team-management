@@ -33,7 +33,6 @@ export const fileSchema = z.object({
 
 export const userSignupFormSchema = z.object({
   name: z.string(),
-  // image: z.string(),
   email: z.string().email(),
   password: z.string().min(8),
 });

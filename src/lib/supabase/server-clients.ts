@@ -8,7 +8,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@/constant/env';
 // server component can only get cookies and not set them, hence the "component" check
 export function createSupabaseServerClient(component = false) {
   cookies().getAll(); // Keep cookies in the JS execution context for Next.js build
-  return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  return createServerClient(SUPABASE_URL as string, SUPABASE_ANON_KEY, {
     cookies: {
       get(name: string) {
         return getCookie(name, { cookies });
@@ -35,7 +35,7 @@ export function createSupabaseReqResClient(
   res: NextResponse
 ) {
   cookies().getAll(); // Keep cookies in the JS execution context for Next.js build
-  return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  return createServerClient(SUPABASE_URL as string, SUPABASE_ANON_KEY, {
     cookies: {
       get(name: string) {
         return getCookie(name, { req, res });

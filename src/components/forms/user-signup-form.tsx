@@ -49,12 +49,13 @@ const UserSignupForm = () => {
     });
 
     if (error) {
-      toast.error('Failed to log in');
+      toast.error('Failed to create new account');
     } else if (data) {
-      toast.success('Logged in successfully');
+      toast.success('Account created successfully');
       setLogInStatus(true);
     }
 
+    router.refresh();
     router.push('/');
   }
 

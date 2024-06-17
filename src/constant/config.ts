@@ -13,10 +13,6 @@ export const siteConfig = {
       href: '/projects',
     },
     {
-      title: 'Teams',
-      href: '/teams',
-    },
-    {
       title: 'Inbox',
       href: '/inbox',
     },
