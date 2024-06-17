@@ -72,7 +72,7 @@ const PaginatedProjects = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Seems there was an error loading the projects</div>;
   }
 
   const projects = projectsData.projects;

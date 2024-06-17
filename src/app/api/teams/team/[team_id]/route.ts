@@ -64,3 +64,38 @@ export async function DELETE(
     }
   }
 }
+
+export async function PUT(
+  req: Request,
+  { params }: { params: { team_id: string } }
+) {
+  try {
+    const serverSupabase = createSupabaseServerClient();
+    const {
+      data: { user: serverUser },
+    } = await serverSupabase.auth.getUser();
+    const user_id = serverUser?.id;
+    if (!user_id) {
+      throw new Error('User not found');
+    }
+    const { team_id } = params;
+    const newMemberData = {
+      team_id,
+      member_id: user_id,
+      isTeamHead: false,
+    };
+    const { data, error } = await serverSupabase
+      .from('teams-members')
+      .insert(newMemberData);
+    if (error) {
+      throw new Error(error.message);
+    }
+    return new Response(JSON.stringify(data), { status: 201 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return new Response(error.message);
+    } else {
+      return new Response(null, { status: 500 });
+    }
+  }
+}

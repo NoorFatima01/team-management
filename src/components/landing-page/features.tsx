@@ -38,7 +38,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className='my-12'>
+    <section className=' my-12 bg-gradient-to-b '>
       <div className='mx-auto w-[130px]'>
         <h2 className='text-3xl font-bold text-foreground '>Features</h2>
       </div>

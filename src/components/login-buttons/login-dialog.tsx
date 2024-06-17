@@ -53,7 +53,7 @@ const LoginDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Log In</Button>
+        <Button size='sm'>Log In</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className='space-y-1'>

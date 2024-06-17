@@ -86,3 +86,46 @@ export async function POST(req: Request) {
     }
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const pageSize = 3;
+    const pageNumber = parseInt(req.url.split('?')[1].split('page=')[1] || '1');
+    const serverSupabase = createSupabaseServerClient();
+
+    //first get total number of teams
+    const { data: teamsCount, error: countError } = await serverSupabase
+      .from('teams')
+      .select('team_id');
+    const totalTeams = teamsCount?.length || 0;
+    if (totalTeams === 0) {
+      return new Response(null, { status: 200 });
+    }
+    if (countError) {
+      throw new Error(countError.message);
+    }
+    const skip = (pageNumber - 1) * pageSize;
+
+    //get only those teams that are in the current page
+    const { data: teams, error } = await serverSupabase
+      .from('teams')
+      .select('team_id, name, description, projects_in_progress, created_at')
+      .range(skip, skip + pageSize - 1);
+    if (error) {
+      throw new Error(error.message);
+    }
+    const teamsResponse = {
+      teams,
+      totalTeams,
+      totalPages: Math.ceil(totalTeams / pageSize),
+      currentPage: pageNumber,
+    };
+    return new Response(JSON.stringify(teamsResponse), { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return new Response(error.message);
+    } else {
+      return new Response(null, { status: 500 });
+    }
+  }
+}
