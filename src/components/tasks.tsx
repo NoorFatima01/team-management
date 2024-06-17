@@ -37,6 +37,11 @@ import {
 } from '@/components/ui/resizable';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import UploadFile from '@/components/upload-file';
 
 type TaskWithProjects = taskSchemaType & {
@@ -159,25 +164,39 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
           </h2>
 
           <div className='flex gap-2'>
-            <Button
-              size='sm'
-              disabled={!isProjectInProgress}
-              onClick={() => {
-                updateProjectStatus('COMPLETED');
-              }}
-            >
-              Mark Project as Done
-            </Button>
-            <Button
-              size='sm'
-              variant='destructive'
-              disabled={!isProjectInProgress}
-              onClick={() => {
-                updateProjectStatus('CANCELLED');
-              }}
-            >
-              Mark Project as Cancelled
-            </Button>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  size='sm'
+                  disabled={!isProjectInProgress}
+                  onClick={() => {
+                    updateProjectStatus('COMPLETED');
+                  }}
+                >
+                  <Icons.check className='size-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <span>Mark as Completed</span>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  size='sm'
+                  variant='destructive'
+                  disabled={!isProjectInProgress}
+                  onClick={() => {
+                    updateProjectStatus('CANCELLED');
+                  }}
+                >
+                  <Icons.close className='size-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <span>Mark as Cancelled</span>
+              </TooltipContent>
+            </Tooltip>
             <AddTaskForm projectName={projectName} />
           </div>
         </div>

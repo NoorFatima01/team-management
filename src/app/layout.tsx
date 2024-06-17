@@ -8,6 +8,7 @@ import ReactQueryProviders from '@/components/react-query-provider';
 import { TailwindIndicator } from '@/components/tailwind-indicator';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export default function RootLayout({
   children,
@@ -19,11 +20,13 @@ export default function RootLayout({
       <head />
       <body className={cn('min-h-screen bg-background font-sans antialiased')}>
         <ReactQueryProviders>
-          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            {children}
-            <Toaster />
-            <TailwindIndicator />
-          </ThemeProvider>
+          <TooltipProvider>
+            <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+              {children}
+              <Toaster />
+              <TailwindIndicator />
+            </ThemeProvider>
+          </TooltipProvider>
         </ReactQueryProviders>
       </body>
     </html>
