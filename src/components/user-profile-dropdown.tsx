@@ -33,9 +33,15 @@ const UserProfileDropdown = ({ user }: UserProfileDropdownProps) => {
               aria-label='Use menu trigger'
             >
               <Avatar className='size-8'>
-                <AvatarImage src={user.image} />
+                {user.image ? (
+                  <>
+                    <AvatarImage src={user.image} />
 
-                <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>CN</AvatarFallback>
+                  </>
+                ) : (
+                  <AvatarFallback>CN</AvatarFallback>
+                )}
               </Avatar>
             </Button>
           </DropdownMenuTrigger>

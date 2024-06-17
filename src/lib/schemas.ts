@@ -31,7 +31,7 @@ export const fileSchema = z.object({
     ),
 });
 
-export const userSignupFormSchema = fileSchema.extend({
+export const userSignupFormSchema = z.object({
   name: z.string(),
   // image: z.string(),
   email: z.string().email(),
@@ -43,7 +43,7 @@ export const userProfileSchema = z.object({
   updated_at: z.string().default(new Date().toISOString()),
   username: z.string(),
   full_name: z.string(),
-  avatar_url: z.string(),
+  avatar_url: z.string().optional(),
   email: z.string().email(),
   role: z.enum(['USER', 'TEAM_MEMBER', 'TEAM_HEAD']).default('USER'),
 });

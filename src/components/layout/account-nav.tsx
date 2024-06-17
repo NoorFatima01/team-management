@@ -22,14 +22,14 @@ interface AccountNavProps {
 }
 
 const accountNavRoutes = [
+  // {
+  //   shouldRender: (user: SessionUser) => user.role === 'USER',
+  //   title: 'User Registration',
+  //   href: '/register-member',
+  //   icon: <Icons.employee className='size-4' />,
+  // },
   {
-    shouldRender: (user: SessionUser) => user.role === 'USER',
-    title: 'User Registration',
-    href: '/register-member',
-    icon: <Icons.employee className='size-4' />,
-  },
-  {
-    shouldRender: (user: SessionUser) => user.role !== 'USER',
+    shouldRender: true,
     title: 'Create a New Team',
     href: '/create-team',
     icon: <Icons.add className='size-4' />,
@@ -55,7 +55,7 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
           {/*div for sidebar boxes*/}
           <Box className='flex flex-col items-center gap-y-4 px-5 py-4'>
             <NextImage
-              src={user?.image as string}
+              src={user.image ? (user.image as string) : '/images/prof-pic.jpg'}
               alt={user?.name as string}
               width={100}
               height={100}
@@ -67,22 +67,20 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
           <Box className='h-full flex flex-col items-center gap-y-4 px-5 py-4 mt-2'>
             <nav className='flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'>
               {accountNavRoutes.map((route, index) => {
-                if (typeof route.shouldRender === 'function') {
-                  if (route.shouldRender(user)) {
-                    return (
-                      <Link
-                        key={index}
-                        href={`/my-profile/${params.name}/${route.href}`}
-                        className={cn(
-                          buttonVariants({ variant: 'ghost' }),
-                          'flex gap-4'
-                        )}
-                      >
-                        {route.icon && route.icon}
-                        {route.title}
-                      </Link>
-                    );
-                  }
+                if (route.shouldRender) {
+                  return (
+                    <Link
+                      key={index}
+                      href={`/my-profile/${params.name}/${route.href}`}
+                      className={cn(
+                        buttonVariants({ variant: 'ghost' }),
+                        'flex gap-4'
+                      )}
+                    >
+                      {route.icon && route.icon}
+                      {route.title}
+                    </Link>
+                  );
                 } else {
                   return null;
                 }

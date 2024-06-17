@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import UploadFile from '@/components/upload-file';
 
 const UserSignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +33,6 @@ const UserSignupForm = () => {
       name: '',
       email: '',
       password: '',
-      file: '',
     },
   });
 
@@ -81,19 +79,6 @@ const UserSignupForm = () => {
                     required
                     {...field}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='file'
-            render={() => (
-              <FormItem className='flex flex-col gap-2'>
-                <FormLabel>Profile Picture</FormLabel>
-                <FormControl>
-                  <UploadFile setValue={form.setValue} name='file' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
