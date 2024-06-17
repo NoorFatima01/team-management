@@ -20,7 +20,7 @@ jobs:
       - name: 🤌 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9.1.1
 
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
