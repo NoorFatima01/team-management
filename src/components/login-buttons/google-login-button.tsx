@@ -23,7 +23,7 @@ export default function LoginWithGoogleButton(props: { nextUrl?: string }) {
   };
 
   return (
-    <Button size='sm' onClick={handleLogin}>
+    <Button size='sm' variant='ghost' onClick={handleLogin}>
       Login with Google
     </Button>
   );

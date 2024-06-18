@@ -1,5 +1,4 @@
 'use client';
-import { DialogClose } from '@radix-ui/react-dialog';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -46,9 +45,9 @@ const LoginDialog = () => {
     router.refresh();
   }
 
-  function createAccountButtonClick() {
-    router.push('/create-account');
-  }
+  // function createAccountButtonClick() {
+  //   router.push('/create-account');
+  // }
 
   return (
     <Dialog>
@@ -98,23 +97,21 @@ const LoginDialog = () => {
               }}
             />
           </div>
-          {/* <DialogClose> */}
           <Button onClick={() => signInWithEmail(email, password)}>
             Log In
           </Button>
-          {/* </DialogClose> */}
         </div>
         <DialogFooter>
           <div className='w-full flex items-center justify-center'>
-            <p className='text-sm'>Don't have an account?</p>{' '}
-            <DialogClose>
-              <Button
-                className='ml-1'
-                onClick={() => createAccountButtonClick()}
-              >
-                Create account
-              </Button>
-            </DialogClose>
+            <p className='text-sm'>Don't have an account?</p>
+            <Button
+              variant='link'
+              className='inline-flex text-white text-md focus-visible:ring-primary-500 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2 hover:underline'
+              // href='/create-account'
+              // onClick={() => createAccountButtonClick()}
+            >
+              Create account
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>

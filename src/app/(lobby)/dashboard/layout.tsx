@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className='container flex flex-col gap-6 mt-6'>
+    <div className='container flex flex-col gap-6 mt-6 p-6'>
       <PageDescriptionHeader title='Dashboard' description='Manage Your Work' />
       <DashboardTabs />
       <main>{children}</main>

@@ -70,7 +70,7 @@ export default function CreateProjectForm() {
   });
 
   const teamOptions: TeamOptions[] =
-    teamsOfUser?.map((team: teamSchemaType) => ({
+    (teamsOfUser as teamSchemaType[])?.map((team: teamSchemaType) => ({
       label: team.name,
       value: team.team_id,
     })) || [];

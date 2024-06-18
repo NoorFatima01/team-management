@@ -17,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <head />
+      <head>
+        <title>TeamManager</title>
+      </head>
       <body className={cn('min-h-screen bg-background font-sans antialiased')}>
         <ReactQueryProviders>
           <TooltipProvider>
