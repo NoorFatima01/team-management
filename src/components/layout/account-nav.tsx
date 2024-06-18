@@ -30,7 +30,7 @@ const accountNavRoutes = [
   // },
   {
     shouldRender: true,
-    title: 'Create a New Team',
+    title: 'New Team',
     href: '/create-team',
     icon: <Icons.add className='size-4' />,
   },
@@ -63,7 +63,7 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
             />
             <h1 className='text-2xl font-bold'>{user?.name}</h1>
           </Box>
-          <Separator />
+          <Separator className='bg-gray-100' />
           <Box className='h-full flex flex-col items-center gap-y-4 px-5 py-4 mt-2'>
             <nav className='flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'>
               {accountNavRoutes.map((route, index) => {
@@ -88,8 +88,14 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
             </nav>
           </Box>
         </div>
-        <Separator orientation='vertical' className='hidden lg:block' />
-        <Separator orientation='horizontal' className='block lg:hidden' />
+        <Separator
+          orientation='vertical'
+          className='hidden lg:block bg-gray-100'
+        />
+        <Separator
+          orientation='horizontal'
+          className='block lg:hidden bg-gray-100'
+        />
 
         {/*div for the main elements of the page*/}
         <main className='h-full flex-1 overflow-y-auto p-2 rounded-lg ml-4'>

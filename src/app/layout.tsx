@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 
 import { cn } from '@/lib/utils';
 
+import { ProgressBar } from '@/components/progress-bar';
 import ReactQueryProviders from '@/components/react-query-provider';
 import { TailwindIndicator } from '@/components/tailwind-indicator';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -21,15 +22,21 @@ export default function RootLayout({
         <title>TeamManager</title>
       </head>
       <body className={cn('min-h-screen bg-background font-sans antialiased')}>
-        <ReactQueryProviders>
-          <TooltipProvider>
-            <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-              {children}
-              <Toaster />
-              <TailwindIndicator />
-            </ThemeProvider>
-          </TooltipProvider>
-        </ReactQueryProviders>
+        <ProgressBar className='fixed top-4 h-3 bg-yellow-300 z-1000'>
+          <ReactQueryProviders>
+            <TooltipProvider>
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+              >
+                {children}
+                <Toaster />
+                <TailwindIndicator />
+              </ThemeProvider>
+            </TooltipProvider>
+          </ReactQueryProviders>
+        </ProgressBar>
       </body>
     </html>
   );

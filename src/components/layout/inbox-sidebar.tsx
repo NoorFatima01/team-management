@@ -40,7 +40,7 @@ export default function InboxSideBar() {
               pathname === `/inbox/${team.name}`
                 ? 'bg-muted hover:bg-muted'
                 : 'hover:bg-transparent hover:underline',
-              'justify-start'
+              'text-center'
             )}
           >
             {team.name}

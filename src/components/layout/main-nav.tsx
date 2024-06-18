@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 import { Icons } from '@/components/icons';
+import { ProgressBar, ProgressBarLink } from '@/components/progress-bar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenuContent,
@@ -39,24 +40,26 @@ export default function MainNav({ items, username }: MainNavProps) {
         </span>
       </Link>
       {items?.length ? (
-        <nav className='hidden lg:flex gap-6'>
-          {items?.map((item, index) => (
-            <Link
-              href={item.href}
-              key={index}
-              className={cn(
-                'flex items-center text-lg font-semibold text-muted-foreground hover:text-foreground/80 sm:text-sm',
-                item.disabled && 'cursor-not-allowed opacity-80',
-                (item.title === 'Dashboard' || item.title === 'Inbox') &&
-                  !username &&
-                  'hidden'
-              )}
-            >
-              {item.icon ? <item.icon className='size-6' /> : null}
-              <span>{item.title}</span>
-            </Link>
-          ))}
-        </nav>
+        <ProgressBar className='fixed top-0 left-0 h-1 bg-primary'>
+          <nav className='hidden lg:flex gap-6'>
+            {items?.map((item, index) => (
+              <ProgressBarLink
+                href={item.href}
+                key={index}
+                className={cn(
+                  'flex items-center text-lg font-semibold text-muted-foreground hover:text-foreground/80 sm:text-sm',
+                  item.disabled && 'cursor-not-allowed opacity-80',
+                  (item.title === 'Dashboard' || item.title === 'Inbox') &&
+                    !username &&
+                    'hidden'
+                )}
+              >
+                {item.icon ? <item.icon className='size-6' /> : null}
+                <span>{item.title}</span>
+              </ProgressBarLink>
+            ))}
+          </nav>
+        </ProgressBar>
       ) : null}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

@@ -45,9 +45,9 @@ const LoginDialog = () => {
     router.refresh();
   }
 
-  // function createAccountButtonClick() {
-  //   router.push('/create-account');
-  // }
+  function createAccountButtonClick() {
+    router.push('/create-account');
+  }
 
   return (
     <Dialog>
@@ -107,8 +107,7 @@ const LoginDialog = () => {
             <Button
               variant='link'
               className='inline-flex text-white text-md focus-visible:ring-primary-500 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2 hover:underline'
-              // href='/create-account'
-              // onClick={() => createAccountButtonClick()}
+              onClick={() => createAccountButtonClick()}
             >
               Create account
             </Button>
