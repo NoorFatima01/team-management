@@ -22,19 +22,6 @@ export async function POST(
     );
   }
 
-  //also update the member_id open to work to false
-  const { error: error2 } = await serverSupabase
-    .from('members')
-    .update({ open_to_work: false })
-    .eq('member_id', body.member_id);
-
-  if (error2) {
-    return new Response(
-      JSON.stringify({ success: false, error: error2.message }),
-      { status: 500 }
-    );
-  }
-
   return new Response(JSON.stringify({ success: true }), { status: 200 });
 }
 

@@ -6,7 +6,8 @@ export async function GET(
 ) {
   try {
     const userId = params.userId;
-    if (!userId) throw new Error('User ID is required');
+    if (!userId) throw new Error('User id is required');
+
     const supabase = createSupabaseServerClient();
 
     const { data: teamsIdsUserIsIn, error: idsError } = await supabase
@@ -14,7 +15,9 @@ export async function GET(
       .select('team_id')
       .eq('member_id', userId);
 
-    if (idsError) throw new Error(idsError.message);
+    if (idsError) {
+      throw new Error(idsError.message);
+    }
 
     const { data: teamsUserIsIn, error: teamsError } = await supabase
       .from('teams')
@@ -24,7 +27,9 @@ export async function GET(
         teamsIdsUserIsIn?.map(({ team_id }) => team_id)
       );
 
-    if (teamsError) throw new Error(teamsError.message);
+    if (teamsError) {
+      throw new Error(teamsError.message);
+    }
     return new Response(JSON.stringify(teamsUserIsIn), { status: 200 });
   } catch (error: unknown) {
     if (error instanceof Error) {

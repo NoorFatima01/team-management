@@ -19,15 +19,6 @@ export async function POST(req: Request) {
     const role = await getRole(user_id as string);
 
     if (role === 'TEAM_MEMBER') {
-      //delete team head from members
-      const { error: membersError } = await serverSupabase
-        .from('members')
-        .delete()
-        .eq('member_id', user_id);
-      if (membersError) {
-        throw new Error(membersError.message);
-      }
-
       //update role to TEAM_HEAD
       const { error: roleError } = await serverSupabase
         .from('profiles')
