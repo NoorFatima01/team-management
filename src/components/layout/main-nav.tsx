@@ -1,7 +1,6 @@
 'use client';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { LucideIcon } from 'lucide-react';
-import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 
@@ -33,12 +32,17 @@ interface MainNavProps {
 export default function MainNav({ items, username }: MainNavProps) {
   return (
     <div className='flex gap-6 lg:gap-10'>
-      <Link href='/' className='hidden items-center space-x-2 lg:flex'>
-        <Icons.logo className='size-6' />
-        <span className='hidden font-bold sm:inline-block'>
-          {siteConfig.name}
-        </span>
-      </Link>
+      <ProgressBar className='fixed top-0 left-0 h-1 bg-primary'>
+        <ProgressBarLink
+          href='/'
+          className='hidden items-center space-x-2 lg:flex'
+        >
+          <Icons.logo className='size-6' />
+          <span className='hidden font-bold sm:inline-block'>
+            {siteConfig.name}
+          </span>
+        </ProgressBarLink>
+      </ProgressBar>
       {items?.length ? (
         <ProgressBar className='fixed top-0 left-0 h-1 bg-primary'>
           <nav className='hidden lg:flex gap-6'>
@@ -87,10 +91,14 @@ export default function MainNav({ items, username }: MainNavProps) {
                   asChild
                   className='flex items-center gap-2.5'
                 >
-                  <Link href={item.href}>
-                    {item.icon && <item.icon className='size-4' aria-hidden />}
-                    <span className='line-clamp-1'>{item.title}</span>
-                  </Link>
+                  <ProgressBar className='fixed top-0 left-0 h-1 bg-primary'>
+                    <ProgressBarLink href={item.href}>
+                      {item.icon && (
+                        <item.icon className='size-4' aria-hidden />
+                      )}
+                      <span className='line-clamp-1'>{item.title}</span>
+                    </ProgressBarLink>
+                  </ProgressBar>
                 </DropdownMenuItem>
               ))
             : null}
