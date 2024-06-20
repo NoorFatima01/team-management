@@ -11,10 +11,7 @@ export function cn(...inputs: ClassValue[]) {
 export async function getAllAvailableMembers() {
   const res = await fetch('/api/member');
   const members = await res.json();
-  //filter out those whose members is null
-  const availableMembers = members.filter(
-    (member: availableMember) => member.members !== null
-  );
+  const availableMembers = members.map((member: availableMember) => member);
   return availableMembers as availableMember[];
 }
 
@@ -45,10 +42,25 @@ export function formatNotificationDateTime(created_at: string) {
     }/${date.getFullYear()}`;
     return formattedDate;
   } else {
-    // If it has been less than a day, return the time part
+    // If it has been less than a day, return the time parts
     const formattedTime = `${date.getHours()}:${
       (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
     }`;
     return formattedTime;
   }
+}
+
+export function formatDate(timestamp: string) {
+  const date = new Date(timestamp);
+
+  // Step 2: Define the formatting options for only the date
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+
+  // Step 3: Format the date using Intl.DateTimeFormat
+  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+  return formattedDate;
 }

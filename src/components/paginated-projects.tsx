@@ -55,10 +55,6 @@ const PaginatedProjects = () => {
     },
   });
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
   if (isFetching || isLoading) {
     return (
       <div className='container grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 my-4'>
@@ -72,7 +68,9 @@ const PaginatedProjects = () => {
   }
 
   if (error) {
-    return <div>Seems there was an error loading the projects</div>;
+    return (
+      <div>Seems there was an error loading the projects, {error.message}</div>
+    );
   }
 
   const projects = projectsData.projects;
