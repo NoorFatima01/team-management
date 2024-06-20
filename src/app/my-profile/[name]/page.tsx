@@ -15,7 +15,7 @@ const AccountPage = async () => {
 
   const { data: userData } = await serverSupabase
     .from('profiles')
-    .select('username, email, role')
+    .select('username, email')
     .eq('id', user_id)
     .single();
   const defaultValues = {
@@ -28,7 +28,7 @@ const AccountPage = async () => {
         title='Account'
         description='Edit your account details'
       />
-      <ProfileForm defaultValues={defaultValues} role={userData?.role} />
+      <ProfileForm defaultValues={defaultValues} />
     </div>
   );
 };

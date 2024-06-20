@@ -63,14 +63,15 @@ export default function CreateProjectForm() {
     },
   });
 
-  const { data: teamsOfUser } = useQuery({
+  const { data } = useQuery({
     queryKey: ['teams'],
     queryFn: () => getTeamsUserIsIn(user_id),
     enabled: !!user_id,
   });
+  const teamsOfUser = data as teamSchemaType[];
 
   const teamOptions: TeamOptions[] =
-    (teamsOfUser as teamSchemaType[])?.map((team: teamSchemaType) => ({
+    teamsOfUser?.map((team: teamSchemaType) => ({
       label: team.name,
       value: team.team_id,
     })) || [];

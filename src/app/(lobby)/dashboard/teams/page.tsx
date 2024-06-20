@@ -30,7 +30,6 @@ export default async function TeamsPage() {
       'team_id',
       teamsIds.map(({ team_id }) => team_id)
     );
-
   const userTeams = teams as teamSchemaType[];
 
   //get members of the teams
