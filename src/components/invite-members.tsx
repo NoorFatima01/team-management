@@ -1,9 +1,10 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -34,6 +35,8 @@ export default function InviteMembers({
   teamName,
   team_id,
 }: InviteMembersProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [invitingMemberId, setInvitingMemberId] = useState<string>('');
   async function addInvitation(data: invitationProps) {
     const response = await fetch('/api/invitations', {
       method: 'POST',
@@ -80,6 +83,7 @@ export default function InviteMembers({
       };
       notificationMutate(notificationData);
       toast.success('Invitation sent');
+      setIsLoading(false);
     },
     onError: () => {
       toast.error('Failed to send invitation');
@@ -87,6 +91,8 @@ export default function InviteMembers({
   });
 
   async function handleClick(id: string) {
+    setIsLoading(true);
+    setInvitingMemberId(id);
     const text = `You have been invited to join the ${teamName} team`;
     const invitationData: invitationProps = {
       member_id: id,
@@ -127,7 +133,11 @@ export default function InviteMembers({
                     size='sm'
                     variant='secondary'
                     onClick={() => handleClick(member.id)}
+                    disabled={isLoading}
                   >
+                    {isLoading && invitingMemberId === member.id && (
+                      <Icons.spinner className='animate-spin size-4 mr-2 ' />
+                    )}
                     Send Invite
                   </Button>
                 </div>

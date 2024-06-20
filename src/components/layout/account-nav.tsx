@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react';
 
@@ -9,6 +8,7 @@ import Box from '@/components/Box';
 import { Icons } from '@/components/icons';
 import ProfilePageBreadcrumb from '@/components/layout/profile-page-breadcrumb';
 import NextImage from '@/components/NextImage';
+import { ProgressBar, ProgressBarLink } from '@/components/progress-bar';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
@@ -22,17 +22,17 @@ interface AccountNavProps {
 }
 
 const accountNavRoutes = [
-  // {
-  //   shouldRender: (user: SessionUser) => user.role === 'USER',
-  //   title: 'User Registration',
-  //   href: '/register-member',
-  //   icon: <Icons.employee className='size-4' />,
-  // },
   {
     shouldRender: true,
     title: 'New Team',
     href: '/create-team',
     icon: <Icons.add className='size-4' />,
+  },
+  {
+    shouldRender: true,
+    title: 'Invitations',
+    href: '/invitations',
+    icon: <Icons.invite className='size-4' />,
   },
 ];
 
@@ -65,27 +65,29 @@ const AccountNav = ({ user, children }: AccountNavProps) => {
           </Box>
           <Separator className='bg-gray-100' />
           <Box className='h-full flex flex-col items-center gap-y-4 px-5 py-4 mt-2'>
-            <nav className='flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'>
-              {accountNavRoutes.map((route, index) => {
-                if (route.shouldRender) {
-                  return (
-                    <Link
-                      key={index}
-                      href={`/my-profile/${params.name}/${route.href}`}
-                      className={cn(
-                        buttonVariants({ variant: 'ghost' }),
-                        'flex gap-4'
-                      )}
-                    >
-                      {route.icon && route.icon}
-                      {route.title}
-                    </Link>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </nav>
+            <ProgressBar className='fixed top-0 left-0 h-1 bg-primary'>
+              <nav className='flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1'>
+                {accountNavRoutes.map((route, index) => {
+                  if (route.shouldRender) {
+                    return (
+                      <ProgressBarLink
+                        key={index}
+                        href={`/my-profile/${params.name}/${route.href}`}
+                        className={cn(
+                          buttonVariants({ variant: 'ghost' }),
+                          'flex gap-4'
+                        )}
+                      >
+                        {route.icon && route.icon}
+                        {route.title}
+                      </ProgressBarLink>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </nav>
+            </ProgressBar>
           </Box>
         </div>
         <Separator

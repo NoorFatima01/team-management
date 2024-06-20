@@ -10,6 +10,11 @@ export async function POST(req: Request) {
   const { member_id } = body;
   const serverSupabase = createSupabaseServerClient();
 
+  const {
+    data: { user: serverUser },
+  } = await serverSupabase.auth.getUser();
+  const user_id = serverUser?.id;
+
   //add read, id and created at to the body
   body = {
     ...body,
@@ -78,12 +83,15 @@ export async function POST(req: Request) {
     );
   }
 
-  pusherServer.trigger('bell-dot', 'pink-dot', {});
-  pusherServer.trigger(
-    'notification',
-    'new-notification',
-    notificationData as notificationSchemaType
-  );
+  //only show real time notification to the user who matched the member_id
+  if (member_id == user_id) {
+    pusherServer.trigger('bell-dot', 'pink-dot', {});
+    pusherServer.trigger(
+      'notification',
+      'new-notification',
+      notificationData as notificationSchemaType
+    );
+  }
 
   return NextResponse.json({ success: true }, { status: 201 });
 }

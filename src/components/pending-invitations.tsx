@@ -4,6 +4,11 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { Icons } from '@/components/icons';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 import { Button } from '../components/ui/button';
 import { invitationSchemaType } from '../lib/schemas';
@@ -124,12 +129,17 @@ const Invitations = () => {
       <h1 className='text-2xl font-bold'>Pending Invitations</h1>
       <div className='mt-2'>
         {pendingInvitationsLoading ? (
-          <h1>Loading...</h1>
+          <div className='flex justify-center items-center mt-32'>
+            <Icons.spinner
+              className=' size-20 animate-spin text-primary-foreground rounded-md p-1'
+              aria-hidden='true'
+            />
+          </div>
         ) : pendingInvitationsData.data?.length === 0 ? (
           <h1>No pending invitations</h1>
         ) : (
           <div className='px-2 py-4 '>
-            <div className='flex flex-col border-2 border-white rounded-md'>
+            <div className='flex flex-col border-2 border-muted-foreground rounded-md'>
               {pendingInvitationsData.data?.map(
                 (invitation: invitationSchemaType) => (
                   <div
@@ -145,26 +155,39 @@ const Invitations = () => {
                         />
                       ) : (
                         <div className='flex gap-3'>
-                          <Button
-                            onClick={() => {
-                              handleAcceptance(
-                                invitation.inv_id,
-                                invitation.team_id,
-                                invitation.member_id
-                              );
-                            }}
-                            disabled={isLoading}
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              handleRejection(invitation.inv_id);
-                            }}
-                            disabled={isLoading}
-                          >
-                            Reject
-                          </Button>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Button
+                                size='sm'
+                                onClick={() => {
+                                  handleAcceptance(
+                                    invitation.inv_id,
+                                    invitation.team_id,
+                                    invitation.member_id
+                                  );
+                                }}
+                                disabled={isLoading}
+                              >
+                                <Icons.check className='size-4' />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Accept</TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Button
+                                size='sm'
+                                variant='destructive'
+                                onClick={() => {
+                                  handleRejection(invitation.inv_id);
+                                }}
+                                disabled={isLoading}
+                              >
+                                <Icons.close className='size-4' />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Reject</TooltipContent>
+                          </Tooltip>
                         </div>
                       )}
                     </div>

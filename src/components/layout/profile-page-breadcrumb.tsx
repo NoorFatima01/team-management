@@ -13,6 +13,7 @@ const ProfilePageBreadcrumb = () => {
   const pathname = usePathname();
   const isCreateTeamPage = pathname.includes('/create-team');
   const isRegisterMemberPage = pathname.includes('/register-member');
+  const isInvitationsPage = pathname.includes('/invitations');
   const pathArray = pathname.split('/');
   const profilePageLink = pathArray.slice(0, 3).join('/');
 
@@ -63,6 +64,20 @@ const ProfilePageBreadcrumb = () => {
                   className='text-foreground font-bold text-xl'
                 >
                   User Registration
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </>
+          )}
+
+          {isInvitationsPage && (
+            <>
+              <BreadcrumbSeparator></BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href={pathname}
+                  className='text-foreground font-bold text-xl'
+                >
+                  Invitations
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </>

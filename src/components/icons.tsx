@@ -3,6 +3,7 @@ import {
   Bell,
   Briefcase,
   CheckIcon,
+  ClipboardPlus,
   File,
   FileImage,
   FileText,
@@ -54,6 +55,7 @@ export const Icons = {
   unread: Mail,
   read: MailOpen,
   message: MessageSquare,
+  invite: ClipboardPlus,
   logo: (props: LucideProps) => (
     <svg
       fill='currentColor'
