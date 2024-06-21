@@ -1,7 +1,9 @@
 'use client';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+
+import { useCanJoinTeamStore } from '@/lib/store';
 
 import { Icons } from '@/components/icons';
 import {
@@ -20,6 +22,13 @@ const Invitations = () => {
   const userId = user?.id;
 
   const [isLoading, setIsLoading] = useState(false);
+  const { fetchTeamsJoined, canJoinMoreTeams, increaseTeamsJoined } =
+    useCanJoinTeamStore();
+
+  useEffect(() => {
+    fetchTeamsJoined(userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   //fetch the invitations that are pending
   const { data: pendingInvitationsData, isLoading: pendingInvitationsLoading } =
@@ -99,6 +108,7 @@ const Invitations = () => {
     mutationFn: updateTeam,
     onSuccess: () => {
       toast.success('Team Updated');
+      increaseTeamsJoined();
     },
     onError: () => {
       toast.error('Failed to update team');
@@ -166,12 +176,16 @@ const Invitations = () => {
                                     invitation.member_id
                                   );
                                 }}
-                                disabled={isLoading}
+                                disabled={isLoading || !canJoinMoreTeams()}
                               >
                                 <Icons.check className='size-4' />
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent>Accept</TooltipContent>
+                            <TooltipContent>
+                              {canJoinMoreTeams()
+                                ? 'Accept'
+                                : 'You can not join more than 3 teams. Please leave a team to join another.'}
+                            </TooltipContent>
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger>

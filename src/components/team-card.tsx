@@ -4,6 +4,7 @@ import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { useCanJoinTeamStore } from '@/lib/store';
 import { formatDate } from '@/lib/utils';
 
 import { Icons } from '@/components/icons';
@@ -20,17 +21,19 @@ import {
 } from '@/components/ui/card';
 
 type TeamCardProps = {
-  isUserLoggedIn: boolean;
+  userId: string | undefined;
+
   team_id: string;
   title: string;
   description: string;
   projects: number;
   createdAt: string;
-  userTeamQuery: UseQueryResult<Team[], Error>; // Replace 'unknown' with the actual type of 'data'
+  userTeamQuery: UseQueryResult<Team[], Error>;
 };
 
 export default function TeamCard({
-  isUserLoggedIn,
+  userId,
+
   team_id,
   title,
   description,
@@ -40,6 +43,14 @@ export default function TeamCard({
 }: TeamCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isUserAlreadyInTeam, setIsUserAlreadyInTeam] = useState(false);
+  const { fetchTeamsJoined, canJoinMoreTeams, increaseTeamsJoined } =
+    useCanJoinTeamStore();
+
+  useEffect(() => {
+    fetchTeamsJoined(userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+  const isUserLoggedIn = userId ? true : false;
   const joinTeam = async () => {
     setIsLoading(true);
     const response = await fetch(`/api/teams/team/${team_id}`, {
@@ -60,6 +71,7 @@ export default function TeamCard({
       toast.success('Successfully joined team');
       setIsLoading(false);
       setIsUserAlreadyInTeam(true);
+      increaseTeamsJoined();
     },
     onError: () => {
       toast.error('Failed to join team');
@@ -98,7 +110,11 @@ export default function TeamCard({
           </p>
         </CardContent>
         <CardFooter>
-          {!isUserAlreadyInTeam && isUserLoggedIn && (
+          {!isUserLoggedIn && (
+            //move badge to the right
+            <Badge className='ml-auto'>Log In to join team</Badge>
+          )}
+          {canJoinMoreTeams() && !isUserAlreadyInTeam && isUserLoggedIn && (
             <Button
               size='sm'
               onClick={() => mutate.mutate()}
@@ -110,9 +126,10 @@ export default function TeamCard({
               Join Team
             </Button>
           )}
-          {!isUserLoggedIn && (
-            //move badge to the right
-            <Badge className='ml-auto'>Log In to join team</Badge>
+          {!canJoinMoreTeams() && isUserLoggedIn && !isUserAlreadyInTeam && (
+            <Badge className='ml-auto' variant='destructive'>
+              You can only join 3 teams
+            </Badge>
           )}
         </CardFooter>
       </Card>

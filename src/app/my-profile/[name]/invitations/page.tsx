@@ -2,12 +2,10 @@ import React from 'react';
 
 import Invitations from '@/components/pending-invitations';
 
-const InvitationsPage = () => {
+export default async function InvitationsPage() {
   return (
     <div>
       <Invitations />
     </div>
   );
-};
-
-export default InvitationsPage;
+}

@@ -96,7 +96,7 @@ export default function PaginatedTeams() {
           return (
             <div key={team.team_id}>
               <TeamCard
-                isUserLoggedIn={!!session?.user}
+                userId={userId}
                 userTeamQuery={userTeamQuery}
                 team_id={team.team_id}
                 title={team.name}

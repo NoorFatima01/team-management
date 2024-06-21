@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { teamFormSchema, teamFormSchemaType } from '@/lib/schemas';
+import { useCanJoinTeamStore } from '@/lib/store';
 import { getAllAvailableMembers } from '@/lib/utils';
 
 import { Icons } from '@/components/icons';
@@ -37,6 +38,13 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
   const [selectedMembers, setSelectedMembers] = useState<Set<string>>(
     new Set()
   );
+  const { fetchTeamsJoined, canJoinMoreTeams, increaseTeamsJoined } =
+    useCanJoinTeamStore();
+
+  useEffect(() => {
+    fetchTeamsJoined(user.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const form = useForm<teamFormSchemaType>({
     resolver: zodResolver(teamFormSchema),
@@ -107,6 +115,7 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
       setIsLoading(false);
       form.reset();
       updateSelectedMembers();
+      increaseTeamsJoined();
     },
     onError: () => {
       setIsLoading(false);
@@ -195,16 +204,22 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={isLoading}>
-          {isLoading && (
-            <Icons.spinner
-              className='mr-2 size-4 animate-spin'
-              aria-hidden='true'
-            />
-          )}
-          Create Team
-          <span className='sr-only'>Create Team</span>
-        </Button>
+        {canJoinMoreTeams() ? (
+          <Button type='submit' disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner
+                className='mr-2 size-4 animate-spin'
+                aria-hidden='true'
+              />
+            )}
+            Create Team
+            <span className='sr-only'>Create Team</span>
+          </Button>
+        ) : (
+          <Button disabled={true} size='sm' variant='destructive'>
+            You can not be in more than 3 teams
+          </Button>
+        )}
       </form>
     </Form>
   );
