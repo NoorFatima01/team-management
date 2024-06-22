@@ -66,6 +66,7 @@ export async function PUT(
       throw new Error('User not found');
     }
     const { team_id } = params;
+    const teams_joined = await req.json();
     const newMemberData = {
       team_id,
       member_id: user_id,
@@ -77,6 +78,16 @@ export async function PUT(
     if (error) {
       throw new Error(error.message);
     }
+
+    //also increase teams_joined in profiles by 1
+    const { error: profileError } = await serverSupabase
+      .from('profiles')
+      .update({ teams_joined: teams_joined.teams_joined })
+      .eq('id', user_id);
+    if (profileError) {
+      throw new Error(profileError.message);
+    }
+
     return new Response(JSON.stringify(data), { status: 201 });
   } catch (error: unknown) {
     if (error instanceof Error) {

@@ -22,8 +22,12 @@ const Invitations = () => {
   const userId = user?.id;
 
   const [isLoading, setIsLoading] = useState(false);
-  const { fetchTeamsJoined, canJoinMoreTeams, increaseTeamsJoined } =
-    useCanJoinTeamStore();
+  const {
+    fetchTeamsJoined,
+    canJoinMoreTeams,
+    increaseTeamsJoined,
+    teamsJoined,
+  } = useCanJoinTeamStore();
 
   useEffect(() => {
     fetchTeamsJoined(userId);
@@ -63,7 +67,7 @@ const Invitations = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ status: status }),
+      body: JSON.stringify({ status: status, teams_joined: teamsJoined + 1 }),
     });
 
     if (response.status !== 200) {
@@ -141,12 +145,16 @@ const Invitations = () => {
         {pendingInvitationsLoading ? (
           <div className='flex justify-center items-center mt-32'>
             <Icons.spinner
-              className=' size-20 animate-spin text-primary-foreground rounded-md p-1'
+              className='size-20 animate-spin text-primary-foreground rounded-md p-1'
               aria-hidden='true'
             />
           </div>
         ) : pendingInvitationsData.data?.length === 0 ? (
-          <h1>No pending invitations</h1>
+          <div className='mt-6 rounded-md border border-muted-foreground p-2'>
+            <p className='text-muted-foreground text-sm'>
+              No pending invitations
+            </p>
+          </div>
         ) : (
           <div className='px-2 py-4 '>
             <div className='flex flex-col border-2 border-muted-foreground rounded-md'>

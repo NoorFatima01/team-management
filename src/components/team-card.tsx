@@ -43,8 +43,12 @@ export default function TeamCard({
 }: TeamCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isUserAlreadyInTeam, setIsUserAlreadyInTeam] = useState(false);
-  const { fetchTeamsJoined, canJoinMoreTeams, increaseTeamsJoined } =
-    useCanJoinTeamStore();
+  const {
+    fetchTeamsJoined,
+    canJoinMoreTeams,
+    increaseTeamsJoined,
+    teamsJoined,
+  } = useCanJoinTeamStore();
 
   useEffect(() => {
     fetchTeamsJoined(userId);
@@ -58,6 +62,7 @@ export default function TeamCard({
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ teams_joined: teamsJoined + 1 }),
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');

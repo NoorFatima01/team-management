@@ -38,8 +38,12 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
   const [selectedMembers, setSelectedMembers] = useState<Set<string>>(
     new Set()
   );
-  const { fetchTeamsJoined, canJoinMoreTeams, increaseTeamsJoined } =
-    useCanJoinTeamStore();
+  const {
+    fetchTeamsJoined,
+    canJoinMoreTeams,
+    increaseTeamsJoined,
+    teamsJoined,
+  } = useCanJoinTeamStore();
 
   useEffect(() => {
     fetchTeamsJoined(user.id);
@@ -99,7 +103,7 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(teamData),
+      body: JSON.stringify({ teamData, teams_joined: teamsJoined + 1 }),
     });
     if (!response.ok) {
       throw new Error('Failed to create team');

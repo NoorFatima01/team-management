@@ -8,7 +8,8 @@ import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const teamData = teamFormSchema.parse(body);
+    const { teamData } = body;
+    const teamDataParsed = teamFormSchema.parse(teamData);
     const serverSupabase = createSupabaseServerClient();
 
     //get current user id
@@ -30,9 +31,9 @@ export async function POST(req: Request) {
     }
 
     // eslint-disable-next-line unused-imports/no-unused-vars
-    const { team_head, members, ...team } = teamData;
+    const { team_head, members, ...team } = teamDataParsed;
     if (user_id) {
-      const teamData: teamSchemaType = {
+      const teamDataParsed: teamSchemaType = {
         ...team,
         team_head: user_id,
         team_id: v4(),
@@ -45,9 +46,48 @@ export async function POST(req: Request) {
       //now add members to team-members table. Also add current user to team-members table and set isteamHead to true for him
       const membersData = members.map((member) => ({
         member_id: member,
-        team_id: teamData.team_id,
+        team_id: teamDataParsed.team_id,
         isTeamHead: member === user_id,
       }));
+
+      //map over membersData and get their teams_joined from profiles table and update it
+      const updateDataArray = await Promise.all(
+        membersData.map(async (member) => {
+          const { data: profileData, error } = await serverSupabase
+            .from('profiles')
+            .select('teams_joined')
+            .eq('id', member.member_id);
+          if (error) {
+            throw new Error(error.message);
+          }
+          return {
+            teams_joined: profileData[0].teams_joined + 1,
+            user_id: member.member_id,
+            requester_id: user_id,
+          };
+        })
+      );
+
+      await Promise.all(
+        updateDataArray.map(async (updateData) => {
+          const { error } = await serverSupabase.rpc('update_teams_joined', {
+            requester_id: updateData.requester_id,
+            user_id: updateData.user_id,
+            updated_teams_joined: updateData.teams_joined,
+          });
+          if (error) {
+            throw new Error(error.message);
+          }
+        })
+      );
+
+      //now insert team data
+      const { error: teamError } = await serverSupabase
+        .from('teams')
+        .insert([{ ...teamDataParsed }]);
+      if (teamError) {
+        throw new Error(teamError.message);
+      }
 
       const { error: teamMembersError } = await serverSupabase
         .from('teams-members')
@@ -57,21 +97,13 @@ export async function POST(req: Request) {
         throw new Error('Failed to create team');
       }
 
-      //now insert team data
-      const { error: teamError } = await serverSupabase
-        .from('teams')
-        .insert([{ ...teamData }]);
-      if (teamError) {
-        throw new Error('Failed to create team');
-      }
-
-      return new Response(JSON.stringify(teamData), { status: 200 });
+      return new Response(JSON.stringify(teamDataParsed), { status: 200 });
     }
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 });
     } else if (error instanceof Error) {
-      return new Response(error.message, { status: 500 });
+      return new Response(error.message, { status: 404 });
     } else {
       return new Response(null, { status: 500 });
     }
