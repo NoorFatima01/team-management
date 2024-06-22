@@ -2,19 +2,13 @@ import React from 'react';
 
 import { teamSchemaType } from '@/lib/schemas';
 
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 interface TeamDeatilsProps {
   team: teamSchemaType;
-  isUserHead: boolean;
   children?: React.ReactNode;
 }
-export default function TeamDetails({
-  team,
-  isUserHead,
-  children,
-}: TeamDeatilsProps) {
+export default function TeamDetails({ team, children }: TeamDeatilsProps) {
   return (
     <div className='rounded-lg shadow-lg p-6 flex flex-col'>
       <h1 className='text-2xl font-bold mb-4'>{team.name}</h1>
@@ -32,11 +26,6 @@ export default function TeamDetails({
         </p>
       </div>
       <div>{children}</div>
-      {isUserHead && (
-        <Button size='sm' variant='destructive' className='self-end'>
-          Delete Team
-        </Button>
-      )}
     </div>
   );
 }

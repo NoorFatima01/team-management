@@ -1,16 +1,19 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 import { memberTableSchemaType, teamSchemaType } from '@/lib/schemas';
 import useSession from '@/lib/supabase/use-session';
 import { getAllAvailableMembers } from '@/lib/utils';
 
+import { Icons } from '@/components/icons';
 import InviteMembers from '@/components/invite-members';
 import MembersTable from '@/components/table/members-table';
 import TeamDetails from '@/components/team-details';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { availableMember } from '@/types';
@@ -49,6 +52,36 @@ export default function TeamsTabs({
     retry: 10,
   });
 
+  async function leaveTeam(team_id: string) {
+    const response = await fetch(`/api/teams/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ team_id }),
+    });
+
+    if (response.status !== 204) {
+      throw new Error('Failed to leave team ,,,,');
+    }
+    return true;
+  }
+
+  const mutate = useMutation({
+    mutationFn: leaveTeam,
+    onSuccess: () => {
+      toast.success('Successfully left team');
+      router.replace('/dashboard/teams');
+    },
+    onError: () => {
+      toast.error('Failed to leave team');
+    },
+  });
+
+  const onLeaveClick = (team_id: string) => {
+    mutate.mutate(team_id);
+  };
+
   return (
     <div>
       <Tabs className='w-full flex flex-col' defaultValue={teams[0].team_id}>
@@ -79,11 +112,7 @@ export default function TeamsTabs({
                     )?.members ?? [];
                 }
                 return (
-                  <TeamDetails
-                    key={teamToShow.team_id}
-                    team={teamToShow}
-                    isUserHead={isHead(teamToShow)}
-                  >
+                  <TeamDetails key={teamToShow.team_id} team={teamToShow}>
                     <div className='flex flex-col'>
                       {isHead(teamToShow) && (
                         <InviteMembers
@@ -93,6 +122,24 @@ export default function TeamsTabs({
                         />
                       )}
                       <MembersTable members={tableMembers} />
+                      <div className='self-end'>
+                        {isHead(teamToShow) && (
+                          <Button size='sm' variant='destructive'>
+                            Delete Team
+                          </Button>
+                        )}
+                        <Button
+                          size='sm'
+                          variant='ghost'
+                          disabled={mutate.isPending}
+                          onClick={() => onLeaveClick(teamToShow.team_id)}
+                        >
+                          {mutate.isPending && (
+                            <Icons.spinner className='size-4 animate-spin mr-2' />
+                          )}
+                          Leave
+                        </Button>
+                      </div>
                     </div>
                   </TeamDetails>
                 );
