@@ -67,7 +67,21 @@ export default function TeamsTabs({
     return true;
   }
 
-  const mutate = useMutation({
+  async function deleteTeam(team_id: string) {
+    const response = await fetch(`/api/teams/team/${team_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    });
+    if (response.status !== 200) {
+      throw new Error('Failed to delete team');
+    }
+    return true;
+  }
+
+  const leaveMutate = useMutation({
     mutationFn: leaveTeam,
     onSuccess: () => {
       toast.success('Successfully left team');
@@ -78,9 +92,16 @@ export default function TeamsTabs({
     },
   });
 
-  const onLeaveClick = (team_id: string) => {
-    mutate.mutate(team_id);
-  };
+  const deleteMutate = useMutation({
+    mutationFn: deleteTeam,
+    onSuccess: () => {
+      toast.success('Successfully deleted team');
+      router.replace('/dashboard/teams');
+    },
+    onError: () => {
+      toast.error('Failed to delete team');
+    },
+  });
 
   return (
     <div>
@@ -122,19 +143,29 @@ export default function TeamsTabs({
                         />
                       )}
                       <MembersTable members={tableMembers} />
-                      <div className='self-end'>
+                      <div className='self-end flex gap-2'>
                         {isHead(teamToShow) && (
-                          <Button size='sm' variant='destructive'>
-                            Delete Team
+                          <Button
+                            size='sm'
+                            variant='destructive'
+                            disabled={deleteMutate.isPending}
+                            onClick={() =>
+                              deleteMutate.mutate(teamToShow.team_id)
+                            }
+                          >
+                            {deleteMutate.isPending && (
+                              <Icons.spinner className='size-4 animate-spin mr-2' />
+                            )}
+                            Delete
                           </Button>
                         )}
                         <Button
                           size='sm'
                           variant='ghost'
-                          disabled={mutate.isPending}
-                          onClick={() => onLeaveClick(teamToShow.team_id)}
+                          disabled={leaveMutate.isPending}
+                          onClick={() => leaveMutate.mutate(teamToShow.team_id)}
                         >
-                          {mutate.isPending && (
+                          {leaveMutate.isPending && (
                             <Icons.spinner className='size-4 animate-spin mr-2' />
                           )}
                           Leave

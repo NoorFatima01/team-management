@@ -30,9 +30,49 @@ export async function DELETE(
   { params }: { params: { team_id: string } }
 ) {
   try {
-    const { team_id } = params;
-
+    const team_id = params.team_id;
+    const teamHead = await req.json();
     const serverSupabase = createSupabaseServerClient();
+
+    //before deleting team, get all members of the team
+    const { data: membersData, error: membersError } = await serverSupabase
+      .from('teams-members')
+      .select('member_id')
+      .eq('team_id', team_id);
+    if (membersError) {
+      throw new Error(membersError.message);
+    }
+
+    const updateDataArray = await Promise.all(
+      membersData.map(async (member) => {
+        const { data: profileData, error } = await serverSupabase
+          .from('profiles')
+          .select('teams_joined')
+          .eq('id', member.member_id);
+        if (error) {
+          throw new Error(error.message);
+        }
+        return {
+          teams_joined: profileData[0].teams_joined - 1,
+          user_id: member.member_id,
+          requester_id: teamHead.userId,
+        };
+      })
+    );
+
+    await Promise.all(
+      updateDataArray.map(async (updateData) => {
+        const { error } = await serverSupabase.rpc('update_teams_joined', {
+          requester_id: updateData.requester_id,
+          user_id: updateData.user_id,
+          updated_teams_joined: updateData.teams_joined,
+        });
+        if (error) {
+          throw new Error(error.message);
+        }
+      })
+    );
+
     //delete team
     const { error } = await serverSupabase
       .from('teams')
