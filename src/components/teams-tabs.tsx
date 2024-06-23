@@ -132,8 +132,16 @@ export default function TeamsTabs({
                         membersWithTeamId.team_id === teamToShow.team_id
                     )?.members ?? [];
                 }
+                //now get team head from the table members
+                const teamHead = tableMembers.find(
+                  (member) => member.member_id === teamToShow.team_head
+                );
                 return (
-                  <TeamDetails key={teamToShow.team_id} team={teamToShow}>
+                  <TeamDetails
+                    key={teamToShow.team_id}
+                    team={teamToShow}
+                    teamHeadUserName={teamHead?.username ?? ''}
+                  >
                     <div className='flex flex-col'>
                       {isHead(teamToShow) && (
                         <InviteMembers

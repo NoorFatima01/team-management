@@ -38,8 +38,8 @@ export default async function TeamsPage() {
       const { data: membersIds } = await serverSupabase
         .from('teams-members')
         .select('member_id')
-        .eq('team_id', team.team_id)
-        .eq('isTeamHead', false);
+        .eq('team_id', team.team_id);
+      // .eq('isTeamHead', false);
 
       const { data: members } = await serverSupabase
         .from('profiles')
