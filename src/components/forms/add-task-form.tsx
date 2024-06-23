@@ -92,7 +92,7 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
     }
     const projectId = projectData[0].project_id;
     if (error) {
-      toast.error('Error uploading file');
+      toast.error(error.message);
       setIsLoading(false);
       return;
     }

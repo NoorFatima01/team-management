@@ -146,80 +146,63 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
   };
   return (
     <div className='h-96 flex flex-col gap-3'>
-      {tasks && tasks.length > 0 ? (
-        <div className='flex justify-between'>
-          <h2 className='text-sm text-muted-foreground'>
-            Project Status:{' '}
-            <span
-              className={cn(
-                status === 'COMPLETED'
-                  ? 'text-primary'
-                  : status === 'CANCELLED'
-                  ? 'text-destructive'
-                  : ''
-              )}
-            >
-              {status}
-            </span>
-          </h2>
-
-          <div className='flex gap-2'>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size='sm'
-                  disabled={!isProjectInProgress}
-                  onClick={() => {
-                    updateProjectStatus('COMPLETED');
-                  }}
-                >
-                  <Icons.check className='size-4' />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <span>Mark as Completed</span>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size='sm'
-                  variant='destructive'
-                  disabled={!isProjectInProgress}
-                  onClick={() => {
-                    updateProjectStatus('CANCELLED');
-                  }}
-                >
-                  <Icons.close className='size-4' />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <span>Mark as Cancelled</span>
-              </TooltipContent>
-            </Tooltip>
-            <AddTaskForm projectName={projectName} />
-          </div>
-        </div>
-      ) : (
-        <div className='flex justify-between'>
-          <h2 className='text-sm text-muted-foreground'>
-            Project Status:{' '}
-            <span
-              className={cn(
-                status === 'COMPLETED'
-                  ? 'text-primary'
-                  : status === 'CANCELLED'
-                  ? 'text-destructive'
-                  : ''
-              )}
-            >
-              {status}
-            </span>
-          </h2>
-
+      <div className='flex justify-between'>
+        <h2 className='text-sm text-muted-foreground'>
+          Project Status:{' '}
+          <span
+            className={cn(
+              status === 'COMPLETED'
+                ? 'text-primary'
+                : status === 'CANCELLED'
+                ? 'text-destructive'
+                : ''
+            )}
+          >
+            {status}
+          </span>
+        </h2>
+        <div className='flex gap-2'>
+          {tasks && tasks.length > 0 && (
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {/* not writing asChild here caused a hydration error at run time */}
+                  <Button
+                    size='sm'
+                    disabled={!isProjectInProgress}
+                    onClick={() => {
+                      updateProjectStatus('COMPLETED');
+                    }}
+                  >
+                    <Icons.check className='size-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span>Mark as Completed</span>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size='sm'
+                    variant='destructive'
+                    disabled={!isProjectInProgress}
+                    onClick={() => {
+                      updateProjectStatus('CANCELLED');
+                    }}
+                  >
+                    <Icons.close className='size-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span>Mark as Cancelled</span>
+                </TooltipContent>
+              </Tooltip>
+            </>
+          )}
           <AddTaskForm projectName={projectName} />
         </div>
-      )}
+      </div>
 
       <ResizablePanelGroup
         direction='horizontal'

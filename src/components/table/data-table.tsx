@@ -29,11 +29,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isClickable?: boolean;
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  isClickable = false,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const [rowSelection, setRowSelection] = React.useState({});
@@ -93,6 +95,7 @@ export default function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                   className='hover:cursor-pointer'
                   onClick={() =>
+                    isClickable &&
                     router.push(
                       `/dashboard/projects/${
                         (row.original as { name: string }).name

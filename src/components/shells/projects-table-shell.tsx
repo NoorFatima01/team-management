@@ -78,7 +78,7 @@ export default function ProjectsTableShell({
     ],
     []
   );
-  return <DataTable columns={columns} data={data} />;
+  return <DataTable columns={columns} data={data} isClickable={true} />;
 }
 
 // /dashboard/projects/${ (row.original as { name: string }).name
