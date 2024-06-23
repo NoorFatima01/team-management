@@ -45,8 +45,5 @@ export default function RootLayout({
 //TODO:
 //only 3 teams per user
 //team head cant be team member and vice versa
-//team head can only delete team
-//team head can only add team members
-//show team head in team details
 //members table sould not link to anything
 //some hydration errors are coming when task status is updated

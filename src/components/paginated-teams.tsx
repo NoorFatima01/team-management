@@ -18,9 +18,13 @@ export type Team = {
   created_at: string;
 };
 
+interface PaginatedTeamsProps {
+  role: string;
+}
+
 const divs = Array.from({ length: 3 }, (_, i) => i);
 
-export default function PaginatedTeams() {
+export default function PaginatedTeams({ role }: PaginatedTeamsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParam = searchParams.get('page');
@@ -96,6 +100,7 @@ export default function PaginatedTeams() {
           return (
             <div key={team.team_id}>
               <TeamCard
+                role={role}
                 userId={userId}
                 userTeamQuery={userTeamQuery}
                 team_id={team.team_id}

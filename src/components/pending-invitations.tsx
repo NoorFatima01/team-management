@@ -16,7 +16,11 @@ import { Button } from '../components/ui/button';
 import { invitationSchemaType } from '../lib/schemas';
 import useSession from '../lib/supabase/use-session';
 
-const Invitations = () => {
+interface InvitationsProps {
+  role: string;
+}
+
+const Invitations = ({ role }: InvitationsProps) => {
   const session = useSession();
   const user = session?.user;
   const userId = user?.id;
@@ -125,6 +129,10 @@ const Invitations = () => {
     member_id: string
   ) {
     setIsLoading(true);
+    if (role === 'TEAM_HEAD') {
+      toast.error('Team head cannot join team as a member');
+      return;
+    }
     //change the status of the invitation to accepted
     invitationUpdate({ status: 'ACCEPTED', inv_id: inv_id });
 

@@ -22,7 +22,7 @@ import {
 
 type TeamCardProps = {
   userId: string | undefined;
-
+  role: string;
   team_id: string;
   title: string;
   description: string;
@@ -33,7 +33,7 @@ type TeamCardProps = {
 
 export default function TeamCard({
   userId,
-
+  role,
   team_id,
   title,
   description,
@@ -57,6 +57,9 @@ export default function TeamCard({
   const isUserLoggedIn = userId ? true : false;
   const joinTeam = async () => {
     setIsLoading(true);
+    if (role === 'TEAM_HEAD') {
+      throw new Error('Team head cannot join team as a member');
+    }
     const response = await fetch(`/api/teams/team/${team_id}`, {
       method: 'PUT',
       headers: {
@@ -78,8 +81,8 @@ export default function TeamCard({
       setIsUserAlreadyInTeam(true);
       increaseTeamsJoined();
     },
-    onError: () => {
-      toast.error('Failed to join team');
+    onError: (error) => {
+      toast.error(error.message);
       setIsLoading(false);
     },
   });

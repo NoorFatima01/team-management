@@ -12,6 +12,7 @@ import { getAllAvailableMembers } from '@/lib/utils';
 
 import { Icons } from '@/components/icons';
 import SelectMembers from '@/components/select-members';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -27,9 +28,13 @@ import { availableMember, SessionUser } from '@/types';
 
 interface CreateTeamFormProps {
   user: Pick<SessionUser, 'name' | 'id'>;
+  isNotTeamHead: boolean;
 }
 
-export default function CreateTeamForm({ user }: CreateTeamFormProps) {
+export default function CreateTeamForm({
+  user,
+  isNotTeamHead,
+}: CreateTeamFormProps) {
   const { name } = user;
   const [isLoading, setIsLoading] = useState(false);
   const [membersList, setMembersList] = useState<
@@ -135,6 +140,11 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
 
   return (
     <Form {...form}>
+      {isNotTeamHead && (
+        <Badge variant='destructive' className='mb-4 self-center'>
+          You must leave existing teams to become a team head.
+        </Badge>
+      )}
       <form
         className='mx-auto grid w-full max-w-md gap-6 '
         onSubmit={form.handleSubmit(onSubmit)}
@@ -209,7 +219,7 @@ export default function CreateTeamForm({ user }: CreateTeamFormProps) {
           )}
         />
         {canJoinMoreTeams() ? (
-          <Button type='submit' disabled={isLoading}>
+          <Button type='submit' disabled={isLoading || isNotTeamHead}>
             {isLoading && (
               <Icons.spinner
                 className='mr-2 size-4 animate-spin'
