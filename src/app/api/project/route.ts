@@ -58,7 +58,13 @@ export async function GET(req: Request) {
     const totalProjects = projectsCount?.length || 0;
 
     if (totalProjects === 0) {
-      return new Response(null, { status: 200 });
+      const projectResponse = {
+        projects: [],
+        totalProjects,
+        totalPages: 0,
+        currentPage: 1,
+      };
+      return new Response(JSON.stringify(projectResponse), { status: 200 });
     }
 
     if (countError) {

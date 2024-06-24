@@ -4,13 +4,9 @@ import { Icons } from '@/components/icons';
 
 const features = [
   {
-    heading: 'Register yourself',
-    description: 'Register as a member to access the platform',
-    icon: <Icons.user />,
-  },
-  {
     heading: 'Create or Join Teams',
-    description: 'Become a team head. Create and manage your own teams.',
+    description:
+      'Create and manage your own teams. Or join a team as a member.',
     icon: <Icons.add />,
   },
   {
@@ -20,7 +16,12 @@ const features = [
     icon: <Icons.folder />,
   },
   {
-    heading: 'View Reports',
+    heading: 'Assign Tasks',
+    description: 'Assign tasks to your team members and track their progress.',
+    icon: <Icons.check />,
+  },
+  {
+    heading: 'Upload and download files',
     description: 'View reports of your projects and tasks.',
     icon: <Icons.file />,
   },
@@ -31,7 +32,7 @@ const features = [
   },
   {
     heading: 'Get Notified',
-    description: 'Get notified of your project and task updates.',
+    description: 'Get notified of your team invites.',
     icon: <Icons.bell />,
   },
 ];

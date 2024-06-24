@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import { notificationSchemaType } from '@/lib/schemas';
@@ -7,11 +8,13 @@ import { formatNotificationDateTime } from '@/lib/utils';
 import { Icons } from '@/components/icons';
 
 interface NotificationsListProps {
+  username: string;
   oldNotifications?: notificationSchemaType[];
   newNotifications?: notificationSchemaType[];
 }
 
 interface ListProps {
+  username: string;
   notifications?: notificationSchemaType[];
   readStatus: boolean[];
   handleMarkAsRead: (id: string, index: number) => void;
@@ -19,6 +22,7 @@ interface ListProps {
 }
 
 const List = ({
+  username,
   notifications,
   readStatus,
   handleMarkAsRead,
@@ -30,7 +34,12 @@ const List = ({
         (notification: notificationSchemaType, index: number) => (
           <div key={index} className='border-y p-1 hover:bg-gray-700'>
             <div className='flex items-center justify-between gap-2'>
-              <p className='font-normal text-sm'>{notification.text}</p>
+              <Link
+                href={`/my-profile/${encodeURIComponent(username)}/invitations`}
+              >
+                <p className='font-normal text-sm'>{notification.text}</p>
+              </Link>
+
               <span>
                 {readStatus[index] === false ? (
                   <button
@@ -57,6 +66,7 @@ const List = ({
 };
 
 const NotificationsList = ({
+  username,
   newNotifications,
   oldNotifications,
 }: NotificationsListProps) => {
@@ -104,6 +114,7 @@ const NotificationsList = ({
     <div>
       <div>
         <List
+          username={username}
           notifications={newNotifications}
           readStatus={readStatus}
           handleMarkAsRead={handleMarkAsRead}
@@ -112,6 +123,7 @@ const NotificationsList = ({
       </div>
       <div>
         <List
+          username={username}
           notifications={oldNotifications}
           readStatus={readStatus}
           handleMarkAsRead={handleMarkAsRead}

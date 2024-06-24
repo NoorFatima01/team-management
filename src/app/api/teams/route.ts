@@ -122,7 +122,13 @@ export async function GET(req: Request) {
       .select('team_id');
     const totalTeams = teamsCount?.length || 0;
     if (totalTeams === 0) {
-      return new Response(null, { status: 200 });
+      const teamsResponse = {
+        teams: [],
+        totalTeams,
+        totalPages: 0,
+        currentPage: 1,
+      };
+      return new Response(JSON.stringify(teamsResponse), { status: 200 });
     }
     if (countError) {
       throw new Error(countError.message);

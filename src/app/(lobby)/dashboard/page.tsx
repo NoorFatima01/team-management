@@ -77,12 +77,6 @@ export default async function DashboardPage() {
                 No tasks found
               </p>
             )}
-            {/* {tasksDataWithProjectName?.map((taskWithProjectName, index) => (
-              <DashboardTaskCard
-                taskWithProjectName={taskWithProjectName}
-                key={index}
-              />
-            ))} */}
             <TaskList tasksDataWithProjectName={tasksDataWithProjectName} />
           </CardContent>
         </CardHeader>

@@ -67,6 +67,14 @@ const PaginatedProjects = () => {
     );
   }
 
+  if (projectsData.projects.length === 0 && !isLoading && !isFetching) {
+    return (
+      <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2 text-center'>
+        <p className='text-muted-foreground text-sm'>No projects found</p>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div>Seems there was an error loading the projects, {error.message}</div>

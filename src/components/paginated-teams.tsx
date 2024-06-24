@@ -79,6 +79,17 @@ export default function PaginatedTeams({ role }: PaginatedTeamsProps) {
     refetchInterval: 1000,
   });
 
+  if (
+    !teamsData ||
+    (teamsData.teams.length === 0 && !isTeamDataLoading && !isTeamDataFetching)
+  ) {
+    return (
+      <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2 text-center'>
+        <p className='text-muted-foreground text-sm'>No teams found</p>
+      </div>
+    );
+  }
+
   const teams = teamsData?.teams as Team[];
   const totalPages = teamsData?.totalPages as number;
   const currentPage = teamsData?.currentPage as number;

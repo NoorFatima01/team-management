@@ -12,6 +12,7 @@ import LoginWithGoogleButton from '@/components/login-buttons/google-login-butto
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -23,6 +24,7 @@ import { Input } from '@/components/ui/input';
 
 const LoginDialog = () => {
   const [email, setEmail] = React.useState('');
+  const [isLoginLoading, setIsLoginLoading] = React.useState(false);
   const [password, setPassword] = React.useState('');
   const { setLogInStatus } = useLogInStatusStore();
 
@@ -36,10 +38,12 @@ const LoginDialog = () => {
     });
 
     if (error) {
-      toast.error('Failed to log in');
+      toast.error(error.message);
+      setIsLoginLoading(false);
     } else if (data) {
       toast.success('Logged in successfully');
       setLogInStatus(true);
+      setIsLoginLoading(false);
     }
 
     router.refresh();
@@ -97,20 +101,30 @@ const LoginDialog = () => {
               }}
             />
           </div>
-          <Button onClick={() => signInWithEmail(email, password)}>
+          <Button
+            onClick={() => {
+              setIsLoginLoading(true);
+              signInWithEmail(email, password);
+            }}
+          >
+            {isLoginLoading && (
+              <Icons.spinner className='animate-spin h-4 w-4 mr-2' />
+            )}
             Log In
           </Button>
         </div>
         <DialogFooter>
           <div className='w-full flex items-center justify-center'>
             <p className='text-sm'>Don't have an account?</p>
-            <Button
-              variant='link'
-              className='inline-flex text-white text-md focus-visible:ring-primary-500 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2 hover:underline'
-              onClick={() => createAccountButtonClick()}
-            >
-              Create account
-            </Button>
+            <DialogClose asChild>
+              <Button
+                variant='link'
+                className='inline-flex text-white text-md focus-visible:ring-primary-500 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2 hover:underline'
+                onClick={() => createAccountButtonClick()}
+              >
+                Create account
+              </Button>
+            </DialogClose>
           </div>
         </DialogFooter>
       </DialogContent>

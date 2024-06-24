@@ -12,12 +12,12 @@ const TABSLIST = [
     link: '/dashboard',
   },
   {
-    name: 'Projects',
+    name: 'My Projects',
     value: 'projects',
     link: '/dashboard/projects',
   },
   {
-    name: 'Teams',
+    name: 'My Teams',
     value: 'teams',
     link: '/dashboard/teams',
   },

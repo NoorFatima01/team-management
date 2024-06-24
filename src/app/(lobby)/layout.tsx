@@ -2,8 +2,8 @@ import React from 'react';
 
 import { getUser } from '@/lib/server-user';
 
+import Footer from '@/components/layout/footer';
 import SiteHeader from '@/components/layout/site-header';
-import { ProgressBar } from '@/components/progress-bar';
 
 interface LobbyLayoutProps {
   children: React.ReactNode;
@@ -18,11 +18,10 @@ export default async function LobbyLayout({ children }: LobbyLayoutProps) {
     image: user?.user_metadata.avatar_url,
   };
   return (
-    <div>
-      <ProgressBar className='fixed top-0 h-3 bg-yellow-300 z-1000'>
-        <SiteHeader user={siteHeaderUser} />
-        <main>{children}</main>
-      </ProgressBar>
+    <div className='flex flex-col min-h-screen'>
+      <SiteHeader user={siteHeaderUser} />
+      <main className='flex-grow'>{children}</main>
+      <Footer />
     </div>
   );
 }

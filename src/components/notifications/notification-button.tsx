@@ -25,6 +25,7 @@ const NotificationButton = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const session = useSession();
   const user = session?.user;
+  const username = user?.user_metadata.full_name;
   const userId = user?.id;
 
   React.useEffect(() => {
@@ -105,6 +106,7 @@ const NotificationButton = () => {
             ) : (
               <div>
                 <NotificationsList
+                  username={username}
                   oldNotifications={oldNotifications}
                   newNotifications={newNotifications}
                 />
