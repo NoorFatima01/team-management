@@ -36,7 +36,6 @@ export default function CreateTeamForm({
   isNotTeamHead,
 }: CreateTeamFormProps) {
   const { name } = user;
-  const [isLoading, setIsLoading] = useState(false);
   const [membersList, setMembersList] = useState<
     { label: string; email: string; value: string }[]
   >([]);
@@ -117,25 +116,22 @@ export default function CreateTeamForm({
     return response.json();
   }
 
-  const { mutate } = useMutation({
+  const mutate = useMutation({
     mutationFn: createTeam,
     onSuccess: () => {
       toast.success('Team Created Successfully');
-      setIsLoading(false);
       form.reset();
       updateSelectedMembers();
       increaseTeamsJoined();
     },
     onError: () => {
-      setIsLoading(false);
       toast.error('Failed to create team');
     },
   });
 
   const onSubmit: SubmitHandler<teamFormSchemaType> = async (formData) => {
     formData.members = Array.from(selectedMembers);
-    setIsLoading(true);
-    mutate(formData);
+    mutate.mutate(formData);
   };
 
   return (
@@ -219,8 +215,8 @@ export default function CreateTeamForm({
           )}
         />
         {canJoinMoreTeams() ? (
-          <Button type='submit' disabled={isLoading || isNotTeamHead}>
-            {isLoading && (
+          <Button type='submit' disabled={mutate.isPending || isNotTeamHead}>
+            {mutate.isPending && (
               <Icons.spinner
                 className='mr-2 size-4 animate-spin'
                 aria-hidden='true'

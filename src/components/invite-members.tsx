@@ -35,7 +35,6 @@ export default function InviteMembers({
   teamName,
   team_id,
 }: InviteMembersProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const [invitingMemberId, setInvitingMemberId] = useState<string>('');
   async function addInvitation(data: invitationProps) {
     const response = await fetch('/api/invitations', {
@@ -73,7 +72,7 @@ export default function InviteMembers({
     mutationFn: addNotification,
   });
 
-  const { mutate: invitationMutate } = useMutation({
+  const invitationMutate = useMutation({
     mutationFn: addInvitation,
     onSuccess: (_, invitationData) => {
       // Add notifications in the database
@@ -83,7 +82,6 @@ export default function InviteMembers({
       };
       notificationMutate(notificationData);
       toast.success('Invitation sent');
-      setIsLoading(false);
     },
     onError: () => {
       toast.error('Failed to send invitation');
@@ -91,8 +89,8 @@ export default function InviteMembers({
   });
 
   async function handleClick(id: string) {
-    setIsLoading(true);
     setInvitingMemberId(id);
+
     const text = `You have been invited to join the ${teamName} team`;
     const invitationData: invitationProps = {
       member_id: id,
@@ -100,7 +98,7 @@ export default function InviteMembers({
       team_id,
     };
     //add invitation to the database
-    invitationMutate(invitationData);
+    invitationMutate.mutate(invitationData);
   }
 
   return (
@@ -133,11 +131,12 @@ export default function InviteMembers({
                     size='sm'
                     variant='secondary'
                     onClick={() => handleClick(member.id)}
-                    disabled={isLoading}
+                    disabled={invitationMutate.isPending}
                   >
-                    {isLoading && invitingMemberId === member.id && (
-                      <Icons.spinner className='animate-spin size-4 mr-2 ' />
-                    )}
+                    {invitationMutate.isPending &&
+                      invitingMemberId === member.id && (
+                        <Icons.spinner className='animate-spin size-4 mr-2 ' />
+                      )}
                     Send Invite
                   </Button>
                 </div>

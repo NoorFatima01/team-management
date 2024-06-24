@@ -49,7 +49,6 @@ export default function CreateProjectForm() {
   const session = useSession();
   const user_id = session?.user.id;
 
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedteam, setSelectedTeam] = useState<string>('');
 
   const form = useForm<projectFormSchemaType>({
@@ -94,20 +93,16 @@ export default function CreateProjectForm() {
     mutationFn: createProject,
     onSuccess: () => {
       toast.success('Project Created Successfully');
-      setIsLoading(false);
       form.reset();
       setSelectedTeam('');
     },
     onError: () => {
       toast.error('Failed to create team');
-      setIsLoading(false);
     },
   });
 
   const onSubmit: SubmitHandler<projectFormSchemaType> = async (formData) => {
     formData.team_id = selectedteam;
-
-    setIsLoading(true);
     mutate.mutate(formData);
   };
 
@@ -254,8 +249,8 @@ export default function CreateProjectForm() {
                   )}
                 />
               </div>
-              <Button type='submit' disabled={isLoading}>
-                {isLoading && (
+              <Button type='submit' disabled={mutate.isPending}>
+                {mutate.isPending && (
                   <Icons.spinner
                     className='mr-2 size-4 animate-spin'
                     aria-hidden='true'

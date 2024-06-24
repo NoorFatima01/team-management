@@ -61,6 +61,9 @@ export function DashboardGraph({ projectsByTeam }: DashboardGraphProps) {
       );
     }
   }
+  if (Object.keys(projectsByTeam).length === 0) {
+    return <p className='text-center text-muted-foreground'>No Data</p>;
+  }
   return (
     <>
       {Object.keys(teamsWithStatusCounts).map((teamName, index) => (

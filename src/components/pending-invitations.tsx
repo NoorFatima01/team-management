@@ -130,7 +130,10 @@ const Invitations = ({ role }: InvitationsProps) => {
   ) {
     setIsLoading(true);
     if (role === 'TEAM_HEAD') {
-      toast.error('Team head cannot join team as a member');
+      toast.error(
+        'Team head cannot join team as a member. Either reject the invite or leave teams to join this one.'
+      );
+      setIsLoading(false);
       return;
     }
     //change the status of the invitation to accepted

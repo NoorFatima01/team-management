@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { projectSchemaType } from '@/lib/schemas';
+import { getRole } from '@/lib/server-user';
 import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import AllProjects from '@/components/all-projects';
@@ -13,6 +14,7 @@ export default async function ProjectPage() {
   } = await serverSupabase.auth.getUser();
   if (user) {
     const user_id = user?.id;
+    const role = await getRole(user_id);
     //get teams
     const { data: teamsIds } = await serverSupabase
       .from('teams-members')
@@ -31,7 +33,7 @@ export default async function ProjectPage() {
     const projectsTableData = projects as projectSchemaType[];
     return (
       <div className='flex flex-col gap-3'>
-        <CreateProjectForm />
+        {role === 'TEAM_HEAD' && <CreateProjectForm />}
         <AllProjects projects={projectsTableData} />
       </div>
     );

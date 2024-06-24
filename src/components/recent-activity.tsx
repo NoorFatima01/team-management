@@ -11,8 +11,10 @@ import useSession from '@/lib/supabase/use-session';
 import { cn } from '@/lib/utils';
 
 import { Icons } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 
 interface RecentActivityProps extends React.HTMLProps<HTMLDivElement> {
   project: string;
@@ -99,12 +101,16 @@ export default function RecentActivity({
           <Button
             size='sm'
             variant='outline'
-            className='mr-4'
+            className='mr-4 '
             onClick={async () => {
               await handleZip();
             }}
           >
-            Download Selected Files
+            <div className='flex items-center gap-2'>
+              Download Selected File(s){' '}
+              <Separator orientation='vertical' className='mx-2 h-4' />
+              <Badge>{selectedFiles.size}</Badge>
+            </div>
           </Button>
         )}
       </div>

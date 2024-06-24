@@ -41,7 +41,6 @@ export default function TeamCard({
   createdAt,
   userTeamQuery,
 }: TeamCardProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const [isUserAlreadyInTeam, setIsUserAlreadyInTeam] = useState(false);
   const {
     fetchTeamsJoined,
@@ -56,7 +55,6 @@ export default function TeamCard({
   }, [userId]);
   const isUserLoggedIn = userId ? true : false;
   const joinTeam = async () => {
-    setIsLoading(true);
     if (role === 'TEAM_HEAD') {
       throw new Error('Team head cannot join team as a member');
     }
@@ -77,13 +75,11 @@ export default function TeamCard({
     mutationFn: joinTeam,
     onSuccess: () => {
       toast.success('Successfully joined team');
-      setIsLoading(false);
       setIsUserAlreadyInTeam(true);
       increaseTeamsJoined();
     },
     onError: (error) => {
       toast.error(error.message);
-      setIsLoading(false);
     },
   });
 
@@ -126,9 +122,9 @@ export default function TeamCard({
             <Button
               size='sm'
               onClick={() => mutate.mutate()}
-              disabled={isLoading}
+              disabled={mutate.isPending}
             >
-              {isLoading && (
+              {mutate.isPending && (
                 <Icons.spinner className='size-4 animate-spin mr-2' />
               )}
               Join Team

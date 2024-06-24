@@ -69,6 +69,8 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
   const [isProjectInProgress] = React.useState(status === 'IN_PROGRESS');
   const [taskSelected, setTaskSelected] =
     React.useState<TaskWithProjects | null>(tasks ? tasks[0] : null);
+  const [isProjectStatusUpdationLoading, setIsProjectStatusUpdationLoading] =
+    React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const { handleZip } = useDownload(
     taskSelected ? ([taskSelected?.filePath] as string[]) : ['']
@@ -110,6 +112,7 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
   });
 
   const updateProjectStatus = async (status: string) => {
+    setIsProjectStatusUpdationLoading(true);
     const response = await fetch('/api/project', {
       method: 'PUT',
       body: JSON.stringify({ projectName, status }),
@@ -119,6 +122,7 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
     } else {
       toast.error('Failed to update project status');
     }
+    setIsProjectStatusUpdationLoading(false);
   };
 
   const onSubmit: SubmitHandler<fileSchemaType> = async (
@@ -169,16 +173,25 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                   {/* not writing asChild here caused a hydration error at run time */}
                   <Button
                     size='sm'
-                    disabled={!isProjectInProgress}
+                    disabled={
+                      !isProjectInProgress || isProjectStatusUpdationLoading
+                    }
                     onClick={() => {
                       updateProjectStatus('COMPLETED');
                     }}
                   >
-                    <Icons.check className='size-4' />
+                    {isProjectStatusUpdationLoading ? (
+                      <Icons.spinner
+                        className='size-4 animate-spin'
+                        aria-hidden='true'
+                      />
+                    ) : (
+                      <Icons.check className='size-4' />
+                    )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <span>Mark as Completed</span>
+                  <span>Mark project as Completed</span>
                 </TooltipContent>
               </Tooltip>
               <Tooltip>
@@ -186,16 +199,25 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                   <Button
                     size='sm'
                     variant='destructive'
-                    disabled={!isProjectInProgress}
+                    disabled={
+                      !isProjectInProgress || isProjectStatusUpdationLoading
+                    }
                     onClick={() => {
                       updateProjectStatus('CANCELLED');
                     }}
                   >
-                    <Icons.close className='size-4' />
+                    {isProjectStatusUpdationLoading ? (
+                      <Icons.spinner
+                        className='size-4 animate-spin'
+                        aria-hidden='true'
+                      />
+                    ) : (
+                      <Icons.close className='size-4' />
+                    )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <span>Mark as Cancelled</span>
+                  <span>Mark project as Cancelled</span>
                 </TooltipContent>
               </Tooltip>
             </>

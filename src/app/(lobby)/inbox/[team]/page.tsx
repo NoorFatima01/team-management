@@ -20,6 +20,14 @@ export default async function TeamInboxPage({ params }: TeamInboxPageProps) {
     .select('*')
     .eq('name', decodedTeamName);
 
+  if (!teamData || teamData.length === 0) {
+    return (
+      <p className='text-center text-lg text-muted-foreground'>
+        Team not found
+      </p>
+    );
+  }
+
   const team_id = teamData && teamData[0].team_id;
 
   const { data: oldChat } = await serverSupabase

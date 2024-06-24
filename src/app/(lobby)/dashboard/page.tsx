@@ -4,7 +4,7 @@ import { getUser } from '@/lib/server-user';
 import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import { DashboardGraph } from '@/components/dashboard-graph';
-import DashboardTaskCard from '@/components/dashboard-task-card';
+import TaskList from '@/components/task-list';
 import {
   Card,
   CardContent,
@@ -72,12 +72,18 @@ export default async function DashboardPage() {
           <CardTitle>Tasks</CardTitle>
           <CardDescription>Following are your ongoing tasks.</CardDescription>
           <CardContent className='flex flex-col gap-4'>
-            {tasksDataWithProjectName?.map((taskWithProjectName, index) => (
+            {tasksDataWithProjectName?.length === 0 && (
+              <p className='text-muted-foreground text-center'>
+                No tasks found
+              </p>
+            )}
+            {/* {tasksDataWithProjectName?.map((taskWithProjectName, index) => (
               <DashboardTaskCard
                 taskWithProjectName={taskWithProjectName}
                 key={index}
               />
-            ))}
+            ))} */}
+            <TaskList tasksDataWithProjectName={tasksDataWithProjectName} />
           </CardContent>
         </CardHeader>
       </Card>

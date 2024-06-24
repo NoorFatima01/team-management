@@ -103,6 +103,16 @@ export default function TeamsTabs({
     },
   });
 
+  if (teams.length === 0) {
+    return (
+      <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2'>
+        <p className='text-muted-foreground text-sm text-center'>
+          You are not part of any team. Create a team or join an existing one.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Tabs className='w-full flex flex-col' defaultValue={teams[0].team_id}>
