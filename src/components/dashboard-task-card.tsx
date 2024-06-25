@@ -17,7 +17,7 @@ export default function DashboardTaskCard({
       <ProgressBarLink
         href={`/dashboard/projects/${taskWithProjectName.projects.name}`}
       >
-        <div className='flex items-center space-x-3 hover:cursor-pointer hover:bg-muted p-3 rounded-lg'>
+        <div className='flex items-center space-x-3 hover:cursor-pointer hover:bg-muted p-2 rounded-lg'>
           <Icons.task className='size-5' />
           <div className='flex flex-col'>
             <h3 className='text-xl font-bold tracking-tighter'>

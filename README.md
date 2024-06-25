@@ -1,5 +1,27 @@
 # Team Manager
 
+## Dummy Accounts to Explore the website
+
+1. **John**
+
+   - **Email:** john@gmail.com
+   - **Password:** 12345678
+   - **Teams:**
+     - John is a part of 3 teams as a team member.
+
+2. **Sarah**
+
+   - **Email:** sarah@gmail.com
+   - **Password:** 12345678
+   - **Teams:**
+     - Sarah is part of 2 teams as team head.
+
+3. **Ryan**
+   - **Email:** ryan@gmail.com
+   - **Password:** 12345678
+   - **Teams:**
+     - Ryan is part of only one team and has an invitation from Sarah to join the security team.
+
 ## Introduction
 
 Welcome to Team Manager, a platform designed to streamline team collaboration, project management, and communication. Team Manager offers a range of features to help you organize your teams, manage projects, and stay connected with your team members in real time.

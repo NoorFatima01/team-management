@@ -70,7 +70,7 @@ export default async function DashboardPage() {
       <Card className='lg:w-[350px] col-span-4'>
         <CardHeader className='flex flex-col gap-3'>
           <CardTitle>Tasks</CardTitle>
-          <CardDescription>Following are your ongoing tasks.</CardDescription>
+          <CardDescription>Following are your tasks.</CardDescription>
           <CardContent className='flex flex-col gap-4'>
             {tasksDataWithProjectName?.length === 0 && (
               <p className='text-muted-foreground text-center'>
