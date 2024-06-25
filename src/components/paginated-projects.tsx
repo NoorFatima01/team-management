@@ -15,7 +15,7 @@ type Project = {
   teams: {
     name: string;
   };
-  project_status: 'IN PROGRESS' | 'COMPLETED' | 'CANCELLED';
+  project_status: 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
   start_date: string;
   end_date: string;
 };

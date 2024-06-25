@@ -115,7 +115,7 @@ const UserSignupForm = () => {
                   <Input
                     id='add-password'
                     type='password'
-                    placeholder='Enter Password'
+                    placeholder='Your Password'
                     {...field}
                   />
                 </FormControl>

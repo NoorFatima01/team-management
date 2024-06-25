@@ -68,19 +68,19 @@ export function DashboardGraph({ projectsByTeam }: DashboardGraphProps) {
     <>
       {Object.keys(teamsWithStatusCounts).map((teamName, index) => (
         <div key={index} className='flex items-center'>
-          <h1 className='-rotate-90 text-lg font-semibold'>{teamName}</h1>
+          <h2 className='-rotate-90 text-md font-semibold'>{teamName}</h2>
           <ResponsiveContainer width='100%' height={350}>
             <BarChart data={teamsWithStatusCounts[teamName]}>
               <XAxis
                 dataKey='status'
                 stroke='#888888'
-                fontSize={10}
+                fontSize={8}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
                 stroke='#888888'
-                fontSize={10}
+                fontSize={9}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `${value}`}

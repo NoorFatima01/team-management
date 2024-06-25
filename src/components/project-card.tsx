@@ -21,7 +21,7 @@ type ProjectCardProps = {
   title: string;
   description: string;
   team: string;
-  status: 'IN PROGRESS' | 'COMPLETED' | 'CANCELLED';
+  status: 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
   start_date: string;
   end_date: string;
 };
@@ -90,7 +90,11 @@ const ProjectCard = ({
         <CardFooter className='flex-row-reverse'>
           <Badge variant='outline' className='flex gap-2 border-4'>
             <Icons.timer className='size-3' />
-            Days Left: {daysLeft}
+            {status === 'IN_PROGRESS' ? (
+              <span>Days Left: {daysLeft}</span>
+            ) : (
+              <span>Time Over</span>
+            )}
           </Badge>
         </CardFooter>
       </Card>
