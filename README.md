@@ -36,7 +36,6 @@ Team Manager defines two roles:
 
 ## Upcoming Features
 
-
 - **Improvements on Task Management**: Enhance task management functionality with new features such as task prioritization, due dates, task assignments to specific team members, and task dependencies.
 
 - **Expanded Notifications**: Introduce more notification alerts for various activities, including chat messages, project updates, task assignments, and deadlines.
