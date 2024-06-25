@@ -1,6 +1,7 @@
 'use client';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 
@@ -91,14 +92,17 @@ export default function MainNav({ items, username }: MainNavProps) {
                   asChild
                   className='flex items-center gap-2.5'
                 >
-                  <ProgressBar className='fixed top-0 left-0 h-1 bg-primary'>
-                    <ProgressBarLink href={item.href}>
-                      {item.icon && (
-                        <item.icon className='size-4' aria-hidden />
-                      )}
-                      <span className='line-clamp-1'>{item.title}</span>
-                    </ProgressBarLink>
-                  </ProgressBar>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      (item.title === 'Dashboard' || item.title === 'Inbox') &&
+                        !username &&
+                        'hidden'
+                    )}
+                  >
+                    {item.icon && <item.icon className='size-4' aria-hidden />}
+                    <span className='line-clamp-1'>{item.title}</span>
+                  </Link>
                 </DropdownMenuItem>
               ))
             : null}

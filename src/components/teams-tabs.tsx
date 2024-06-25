@@ -162,7 +162,7 @@ export default function TeamsTabs({
                       )}
                       <MembersTable members={tableMembers} />
                       <div className='self-end flex gap-2'>
-                        {isHead(teamToShow) && (
+                        {isHead(teamToShow) ? (
                           <Button
                             size='sm'
                             variant='destructive'
@@ -176,18 +176,21 @@ export default function TeamsTabs({
                             )}
                             Delete
                           </Button>
+                        ) : (
+                          <Button
+                            size='sm'
+                            variant='ghost'
+                            disabled={leaveMutate.isPending}
+                            onClick={() =>
+                              leaveMutate.mutate(teamToShow.team_id)
+                            }
+                          >
+                            {leaveMutate.isPending && (
+                              <Icons.spinner className='size-4 animate-spin mr-2' />
+                            )}
+                            Leave
+                          </Button>
                         )}
-                        <Button
-                          size='sm'
-                          variant='ghost'
-                          disabled={leaveMutate.isPending}
-                          onClick={() => leaveMutate.mutate(teamToShow.team_id)}
-                        >
-                          {leaveMutate.isPending && (
-                            <Icons.spinner className='size-4 animate-spin mr-2' />
-                          )}
-                          Leave
-                        </Button>
                       </div>
                     </div>
                   </TeamDetails>

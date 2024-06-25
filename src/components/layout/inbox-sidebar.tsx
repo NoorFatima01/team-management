@@ -36,9 +36,9 @@ export default function InboxSideBar() {
   if (!userId) return null;
   if (isLoading) {
     return (
-      <div className='flex justify-center items-center mt-32'>
+      <div className='flex justify-center items-center lg:mt-32'>
         <Icons.spinner
-          className='size-20 animate-spin text-primary-foreground rounded-md p-1'
+          className='lg:size-20 size-8 animate-spin text-primary-foreground rounded-md p-1'
           aria-hidden='true'
         />
       </div>

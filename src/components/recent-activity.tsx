@@ -96,7 +96,7 @@ export default function RecentActivity({
   return (
     <div className={cn('flex flex-col gap-4', className)}>
       <div className='flex justify-between'>
-        <h3 className='text-xl font-extrabold'>Recent Activity</h3>
+        <h3 className='md:text-xl text-lg font-extrabold'>Recent Activity</h3>
         {selectedFiles.size > 0 && (
           <Button
             size='sm'

@@ -235,7 +235,7 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
       >
         <ResizablePanel defaultSize={20}>
           <ScrollArea className='p-6'>
-            <h2 className='text-2xl font-extrabold tracking-tighter mb-4'>
+            <h2 className='md:text-2xl text-lg font-extrabold tracking-tighter mb-4'>
               {projectName}
             </h2>
 
@@ -275,10 +275,12 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                 {taskSelected ? (
                   <div className='flex justify-between'>
                     <div className='flex flex-col gap-3'>
-                      <span className='font-extrabold text-xl'>
+                      <span className='font-extrabold md:text-xl text-md'>
                         {taskSelected.title}
                       </span>
-                      <span className='text-lg'>{taskSelected.details}</span>
+                      <span className='md:text-lg text-base'>
+                        {taskSelected.details}
+                      </span>
                     </div>
                     <div className='flex gap-3'>
                       <Tooltip>
@@ -300,7 +302,7 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                     </div>
                   </div>
                 ) : (
-                  <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2'>
+                  <div className='self-center mt-6 rounded-md border border-muted-foreground p-2'>
                     <p className='text-muted-foreground text-sm'>
                       Add a task to get started
                     </p>

@@ -57,11 +57,9 @@ const PaginatedProjects = () => {
 
   if (isFetching || isLoading) {
     return (
-      <div className='container grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 my-4'>
+      <div className='container flex flex-col items-center justify-center lg:grid lg:grid-cols-3 gap-2 my-4'>
         {divs.map((div) => (
-          <div key={div}>
-            <Skeleton className=' h-64 w-[420px]  rounded-lg' />
-          </div>
+          <Skeleton className='h-64 w-[420px] rounded-lg' key={div} />
         ))}
       </div>
     );

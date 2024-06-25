@@ -79,6 +79,16 @@ export default function PaginatedTeams({ role }: PaginatedTeamsProps) {
     refetchInterval: 1000,
   });
 
+  if (isTeamDataFetching || isTeamDataLoading) {
+    return (
+      <div className='container flex flex-col items-center justify-center lg:grid lg:grid-cols-3 gap-2 my-4'>
+        {divs.map((div) => (
+          <Skeleton className='h-64 w-[420px] rounded-lg' key={div} />
+        ))}
+      </div>
+    );
+  }
+
   if (
     !teamsData ||
     (teamsData.teams.length === 0 && !isTeamDataLoading && !isTeamDataFetching)
@@ -93,17 +103,7 @@ export default function PaginatedTeams({ role }: PaginatedTeamsProps) {
   const teams = teamsData?.teams as Team[];
   const totalPages = teamsData?.totalPages as number;
   const currentPage = teamsData?.currentPage as number;
-  if (isTeamDataFetching || isTeamDataLoading) {
-    return (
-      <div className='container grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 my-4'>
-        {divs.map((div) => (
-          <div key={div}>
-            <Skeleton className=' h-64 w-[420px] rounded-lg' />
-          </div>
-        ))}
-      </div>
-    );
-  }
+
   return (
     <section className='mx-auto my-8'>
       <div className='container grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 my-4'>
