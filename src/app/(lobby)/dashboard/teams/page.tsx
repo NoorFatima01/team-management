@@ -12,7 +12,13 @@ export default async function TeamsPage() {
   } = await serverSupabase.auth.getUser();
   const user_id = user?.id;
   if (!user_id) {
-    return <div>no user</div>;
+    return (
+      <div className='self-center  mt-6 rounded-md border border-muted-foreground p-2'>
+        <p className='text-muted-foreground text-sm text-center'>
+          No user. Login to view teams
+        </p>
+      </div>
+    );
   }
 
   //get teams

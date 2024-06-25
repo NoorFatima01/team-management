@@ -222,7 +222,10 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
               </Tooltip>
             </>
           )}
-          <AddTaskForm projectName={projectName} />
+          <AddTaskForm
+            projectName={projectName}
+            isDisabled={!isProjectInProgress}
+          />
         </div>
       </div>
 
@@ -245,11 +248,13 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                     onClick={() => setTaskSelected(task)}
                     variant='ghost'
                     className={cn(
-                      ' w-full font-semibold hover:cursor-pointer hover:text-primary-foreground transition-all duration-400',
-                      taskSelected === task && 'text-xl font-bold'
+                      ' w-full font-semibold text-sm hover:cursor-pointer hover:text-primary-foreground transition-all duration-400',
+                      taskSelected === task && 'text-md font-bold'
                     )}
                   >
-                    {task.title}
+                    {task.title.length > 12
+                      ? `${task.title.substring(0, 9)}...`
+                      : task.title}
                   </Button>
                 ))
               ) : (
@@ -276,15 +281,22 @@ export default function Tasks({ projectName, tasks }: TasksProps) {
                       <span className='text-lg'>{taskSelected.details}</span>
                     </div>
                     <div className='flex gap-3'>
-                      <Button
-                        size='sm'
-                        variant='secondary'
-                        onClick={async () => {
-                          await handleZip();
-                        }}
-                      >
-                        Download Reference Material
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size='sm'
+                            variant='ghost'
+                            onClick={async () => {
+                              await handleZip();
+                            }}
+                          >
+                            <Icons.download className=' size-4' />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <span>Download Reference Material</span>
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                   </div>
                 ) : (

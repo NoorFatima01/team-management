@@ -37,9 +37,13 @@ import UploadFile from '@/components/upload-file';
 
 interface AddTaskFormProps {
   projectName: string;
+  isDisabled?: boolean;
 }
 
-export default function AddTaskForm({ projectName }: AddTaskFormProps) {
+export default function AddTaskForm({
+  projectName,
+  isDisabled = false,
+}: AddTaskFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<taskFormSchemaType>({
     resolver: zodResolver(taskFormSchema),
@@ -108,7 +112,9 @@ export default function AddTaskForm({ projectName }: AddTaskFormProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size='sm'>Add Task</Button>
+        <Button size='sm' disabled={isDisabled}>
+          Add Task
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className='mb-4'>
