@@ -43,3 +43,4 @@ export default function RootLayout({
 }
 
 //TODO:
+// when no notif in db, it gives an error. fix that

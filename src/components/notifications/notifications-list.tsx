@@ -110,6 +110,10 @@ const NotificationsList = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readStatus]);
 
+  if (newNotifications?.length === 0 && oldNotifications?.length === 0) {
+    return <p>No unread notifications</p>;
+  }
+
   return (
     <div>
       <div>
