@@ -55,6 +55,7 @@ Team Manager defines two roles:
 - **Real-time Chat**: Members of a team can chat with each other in real time.
 - **Notifications**: Members receive real-time notifications about certain activities on the platform.
 - **Restriction on Number of Teams**: At a time a user can be a part of only 3 teams. To join or create another team, he/she needs to leave or delete an existing team.
+- **Blogs**: Users can read blogs that are being statically generated at build time for faster page loading.
 
 ## Upcoming Features
 
