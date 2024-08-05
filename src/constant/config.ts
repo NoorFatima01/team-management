@@ -20,9 +20,9 @@ export const siteConfig = {
       title: 'Inbox',
       href: '/inbox',
     },
-    {
-      title: 'Blogs',
-      href: '/blogs',
-    },
+    // {
+    //   title: 'Blogs',
+    //   href: '/blogs',
+    // },
   ],
 };
