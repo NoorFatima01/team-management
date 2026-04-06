@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import type { Post } from '@/lib/md';
@@ -5,6 +6,10 @@ import { getAllPublished } from '@/lib/md';
 
 import BlogCard from '@/components/blog-card';
 import PageDescriptionHeader from '@/components/layout/page-description-header';
+
+export const metadata: Metadata = {
+  title: 'Blogs',
+};
 
 const BlogsPage = async () => {
   const fetchPosts = async () => {

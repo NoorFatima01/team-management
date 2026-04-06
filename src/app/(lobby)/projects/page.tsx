@@ -1,7 +1,12 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import PageDescriptionHeader from '@/components/layout/page-description-header';
 import PaginatedProjects from '@/components/paginated-projects';
+
+export const metadata: Metadata = {
+  title: 'Projects',
+};
 
 const ProjectsPage = () => {
   return (

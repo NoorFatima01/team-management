@@ -1,9 +1,14 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { taskSchemaType } from '@/lib/schemas';
 import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import Tasks from '@/components/tasks';
+
+export const metadata: Metadata = {
+  title: 'Project Details',
+};
 
 interface ProjectDetailsPageProps {
   params: { project: string };

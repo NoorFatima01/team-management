@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { projectSchemaType } from '@/lib/schemas';
@@ -6,6 +7,10 @@ import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import AllProjects from '@/components/all-projects';
 import CreateProjectForm from '@/components/forms/create-project-form';
+
+export const metadata: Metadata = {
+  title: 'Dashboard Projects',
+};
 
 export default async function ProjectPage() {
   const serverSupabase = createSupabaseServerClient();

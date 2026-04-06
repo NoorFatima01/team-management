@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { getRole, getUser } from '@/lib/server-user';
@@ -5,6 +6,10 @@ import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import CreateTeamForm from '@/components/forms/create-team-form';
 import PageDescriptionHeader from '@/components/layout/page-description-header';
+
+export const metadata: Metadata = {
+  title: 'Create Team',
+};
 
 export default async function CreateTeamPage() {
   const serverSupabase = createSupabaseServerClient();

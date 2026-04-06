@@ -1,5 +1,10 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import React from 'react';
+
+export const metadata: Metadata = {
+  title: 'Inbox',
+};
 
 export default function InboxPage() {
   return (

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
@@ -6,6 +7,10 @@ import MessageField from '@/components/message-field';
 import Messages from '@/components/messages';
 
 import { messageUIType } from '@/types';
+
+export const metadata: Metadata = {
+  title: 'Team Inbox',
+};
 
 interface TeamInboxPageProps {
   params: { team: string };

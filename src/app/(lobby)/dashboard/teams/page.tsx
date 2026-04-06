@@ -1,9 +1,14 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { memberTableSchemaType, teamSchemaType } from '@/lib/schemas';
 import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import TeamsTabs from '@/components/teams-tabs';
+
+export const metadata: Metadata = {
+  title: 'Dashboard Teams',
+};
 
 export default async function TeamsPage() {
   const serverSupabase = createSupabaseServerClient();

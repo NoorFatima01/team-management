@@ -8,7 +8,6 @@ import { useLogInStatusStore } from '@/lib/store';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser-clients';
 
 import { Icons } from '@/components/icons';
-import LoginWithGoogleButton from '@/components/login-buttons/google-login-button';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -65,12 +64,12 @@ const LoginDialog = () => {
             Enter your email below to create your account
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4'>
-          <div className='flex items-center justify-center'>
+        <div className=''>
+          {/* <div className='flex items-center justify-center'>
             <Icons.google className='mr-2 h-4 w-4' />
             <LoginWithGoogleButton />
-          </div>
-          <div className='relative'>
+          </div> */}
+          {/* <div className='relative'>
             <div className='absolute inset-0 flex items-center'>
               <span className='w-full border-t' />
             </div>
@@ -79,7 +78,7 @@ const LoginDialog = () => {
                 Or continue with
               </span>
             </div>
-          </div>
+          </div> */}
           <div className='grid gap-2'>
             <Label>Email</Label>
             <Input
@@ -106,6 +105,7 @@ const LoginDialog = () => {
               setIsLoginLoading(true);
               signInWithEmail(email, password);
             }}
+            className='mt-4'
           >
             {isLoginLoading && (
               <Icons.spinner className='animate-spin h-4 w-4 mr-2' />
@@ -114,12 +114,12 @@ const LoginDialog = () => {
           </Button>
         </div>
         <DialogFooter>
-          <div className='w-full flex items-center justify-center'>
+          <div className='w-full flex items-center justify-center '>
             <p className='text-sm'>Don't have an account?</p>
             <DialogClose asChild>
               <Button
                 variant='link'
-                className='inline-flex text-white text-md focus-visible:ring-primary-500 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2 hover:underline'
+                className='inline-flex text-white text-md focus-visible:ring-primary-500 hover:bg-gray-500 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2 hover:underline ml-3'
                 onClick={() => createAccountButtonClick()}
               >
                 Create account

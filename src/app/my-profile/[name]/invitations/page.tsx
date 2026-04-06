@@ -1,8 +1,13 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { getRole, getUser } from '@/lib/server-user';
 
 import Invitations from '@/components/pending-invitations';
+
+export const metadata: Metadata = {
+  title: 'Invitations',
+};
 
 export default async function InvitationsPage() {
   const user = await getUser();

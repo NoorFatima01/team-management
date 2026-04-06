@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { getUser } from '@/lib/server-user';
@@ -5,6 +6,10 @@ import { createSupabaseServerClient } from '@/lib/supabase/server-clients';
 
 import { ProfileForm } from '@/components/forms/profile-form';
 import PageDescriptionHeader from '@/components/layout/page-description-header';
+
+export const metadata: Metadata = {
+  title: 'My Profile',
+};
 
 const AccountPage = async () => {
   const user = await getUser();

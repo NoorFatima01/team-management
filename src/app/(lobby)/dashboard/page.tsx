@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { getUser } from '@/lib/server-user';
@@ -18,6 +19,10 @@ import {
   ProjectsByTeam,
   TaskDataWithProjectName,
 } from '@/types';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 export default async function DashboardPage() {
   const user = await getUser();

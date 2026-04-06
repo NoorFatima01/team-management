@@ -1,8 +1,13 @@
 import Markdown from 'markdown-to-jsx';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 
 import { getAllPublished, getSinglePost } from '@/lib/md';
+
+export const metadata: Metadata = {
+  title: 'Blog Details',
+};
 
 type Props = {
   params: { blog: string };

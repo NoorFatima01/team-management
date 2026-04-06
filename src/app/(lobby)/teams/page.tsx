@@ -1,9 +1,14 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import { getRole, getUser } from '@/lib/server-user';
 
 import PageDescriptionHeader from '@/components/layout/page-description-header';
 import PaginatedTeams from '@/components/paginated-teams';
+
+export const metadata: Metadata = {
+  title: 'Teams',
+};
 
 export default async function TeamsPage() {
   const user = await getUser();

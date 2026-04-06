@@ -1,7 +1,12 @@
+import type { Metadata } from 'next';
 import React from 'react';
 
 import UserSignupForm from '@/components/forms/user-signup-form';
 import PageDescriptionHeader from '@/components/layout/page-description-header';
+
+export const metadata: Metadata = {
+  title: 'Create Account',
+};
 
 const CreateAccountPage = () => {
   return (
